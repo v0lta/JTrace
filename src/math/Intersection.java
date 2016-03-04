@@ -1,39 +1,17 @@
 package math;
 
 public class Intersection {
-	private boolean hit;
-	private Point point;
-	private Normal normal;
-	private Color color;
+	public final boolean hit;
+	public final Point point;
+	public final Normal normal;
+	public final Color color;
+	public final double reflectivity;
 	
-	public Intersection(boolean hit, Point point, Normal normal, Color color ) {
+	public Intersection(boolean hit, Point point, Normal normal, Color color, double ref) {
 		this.hit = hit;
 		this.point = point;
 		this.normal = normal;
 		this.color = color;
+		this.reflectivity = ref;
 	}
-	
-	public boolean isHit() {
-		return this.hit;
-	}
-	
-	public Point hitPoint() {
-		return this.point;
-	}
-	
-	public Normal hitNormal() {
-		return this.normal;
-	}
-	
-	public Color hitColor() {
-		return this.color;
-	}
-	public void set(Intersection inter) {
-		this.hit = inter.hit;
-		this.point = inter.point;
-		this.normal = inter.normal;
-		this.color = inter.color;
-	}
-	
-	
 }

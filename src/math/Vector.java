@@ -272,6 +272,27 @@ public class Vector implements Cloneable, Comparable<Vector> {
 		return new Vector(xx, yy, zz);
 	}
 
+	
+	/**
+	 * Returns the element-wise product of this {@link Vector} with the given
+	 * {@link Vector}.
+	 * 
+	 * @param vector
+	 *            the {@link Vector} to calculate the element-wise product of.
+	 * @throws NullPointerException
+	 *             when the given {@link Vector} is null.
+	 * @return the element-wise product of this {@link Vector} with the given
+	 *         {@link Vector}.
+	 */
+	public Vector elPrd(Vector vector) throws NullPointerException {
+		double xx = x*vector.x;
+		double yy = y*vector.y;
+		double zz = z*vector.z;
+
+		return new Vector(xx, yy, zz);
+	}
+	
+	
 	/**
 	 * Returns the squared length of this {@link Vector}.
 	 * 
@@ -359,5 +380,7 @@ public class Vector implements Cloneable, Comparable<Vector> {
 	public String toString() {
 		return String.format(Locale.ENGLISH, "[%s]:\n%g %g %g", getClass()
 				.getName(), x, y, z);
-	};
+	}
+
+
 }

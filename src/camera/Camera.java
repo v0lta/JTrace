@@ -1,5 +1,6 @@
 package camera;
 
+import math.Point;
 import math.Ray;
 import sampling.Sample;
 
@@ -20,4 +21,5 @@ public interface Camera {
 	 * @return a new {@link Ray} from the given {@link Sample}.
 	 */
 	public Ray generateRay(Sample sample) throws NullPointerException;
+	public Point getOrigin();
 }

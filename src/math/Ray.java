@@ -22,19 +22,19 @@ public class Ray implements Cloneable {
 	 * Creates a new {@link Ray} starting at the given origin and propagating
 	 * in the given direction.
 	 * 
-	 * @param origin
+	 * @param point
 	 *            the origin of the ray.
 	 * @param direction
 	 *            the direction of the ray.
 	 * @throws NullPointerException
 	 *             when the given origin and/or direction is null.
 	 */
-	public Ray(Point origin, Vector direction) throws NullPointerException {
-		if (origin == null)
+	public Ray(Point point, Vector direction) throws NullPointerException {
+		if (point == null)
 			throw new NullPointerException("the given origin is null!");
 		if (direction == null)
 			throw new NullPointerException("the given direction is null!");
-		this.origin = origin;
+		this.origin = point;
 		this.direction = direction;
 	}
 

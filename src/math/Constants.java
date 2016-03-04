@@ -1,5 +1,5 @@
 package math;
 
 public class Constants {
-	public static final double epsilon = 0.01;
+	public static final double epsilon = 0.1;
 }

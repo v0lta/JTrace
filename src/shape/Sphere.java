@@ -1,5 +1,6 @@
 package shape;
 
+import math.Constants;
 import math.Normal;
 import math.Point;
 import math.Ray;
@@ -19,6 +20,7 @@ import math.Color;
 public class Sphere implements Shape {
 	public final Transformation transformation;
 	public final Color color;
+	public final double reflectivity;
 
 	/**
 	 * Creates a new unit {@link Sphere} at the origin, transformed by the given
@@ -29,7 +31,7 @@ public class Sphere implements Shape {
 	 * @throws NullPointerException
 	 *             when the transformation is null.
 	 */
-	public Sphere(Transformation transformation, Color color) {
+	public Sphere(Transformation transformation, Color color,double reflectivity) {
 		if (transformation == null)
 			throw new NullPointerException("the given origin is null!");
 		if (color == null)
@@ -37,6 +39,7 @@ public class Sphere implements Shape {
 
 		this.transformation = transformation;
 		this.color = color;
+		this.reflectivity = reflectivity;
 	}
 
 	/*
@@ -57,7 +60,7 @@ public class Sphere implements Shape {
 		double d = b * b - 4.0 * a * c;
 
 		if (d < 0)
-			return new Intersection(false,null,null,null);
+			return new Intersection(false,null,null,null,0);
 		double dr = Math.sqrt(d);
 
 		// numerically solve the equation a*t^2 + b * t + c = 0
@@ -71,7 +74,8 @@ public class Sphere implements Shape {
 		double t0 = q / a;
 		double t1 = c / q;
 
-		boolean hasInt = t0 >= 0 || t1 >= 0;
+		//hit points with t<0 are behind the camera.
+		boolean hasInt = t0 >= Constants.epsilon || t1 >= Constants.epsilon;
 		
 		
 		if (hasInt == true) {
@@ -80,12 +84,13 @@ public class Sphere implements Shape {
 			Point hitPntT;
 			Normal hitNmlT;
 			Color hitColor;
+			//the hit point with the smaller t is closer to the camera.
 			if (t0 < t1) {
 				hitPoint = o.add(transformed.direction.scale(t0));
 				hitPntT = this.transformation.transform(hitPoint.toPoint());
 				hitNmlT = this.transformation.transformInverseTranspose(hitPoint.toNormal());
 				hitColor = this.color;
-				return new Intersection(hasInt,hitPntT,hitNmlT,hitColor);
+				return new Intersection(hasInt,hitPntT,hitNmlT,hitColor,this.reflectivity);
 				
 				
 			} else {
@@ -93,11 +98,11 @@ public class Sphere implements Shape {
 				hitPntT = this.transformation.transform(hitPoint.toPoint());
 				hitNmlT = this.transformation.transformInverseTranspose(hitPoint.toNormal());
 				hitColor = this.color;
-				return new Intersection(hasInt,hitPntT,hitNmlT,hitColor);
+				return new Intersection(hasInt,hitPntT,hitNmlT,hitColor,this.reflectivity);
 			}
 		} else {
 			// No intersection worth reporting
-			return new Intersection(hasInt,null,null,null);
+			return new Intersection(hasInt,null,null,null,0);
 		}
 	}
 }

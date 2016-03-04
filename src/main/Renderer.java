@@ -12,21 +12,18 @@ import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 
-import math.Intersection;
-import math.Point;
-import math.Ray;
-import math.Transformation;
-import math.Vector;
-import math.Color;
-import sampling.Sample;
-import shape.Shape;
-import shape.Sphere;
-import camera.PerspectiveCamera;
 import film.FrameBuffer;
 import film.Tile;
 import gui.ImagePanel;
 import gui.ProgressReporter;
 import gui.RenderFrame;
+import main.World;
+import math.Intersection;
+import math.Ray;
+import math.Vector;
+import light.PointLight;
+import sampling.Sample;
+import shape.Shape;
 
 /**
  * Entry point of your renderer.
@@ -109,9 +106,6 @@ public class Renderer {
 		 * Initialize the graphical user interface
 		 *********************************************************************/
 
-		final PerspectiveCamera camera = new PerspectiveCamera(width, height,
-				new Point(0, 0, 0), new Point(0, 0, 1), new Vector(0, 1, 0), 90);
-
 		// initialize the frame buffer
 		final FrameBuffer buffer = new FrameBuffer(width, height);
 
@@ -131,24 +125,7 @@ public class Renderer {
 		/**********************************************************************
 		 * Initialize the scene
 		 *********************************************************************/
-
-		Transformation t1 = Transformation.translate(0, 0, 10).append(
-				Transformation.scale(5, 5, 5));
-		Transformation t2 = Transformation.translate(4, -4, 12).append(
-				Transformation.scale(4, 4, 4));
-		Transformation t3 = Transformation.translate(-4, -4, 12).append(
-				Transformation.scale(4, 4, 4));
-		Transformation t4 = Transformation.translate(4, 4, 12).append(
-				Transformation.scale(4, 4, 4));
-		Transformation t5 = Transformation.translate(-4, 4, 12).append(
-				Transformation.scale(4, 4, 4));
-
-		final List<Shape> shapes = new ArrayList<Shape>();
-		shapes.add(new Sphere(t1,new Color(1.0,0.0,0.0)));
-		shapes.add(new Sphere(t2,new Color(0.0,1.0,0.0)));
-		shapes.add(new Sphere(t3,new Color(0.0,0.0,1.0)));
-		shapes.add(new Sphere(t4,new Color(0.0,0.5,0.5)));
-		shapes.add(new Sphere(t5,new Color(0.5,0.5,0.0)));
+		final World world = new World(width, height, "planeAndSphere");
 
 		/**********************************************************************
 		 * Multi-threaded rendering of the scene
@@ -168,21 +145,22 @@ public class Renderer {
 				@Override
 				public void run() {
 					final List<Intersection> intersections = new ArrayList<Intersection>();
+					final List<Intersection> shadowInters = new ArrayList<Intersection>();					
 					final List<Double> dists = new ArrayList<Double>();
 					// iterate over the contents of the tile
 					for (int y = tile.yStart; y < tile.yEnd; ++y) {
 						for (int x = tile.xStart; x < tile.xEnd; ++x) {
 							// create a ray through the center of the
 							// pixel.
-							Ray ray = camera.generateRay(new Sample(x + 0.5,
+							Ray ray = world.camera.generateRay(new Sample(x + 0.5,
 									y + 0.5));
 
 							// test the scene on intersections 
 							intersections.clear();
-							for (Shape shape : shapes) {
-								Intersection currentInter = new Intersection(false,null,null,null);
-								currentInter.set(shape.intersect(ray));
-								if (currentInter.isHit() == true) {
+							for (Shape shape : world.shapes) {
+								Intersection currentInter;
+								currentInter = shape.intersect(ray);
+								if (currentInter.hit == true) {
 									intersections.add(currentInter);
 								}
 							}
@@ -192,27 +170,78 @@ public class Renderer {
 							} else {
 																		
 									//find the intersection closest to the camera.
-									Vector camPos = camera.getOrigin().toVector();
+									Vector camPos = world.camera.getOrigin().toVector();
 									Vector intPos;
 									Double dist;
 									dists.clear();
 									for (Intersection currentInter: intersections){
-										intPos = currentInter.hitPoint().toVector();
+										intPos = currentInter.point.toVector();
 							            dist = camPos.subtract(intPos).lengthSquared();
 										dists.add(dist);
 									}
 									int index = dists.indexOf(Collections.min(dists));
-									Intersection closestInt = intersections.get(0);
-									if (index != 0){
-										closestInt = intersections.get(index);
-									}
+									Intersection closestInt = intersections.get(index);
 									
 									//add a color contribution to the pixel based in the closest intersection.
-									double color[];
-									color = closestInt.hitColor().toArray();
-									buffer.getPixel(x, y).add(color[0], color[1], color[2]);
+									//double color[];
+									//color = closestInt.hitColor().toArray();
+									//buffer.getPixel(x, y).add(color[0], color[1], color[2]);
 									
-									
+					                //use the found intersection for rendering.
+					                double La = world.ambient;
+					                double Rs = closestInt.reflectivity;
+					                Vector Cs = closestInt.color.toVector();
+					                double[] ambRes = Cs.scale(La).scale(Rs).toArray();
+					                buffer.getPixel(x, y).add(ambRes[0], ambRes[1], ambRes[2],1.0);
+					                
+					                
+					                //add a contribution for each light.
+					                for (PointLight pl: world.plights){
+					                Vector l  = pl.l(closestInt.point);
+					                Vector n  = closestInt.normal.toVector();
+					                double dot = (l.dot(n));
+					                
+					                    if (dot > 0){
+					                    	if (pl.shadows) {
+					                    		//launch a shaow ray.
+					                    		Vector toLight = pl.origin.toVector().subtract(closestInt.point.toVector()); 
+					                    		Ray shadowRay = new Ray(closestInt.point,toLight);
+					                    		shadowInters.clear();
+					                    		for (Shape shadowShape : world.shapes) {
+													Intersection shadowInter;
+													shadowInter = shadowShape.intersect(shadowRay);
+													if (shadowInter.hit == true) {
+														shadowInters.add(shadowInter);
+													}
+												}
+												//see if an intersection was found
+												if (shadowInters.isEmpty()) {
+													//its not in the shadow.
+													Vector Lp = pl.L();
+								                    Vector Cp = pl.color.toVector();								                    
+								                    double[] lghtRes = Cs.elPrd(Lp).elPrd(Cp).scale(dot).scale(Rs/3.14).toArray();
+							                    	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);										
+													
+												} 
+					                    	} else {
+					                    		//there are no shadwos directly shade things
+							                    Vector Lp = pl.L();
+							                    Vector Cp = pl.color.toVector();
+							                    
+							                    double[] lghtRes = Cs.elPrd(Lp).elPrd(Cp).scale(dot).scale(Rs/3.14).toArray();
+						                    	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],world.plights.size());
+					                    	}
+					                    	
+					                    	
+					                    	
+					                    }
+					                }
+					                //deal with out color overflow.
+					                //RGBSpectrum  currentSpec;
+					                //currentSpec = buffer.getPixel(x, y).getSpectrum();
+					                
+					                
+
 							}
 								
 								

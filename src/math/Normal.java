@@ -291,4 +291,3 @@ public class Normal implements Cloneable, Comparable<Normal> {
 				.getName(), x, y, z);
 	};
 }
-
