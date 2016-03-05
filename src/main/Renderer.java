@@ -125,8 +125,9 @@ public class Renderer {
 		/**********************************************************************
 		 * Initialize the scene
 		 *********************************************************************/
-		final World world = new World(width, height, "planeAndSphere");
-
+		//final World world = new World(width, height, "planeAndSphere");
+		final World world = new World(width, height, "Julia");
+		
 		/**********************************************************************
 		 * Multi-threaded rendering of the scene
 		 *********************************************************************/
@@ -199,12 +200,13 @@ public class Renderer {
 					                for (PointLight pl: world.plights){
 					                Vector l  = pl.l(closestInt.point);
 					                Vector n  = closestInt.normal.toVector();
+					                Vector toLight = pl.origin.toVector().subtract(closestInt.point.toVector()); 
+					                
 					                double dot = (l.dot(n));
 					                
 					                    if (dot > 0){
 					                    	if (pl.shadows) {
-					                    		//launch a shaow ray.
-					                    		Vector toLight = pl.origin.toVector().subtract(closestInt.point.toVector()); 
+					                    		//launch a shaow ray.					                    		
 					                    		Ray shadowRay = new Ray(closestInt.point,toLight);
 					                    		shadowInters.clear();
 					                    		for (Shape shadowShape : world.shapes) {
@@ -217,35 +219,26 @@ public class Renderer {
 												//see if an intersection was found
 												if (shadowInters.isEmpty()) {
 													//its not in the shadow.
+													//compute distance to light source
+													double d = toLight.lengthSquared();
 													Vector Lp = pl.L();
 								                    Vector Cp = pl.color.toVector();								                    
-								                    double[] lghtRes = Cs.elPrd(Lp).elPrd(Cp).scale(dot).scale(Rs/3.14).toArray();
+								                    double[] lghtRes = Cs.elPrd(Lp).elPrd(Cp).scale(dot).scale(Rs/3.14).scale(1/d).toArray();
 							                    	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);										
 													
 												} 
 					                    	} else {
 					                    		//there are no shadwos directly shade things
-							                    Vector Lp = pl.L();
-							                    Vector Cp = pl.color.toVector();
-							                    
-							                    double[] lghtRes = Cs.elPrd(Lp).elPrd(Cp).scale(dot).scale(Rs/3.14).toArray();
-						                    	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],world.plights.size());
+												double d = toLight.lengthSquared();
+												Vector Lp = pl.L();
+							                    Vector Cp = pl.color.toVector();								                    
+							                    double[] lghtRes = Cs.elPrd(Lp).elPrd(Cp).scale(dot).scale(Rs/3.14).scale(1.0/d).toArray();
+						                    	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);
 					                    	}
-					                    	
-					                    	
 					                    	
 					                    }
 					                }
-					                //deal with out color overflow.
-					                //RGBSpectrum  currentSpec;
-					                //currentSpec = buffer.getPixel(x, y).getSpectrum();
-					                
-					                
-
 							}
-								
-								
-								
 						}
 					}
 

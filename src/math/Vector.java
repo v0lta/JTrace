@@ -330,6 +330,15 @@ public class Vector implements Cloneable, Comparable<Vector> {
 	}
 
 	/**
+	 * Converts this {@link Vector} to a {@link Color}.
+	 * 
+	 * @return this {@link Vector} as a {@link Color}.
+	 */
+	public Color toColor() {
+		return new Color(x, y, z);
+	}
+	
+	/**
 	 * Returns a normalized version of this {@link Vector}.
 	 * 
 	 * @return a normalized version of this {@link Vector}.

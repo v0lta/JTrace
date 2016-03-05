@@ -5,7 +5,7 @@ public class Color {
 	public final double g;
 	public final double b;
 	
-	public Color(double r, double g, double b) {
+	public Color(double r, double b, double g) {
 		this.r = r;
 		this.g = g;
 		this.b = b;
@@ -23,5 +23,6 @@ public class Color {
 	public Vector toVector() {
 		return new Vector(r, g, b);
 	}
+
 	
 }
