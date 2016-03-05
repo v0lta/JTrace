@@ -117,23 +117,21 @@ public class World{
 				new Point(1, 1, 1), new Point(1, 1, 0), new Vector(1, 0, 0), 90);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
-		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.001,true);
+		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.00,false);
 		this.plights.add(whiteLight);
 	
-		this.ambient = 0.00;
+		this.ambient = 1.0;
 		
 		//setup the objects in the scene.
 		
 		
 		Material mat;
 		//cr = -0.076, ci = 0.651, N = 200, bound = 1, lim = 100
-		List<Color> colorList = new ArrayList<Color>();
-		colorList.add(new Color(0,0,100)); colorList.add(new Color(100,100,0));
-		mat = new Julia(new Complex(-0.076,0.652),400,1,100, new Color(00,10,10),true,colorList);
+		mat = new Julia(new Complex(-0.076,0.652),600,1,400,2.5);
 
 		//(Point a,Normal n, Material m,double reflectivity)
 		Plane plane = new Plane(new Point(0,0,0),new Normal(0,0,1),
-				                mat,1);
+				                mat,1.0);
 		this.shapes.add(plane);
 		
 	}

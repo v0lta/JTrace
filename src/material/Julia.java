@@ -13,19 +13,14 @@ public class Julia implements Material {
 	public final double[][] set;
 	private final int N;
 	private final double bound;
-	public final Color color;
 	
-	private final boolean map;
 	private ColorMap colorMap = null;
 	
-	public Julia(Complex c, int N, double bound, int lim,Color color, boolean map, List<Color> colorList){
+	public Julia(Complex c, int N, double bound, int lim, double colorScale){
 		this.N = N;
 		this.bound = bound;
-		this.color = color;
 		this.set = computeJulia(c ,N,bound,lim);	
 		
-		this.map = map;
-		if (this.map == true) {
 			//find min and max values;
 			double tmpMin = this.set[0][0];
 			double tmpMax = this.set[0][0];;
@@ -39,45 +34,17 @@ public class Julia implements Material {
 					}
 				}
 			}
-			this.colorMap = new ColorMap(colorList,tmpMax,tmpMin,this.set);
-		}
+		this.colorMap = new ColorMap(tmpMin,tmpMax,this.set, colorScale);
 		
 	}
 	
 	/**
 	 * A two dimensional material definition
 	 */
+
 	@Override
-	public Color getColor(Vector point) {
+	public Color getColor(Vector point){
 		//map input into the space where the julia set has been computed.
-		double x = Math.abs(point.x);
-		double y = Math.abs(point.y);
-		double mapBnd = 2*bound;
-		
-		double dx = (mapBnd)/(N-1);
-		double tx = x - mapBnd*( (int) (x/mapBnd) );
-		int indexX = (int) (tx/dx);
-		
-		double dy = dx;
-		double ty = y - mapBnd*( (int) (y/mapBnd) );
-		int indexY = (int) (ty/dy);
-		
-		if ((indexX > N) || (indexY > N)) {
-			System.out.println(dx);
-			System.out.println(tx);
-			System.out.println(indexX); 
-			
-			System.out.println(dy);
-			System.out.println(ty);
-			System.out.println(indexY);
-			System.out.println(System.getProperty("line.separator"));
-			
-		}
-		Vector res = color.toVector().scale(set[indexX][indexY]);
-		return res.toColor();
-	}
-	
-	public Color getColor2(Vector point){
 		double x = Math.abs(point.x);
 		double y = Math.abs(point.y);
 		double mapBnd = 2*bound;
@@ -153,7 +120,7 @@ public class Julia implements Material {
 	public static void main(String[] arguments){
 		int N = 200;
 		Julia mat;
-		mat = new Julia(new Complex(-0.076,0.652),N,1,100, new Color(1,1,1), false,null);
+		mat = new Julia(new Complex(-0.076,0.652),N,1,100,10);
 
 		BufferedWriter br;
 		try {
