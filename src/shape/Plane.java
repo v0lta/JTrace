@@ -1,5 +1,8 @@
 package shape;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import material.Material;
 import math.Color;
 import math.Constants;
@@ -31,7 +34,8 @@ public class Plane implements Shape {
      * The ray object intersection function for a planes without transformations. 
      */    
 	@Override
-	public Intersection intersect(Ray ray) {
+	public List<Intersection> intersect(Ray ray) {
+		List<Intersection> hits = new ArrayList<Intersection>();
 		
     	Vector ro = ray.origin.toVector();
         Vector rd = ray.direction;
@@ -40,15 +44,16 @@ public class Plane implements Shape {
         double denomDot = n.toVector().dot(rd); 
         
         if (Math.abs(denomDot) < Constants.epsilon){
-            return new Intersection(false,null,null,null,0);
+            return hits;
         } else {
             t = (n.toVector().dot(a.toVector())) - (n.toVector().dot(ro)) / denomDot;
             if (t <= Constants.epsilon) {
-                return new Intersection(false,null,null,null,0);
+                return hits;
             } else {
                 Vector pointVec = ro.add(rd.scale(t));
                 Color color = m.getColor(pointVec);
-                return new Intersection(true, pointVec.toPoint(), n, color,reflectivity);
+                hits.add(new Intersection(true, pointVec.toPoint(), n, color,reflectivity));
+                return hits;
             }
         }
 	}

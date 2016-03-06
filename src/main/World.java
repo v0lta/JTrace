@@ -8,6 +8,7 @@ import material.Chess;
 import material.Complex;
 import material.Julia;
 import material.Material;
+import material.Monochrome;
 import math.Color;
 import math.Normal;
 import math.Point;
@@ -15,6 +16,7 @@ import math.Transformation;
 import math.Vector;
 import camera.Camera;
 import camera.PerspectiveCamera;
+import shape.ObjShape;
 import shape.Plane;
 import shape.Shape;
 import shape.Sphere;
@@ -36,7 +38,10 @@ public class World{
 			planeAndSphere(width,height);
 		}
 		else if (choice == "Julia") {
-			Julia(width,height);
+			julia(width,height);
+		}
+		else if (choice == "bunny") {
+			bunny(width,height);
 		}
 		else
 			throw new IllegalArgumentException();
@@ -102,8 +107,9 @@ public class World{
 		Material mat;
 		mat = new Chess(new Color(100,100,100), new Color(1,1,1),1);
 		//cr = -0.076, ci = 0.651, N = 200, bound = 1, lim = 100
-		//mat = new Julia(new Complex(-0.076,0.652),200,1,100, new Color(10,10,10));
-
+		//mat = new Julia(new Complex(-0.076,0.652),200,1,100, 10);
+		mat = new Monochrome(new Color(100,100,100));
+		
 		//(Point a,Normal n, Material m,double reflectivity)
 		Plane plane = new Plane(new Point(0,0,0),new Normal(0,0,1),
 				                mat,1);
@@ -111,7 +117,7 @@ public class World{
 		
 	}
 
-	public void Julia(int width,int height) {
+	public void julia(int width,int height) {
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
 				new Point(1, 1, 1), new Point(1, 1, 0), new Vector(1, 0, 0), 90);
@@ -135,5 +141,42 @@ public class World{
 		this.shapes.add(plane);
 		
 	}
+	
+	public void bunny(int width,int height) {
+		//set the camera.
+		this.camera = new PerspectiveCamera(width, height,
+				new Point(2, -0, 5), new Point(0, 0, 0), new Vector(-1, 0, 0), 90);
+
+		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
+		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.0001,true);
+		this.plights.add(whiteLight);
+		//PointLight blueLight = new PointLight(new Point(8,8,10),new Color(10,10,100), 0.001,true);
+		//this.plights.add(blueLight);
+		//PointLight redLight = new PointLight(new Point(8,-8,10),new Color(200,10,10), 0.001,true);
+		//this.plights.add(redLight);
+		
+		this.ambient = 0.00;
+		
+		//setup the objects in the scene.
+		Transformation t1 = Transformation.translate(0, 0, 1.0).append(
+				Transformation.scale(1, 1, 1));
+		
+		ObjShape bunny = new ObjShape("./obj/cube.obj",t1,new Color(10,10,10),1.0);
+		this.shapes.add(bunny);
+		
+		
+		Material mat;
+		//mat = new Chess(new Color(100,100,100), new Color(1,1,1),1);
+		//cr = -0.076, ci = 0.651, N = 200, bound = 1, lim = 100
+		//mat = new Julia(new Complex(-0.076,0.652),200,1,100, 10);
+		mat = new Monochrome(new Color(100,100,100));
+		
+		//(Point a,Normal n, Material m,double reflectivity)
+		Plane plane = new Plane(new Point(0,0,0),new Normal(0,0,1),
+				                mat,1);
+		//this.shapes.add(plane);
+		
+	}
+
 
 }

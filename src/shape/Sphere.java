@@ -1,5 +1,8 @@
 package shape;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import math.Constants;
 import math.Normal;
 import math.Point;
@@ -48,7 +51,8 @@ public class Sphere implements Shape {
 	 * @see shape.Shape#intersect(geometry3d.Ray3D)
 	 */
 	@Override
-	public Intersection intersect(Ray ray) {
+	public List<Intersection> intersect(Ray ray) {
+		List<Intersection> hits = new ArrayList<Intersection>();
 		Ray transformed = transformation.transformInverse(ray);
 
 		Vector o = transformed.origin.toVector();
@@ -60,7 +64,7 @@ public class Sphere implements Shape {
 		double d = b * b - 4.0 * a * c;
 
 		if (d < 0)
-			return new Intersection(false,null,null,null,0);
+			return hits;
 		double dr = Math.sqrt(d);
 
 		// numerically solve the equation a*t^2 + b * t + c = 0
@@ -90,7 +94,8 @@ public class Sphere implements Shape {
 				hitPntT = this.transformation.transform(hitPoint.toPoint());
 				hitNmlT = this.transformation.transformInverseTranspose(hitPoint.toNormal());
 				hitColor = this.color;
-				return new Intersection(hasInt,hitPntT,hitNmlT,hitColor,this.reflectivity);
+				hits.add(new Intersection(hasInt,hitPntT,hitNmlT,hitColor,this.reflectivity));
+				return hits;
 				
 				
 			} else {
@@ -98,11 +103,12 @@ public class Sphere implements Shape {
 				hitPntT = this.transformation.transform(hitPoint.toPoint());
 				hitNmlT = this.transformation.transformInverseTranspose(hitPoint.toNormal());
 				hitColor = this.color;
-				return new Intersection(hasInt,hitPntT,hitNmlT,hitColor,this.reflectivity);
+				hits.add(new Intersection(hasInt,hitPntT,hitNmlT,hitColor,this.reflectivity));
+				return hits;
 			}
 		} else {
 			// No intersection worth reporting
-			return new Intersection(hasInt,null,null,null,0);
+			return hits;
 		}
 	}
 }

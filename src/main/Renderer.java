@@ -117,7 +117,7 @@ public class Renderer {
 		final ImagePanel panel;
 		if (gui) {
 			panel = new ImagePanel(width, height, sensitivity, gamma);
-			RenderFrame frame = new RenderFrame("Spheres", panel);
+			RenderFrame frame = new RenderFrame("JTrace", panel);
 			reporter.addProgressListener(frame);
 		} else
 			panel = null;
@@ -127,6 +127,7 @@ public class Renderer {
 		 *********************************************************************/
 		//final World world = new World(width, height, "planeAndSphere");
 		final World world = new World(width, height, "Julia");
+		//final World world = new World(width, height, "bunny");
 		
 		/**********************************************************************
 		 * Multi-threaded rendering of the scene
@@ -159,10 +160,10 @@ public class Renderer {
 							// test the scene on intersections 
 							intersections.clear();
 							for (Shape shape : world.shapes) {
-								Intersection currentInter;
+								List<Intersection> currentInter = new ArrayList<Intersection>();
 								currentInter = shape.intersect(ray);
-								if (currentInter.hit == true) {
-									intersections.add(currentInter);
+								if (currentInter.isEmpty() == false) {
+									intersections.addAll(currentInter);
 								}
 							}
 							//see if an intersection was found
@@ -210,10 +211,10 @@ public class Renderer {
 					                    		Ray shadowRay = new Ray(closestInt.point,toLight);
 					                    		shadowInters.clear();
 					                    		for (Shape shadowShape : world.shapes) {
-													Intersection shadowInter;
-													shadowInter = shadowShape.intersect(shadowRay);
-													if (shadowInter.hit == true) {
-														shadowInters.add(shadowInter);
+													List<Intersection> shadowInter = new ArrayList<Intersection>();
+													shadowInter.addAll(shadowShape.intersect(shadowRay));
+													if (shadowInter.isEmpty() == false) {
+														shadowInters.addAll(shadowInter);
 													}
 												}
 												//see if an intersection was found

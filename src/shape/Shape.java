@@ -1,5 +1,7 @@
 package shape;
 
+import java.util.List;
+
 import math.Ray;
 import math.Intersection;
 
@@ -18,5 +20,5 @@ public interface Shape {
 	 *            the {@link Ray} to intersect with.
 	 * @return true when the given {@link Ray} intersects this {@link Shape}.
 	 */
-	public Intersection intersect(Ray ray);
+	public List<Intersection> intersect(Ray ray);
 }
