@@ -67,7 +67,7 @@ public class PerspectiveCamera implements Camera {
 					+ "larger than or equal to 180 degrees!");
 
 		this.origin = origin;
-		this.basis = new OrthonormalBasis(lookat, up);
+		this.basis = new OrthonormalBasis(lookat.scale(-1), up);
 
 		invxResolution = 1.0 / (double) xResolution;
 		invyResolution = 1.0 / (double) yResolution;
@@ -120,7 +120,7 @@ public class PerspectiveCamera implements Camera {
 		double u = width * (sample.x * invxResolution - 0.5);
 		double v = height * (sample.y * invyResolution - 0.5);
 
-		Vector direction = basis.w.add(basis.u.scale(u).add(basis.v.scale(v)));
+		Vector direction = basis.u.scale(u).add(basis.v.scale(v)).subtract(basis.w);
 
 		return new Ray(origin, direction);
 	}

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import acceleration.AxisAlignedBox;
 import math.Color;
 import math.Intersection;
 import math.Normal;
@@ -19,6 +20,7 @@ public class ObjShape implements Shape {
 	public final double reflectivity;
 	public final Color color;
 	public final List<Triangle> triangleList;
+	private AxisAlignedBox aab;
 	
 	public ObjShape(String path, Transformation transformation,Color color, double reflectivity){
 		this.path = path;
@@ -40,11 +42,17 @@ public class ObjShape implements Shape {
 		//go trough the triangles and find intersections.
 		List<Intersection> intersections = new ArrayList<Intersection>();
 		intersections.clear();
-		for (Triangle triangle : this.triangleList) {
-			List<Intersection> currentInter;
-			currentInter = triangle.intersect(ray);
-			if (currentInter.isEmpty() == false) {
-				intersections.addAll(currentInter);
+		
+		//intersections.addAll(this.aab.intersect(ray));
+		
+		//if (false) {
+		if (aab.intersectBool(ray)) {
+			for (Triangle triangle : this.triangleList) {
+				List<Intersection> currentInter;
+				currentInter = triangle.intersect(ray);
+				if (currentInter.isEmpty() == false) {
+					intersections.addAll(currentInter);
+				}
 			}
 		}
 		return intersections;
@@ -125,7 +133,8 @@ public class ObjShape implements Shape {
 			//close the buffered reader.
 			br.close();		
 			
-			//create the triangles.			
+			//create the triangles.
+			Extremes minmax = new Extremes();
 			for (List<List<Integer>> asmblyList : fList) {
 				//create the point objects
 				List<Double> vertex = vertList.get(asmblyList.get(0).get(0) - 1);
@@ -133,7 +142,7 @@ public class ObjShape implements Shape {
 				Double y = vertex.get(1);
 				Double z = vertex.get(2);
 				Point a = new Point(x,y,z);
-				
+				minmax.checkVals(x, y, z);
 				//System.out.println(asmblyList.get(1).get(0));
 				
 				//b
@@ -142,6 +151,7 @@ public class ObjShape implements Shape {
 				y = vertex.get(1);
 				z = vertex.get(2);
 				Point b = new Point(x,y,z);
+				minmax.checkVals(x, y, z);
 				
 				//c
 				vertex = vertList.get(asmblyList.get(2).get(0) - 1);
@@ -149,6 +159,7 @@ public class ObjShape implements Shape {
 				y = vertex.get(1);
 				z = vertex.get(2);
 				Point c = new Point(x,y,z);
+				minmax.checkVals(x, y, z);
 				
 				//create the normal objects.
 				List<Double> normals = normList.get(asmblyList.get(0).get(2) - 1);
@@ -178,7 +189,39 @@ public class ObjShape implements Shape {
 				this.triangleList.add(triangle);
 				
 			}
+			this.aab = new AxisAlignedBox(new Point(minmax.xMin,minmax.yMin,minmax.zMin),
+										  new Point(minmax.xMax,minmax.yMax,minmax.zMax),
+										  this.transformation);
 			
+	}
+	
+	private class Extremes{
+		public double xMax = 0;public  double xMin = 0;
+		public double yMax = 0;public  double yMin = 0;
+		public double zMax = 0;public  double zMin = 0;
+		
+		public Extremes(){};
+		
+		public void checkVals(double x,double y,double z){
+			if (xMin > x){
+				this.xMin = x;
+			}
+			if (xMax < x){
+				this.xMax = x;
+			}
+			if (yMin > y){
+				this.yMin = y;
+			}
+			if (yMax < y){
+				this.yMax = y;
+			}
+			if (zMin > z){
+				this.zMin = z;
+			}
+			if (zMax < z){
+				this.zMax = z;
+			}
+		}
 	}
 	
 	/*

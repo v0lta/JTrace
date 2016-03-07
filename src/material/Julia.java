@@ -16,6 +16,14 @@ public class Julia implements Material {
 	
 	private ColorMap colorMap = null;
 	
+	/**
+	 * Creates a Julia-set covered material
+	 * @param c complex seed
+	 * @param N for loop counter
+	 * @param bound 0.5 of the rectangle size.
+	 * @param lim kernel limit.
+	 * @param colorScale color factor.
+	 */
 	public Julia(Complex c, int N, double bound, int lim, double colorScale){
 		this.N = N;
 		this.bound = bound;

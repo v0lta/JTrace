@@ -3,6 +3,7 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 
+import acceleration.AxisAlignedBox;
 import light.PointLight;
 import material.Chess;
 import material.Complex;
@@ -20,6 +21,7 @@ import shape.ObjShape;
 import shape.Plane;
 import shape.Shape;
 import shape.Sphere;
+import shape.Triangle;
 
 /**
  * Sets up the scene to be rendered.
@@ -145,36 +147,41 @@ public class World{
 	public void bunny(int width,int height) {
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(2, -0, 5), new Point(0, 0, 0), new Vector(-1, 0, 0), 90);
+				new Point(10, 10, 10), new Point(0, 0, 0), new Vector(-1, -1, 0), 90);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
-		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.0001,true);
+		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(0,0,100), 0.0001,true);
 		this.plights.add(whiteLight);
-		//PointLight blueLight = new PointLight(new Point(8,8,10),new Color(10,10,100), 0.001,true);
-		//this.plights.add(blueLight);
-		//PointLight redLight = new PointLight(new Point(8,-8,10),new Color(200,10,10), 0.001,true);
-		//this.plights.add(redLight);
+		PointLight blueLight = new PointLight(new Point(0,8,4),new Color(0,100,0), 0.001,true);
+		this.plights.add(blueLight);
+		PointLight redLight = new PointLight(new Point(8,0,4),new Color(100,0,0), 0.001,true);
+		this.plights.add(redLight);
 		
-		this.ambient = 0.00;
+		this.ambient = 0.000;
 		
 		//setup the objects in the scene.
-		Transformation t1 = Transformation.translate(0, 0, 1.0).append(
-				Transformation.scale(1, 1, 1));
+		Transformation t1 = Transformation.translate(0, 0, 0).append(
+				Transformation.rotateX(90).append(Transformation.rotateY(90)));
+				
+		//Triangle triangle = new Triangle(new Point(0,0,0), new Point(1,0,0), new Point(0,1,0),
+		//								new Normal(0,0,1), new Normal(0,0,1), new Normal(0,0,1),
+		//								new Color(100,0,0),1.0,t1);
+		//this.shapes.add(triangle);
 		
-		ObjShape bunny = new ObjShape("./obj/cube.obj",t1,new Color(10,10,10),1.0);
+		ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,new Color(100,100,100),1.0);
 		this.shapes.add(bunny);
 		
 		
 		Material mat;
 		//mat = new Chess(new Color(100,100,100), new Color(1,1,1),1);
 		//cr = -0.076, ci = 0.651, N = 200, bound = 1, lim = 100
-		//mat = new Julia(new Complex(-0.076,0.652),200,1,100, 10);
+		//mat = new Julia(new Complex(-0.076,0.652),200,1.5,100, 10);
 		mat = new Monochrome(new Color(100,100,100));
 		
 		//(Point a,Normal n, Material m,double reflectivity)
 		Plane plane = new Plane(new Point(0,0,0),new Normal(0,0,1),
-				                mat,1);
-		//this.shapes.add(plane);
+				                mat,10);
+		this.shapes.add(plane);
 		
 	}
 
