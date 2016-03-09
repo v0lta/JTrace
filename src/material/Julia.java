@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import math.Color;
+import math.TextPoint;
 import math.Vector;
 
 public class Julia implements Material {
@@ -51,10 +52,29 @@ public class Julia implements Material {
 	 */
 
 	@Override
-	public Color getColor(Vector point){
+	public Color getColor(TextPoint point){
 		//map input into the space where the julia set has been computed.
-		double x = Math.abs(point.x);
-		double y = Math.abs(point.y);
+		double x = Math.abs(point.u);
+		double y = Math.abs(point.v);
+		double mapBnd = 2*bound;
+		
+		double dx = (mapBnd)/(N-1);
+		double tx = x - mapBnd*( (int) (x/mapBnd) );
+		int indexX = (int) (tx/dx);
+		
+		double dy = dx;
+		double ty = y - mapBnd*( (int) (y/mapBnd) );
+		int indexY = (int) (ty/dy);
+		return this.colorMap.getColor(indexX, indexY);
+	}
+	
+	@Override
+	public Color getColor(Vector pointVec) {
+		//TODO: use something better.
+		TextPoint point = new TextPoint(pointVec.x,pointVec.y);
+		//map input into the space where the julia set has been computed.
+		double x = Math.abs(point.u);
+		double y = Math.abs(point.v);
 		double mapBnd = 2*bound;
 		
 		double dx = (mapBnd)/(N-1);

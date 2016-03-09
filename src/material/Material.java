@@ -1,6 +1,7 @@
 package material;
 
 import math.Color;
+import math.TextPoint;
 import math.Vector;
 
 
@@ -18,5 +19,6 @@ public interface Material {
 	 *    
 	 * @return a color object.
 	 */
-	public Color getColor(Vector pointVec);
+	public Color getColor(TextPoint txtPnt);	
+	public Color getColor(Vector hitPoint );
 }

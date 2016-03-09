@@ -7,26 +7,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import acceleration.AxisAlignedBox;
+import material.Material;
 import math.Color;
 import math.Intersection;
 import math.Normal;
 import math.Point;
 import math.Ray;
+import math.TextPoint;
 import math.Transformation;
 
 public class ObjShape implements Shape {
 	public final String path;
 	public final Transformation transformation;
 	public final double reflectivity;
-	public final Color color;
+	public final Material mat;
 	public final List<Triangle> triangleList;
 	private AxisAlignedBox aab;
 	
-	public ObjShape(String path, Transformation transformation,Color color, double reflectivity){
+	public ObjShape(String path, Transformation transformation, Material mat,
+					double reflectivity){
 		this.path = path;
 		this.transformation = transformation;
 		this.reflectivity = reflectivity;
-		this.color = color;
+		this.mat = mat;
 		this.triangleList = new ArrayList<Triangle>();
 		
 		try {
@@ -182,10 +185,29 @@ public class ObjShape implements Shape {
 				z = normals.get(2);
 				Normal cn = new Normal(x,y,z);
 				
+				//find the texture coordinates.
+				//create the normal objects.
+				//System.out.println(asmblyList);
+				List<Double> textVerts = txtvList.get(asmblyList.get(0).get(1) - 1);
+				//System.out.println(textVerts);
+				double u = textVerts.get(0);
+				double v = textVerts.get(1);
+				TextPoint at = new TextPoint(u,v);
+				
+				textVerts = txtvList.get(asmblyList.get(1).get(1) - 1);
+				u = textVerts.get(0);
+				v = textVerts.get(1);
+				TextPoint bt = new TextPoint(u,v);
+				
+				textVerts = txtvList.get(asmblyList.get(2).get(1) - 1);
+				u = textVerts.get(0);
+				v = textVerts.get(1);
+				TextPoint ct = new TextPoint(u,v);
+				
 				//(Point a, Point b, Point c,
 				//Normal an, Normal bn, Normal cn, Color color,
 				//double reflectivity, Transformation transformation)
-				Triangle triangle = new Triangle(a,b,c,an,bn,cn,this.color,this.reflectivity,this.transformation);
+				Triangle triangle = new Triangle(a,b,c,an,bn,cn,at,bt,ct,this.mat,this.reflectivity,this.transformation);
 				this.triangleList.add(triangle);
 				
 				
@@ -232,8 +254,9 @@ public class ObjShape implements Shape {
 	 */
 	public static void main(String[] arguments){
 		Transformation testTrans = Transformation.createIdentity();
+		Material mat = null;
 			@SuppressWarnings("unused")
-			ObjShape testObj = new ObjShape("./obj/plane.obj",testTrans,new Color(10,10,10),1.0);
+			ObjShape testObj = new ObjShape("./obj/plane.obj",testTrans,mat,1.0);
 	}
 	 
 

@@ -1,7 +1,9 @@
 package material;
 
 import math.Color;
+import math.TextPoint;
 import math.Vector;
+
 
 public class Monochrome implements Material {
 
@@ -12,7 +14,10 @@ public class Monochrome implements Material {
 	}
 	
 	@Override
-	public Color getColor(Vector pointVec) {
+	public Color getColor(TextPoint txtPnt) {
+		return this.color;
+	}
+	public Color getColor(Vector hitPoint) {
 		return this.color;
 	}
 

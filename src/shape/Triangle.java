@@ -3,12 +3,14 @@ package shape;
 import java.util.ArrayList;
 import java.util.List;
 
+import material.Material;
 import math.Color;
 import math.Constants;
 import math.Intersection;
 import math.Normal;
 import math.Point;
 import math.Ray;
+import math.TextPoint;
 import math.Transformation;
 import math.Vector;
 
@@ -20,16 +22,19 @@ public class Triangle implements Shape {
 	public final Normal an;
 	public final Normal bn;
 	public final Normal cn;
-	public final Color color;
+	public final TextPoint at;
+	public final TextPoint bt;
+	public final TextPoint ct;
+	public final Material mat;
 	public final double reflectivity;
 	public final Transformation transformation;
 
 	
 	
 	public Triangle (Point a, Point b, Point c,
-			Normal an, Normal bn, Normal cn, Color color,
+			Normal an, Normal bn, Normal cn,
+			TextPoint at, TextPoint bt, TextPoint ct, Material mat,
 			double reflectivity, Transformation transformation) {
-		
 		
 		this.a = a;
 		this.b = b;
@@ -46,7 +51,10 @@ public class Triangle implements Shape {
 			//np.cross((self.a - self.c), (self.b -self.c))
 			this.cn = a.subtract(c).cross(b.subtract(c)).toNormal();			
 		}
-		this.color = color;
+		this.at = at;
+		this.bt = bt;
+		this.ct = ct;
+		this.mat = mat;
 		this.reflectivity = reflectivity;
 		this.transformation = transformation;		
 	}
@@ -108,15 +116,22 @@ public class Triangle implements Shape {
         Point hitPoint;
         Vector hitNormVec;
         Normal hitNormal;
+        TextPoint hitTxt;
+        
         Vector an = this.an.toVector();
         Vector bn = this.bn.toVector();
         Vector cn = this.cn.toVector();
         
         hitPoint = ro.add(rd.scale(t)); 
         hitPoint = this.transformation.transform( hitPoint );
+        
         hitNormVec = an.scale(1 - beta - gamma).add(bn.scale(beta)).add(cn.scale(gamma));
         hitNormal = this.transformation.transformInverseTranspose( hitNormVec.toNormal());
-        hits.add(new Intersection(true, hitPoint, hitNormal, this.color,this.reflectivity));
+        
+        hitTxt = at.scale(1 - beta - gamma).add(bt.scale(beta)).add(ct.scale(gamma));
+        Color hitClr = mat.getColor(hitTxt);
+        
+        hits.add(new Intersection(true, hitPoint, hitNormal, hitClr,this.reflectivity));
         return hits;
 	}
 

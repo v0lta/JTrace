@@ -42,7 +42,7 @@ public class Renderer {
 		int width = 640;
 		int height = 640;
 		double sensitivity = 1.0;
-		double gamma = 2.2;
+		double gamma = 1.5;
 		boolean gui = true;
 		
 
