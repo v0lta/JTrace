@@ -1,0 +1,13 @@
+Origineel model: http://www.turbosquid.com/FullPreview/Index.cfm/ID/889330
+
+Over de normal maps:
+De apple_tangentSpaceNormalMap.jpg is de originele normal map in de rakende 
+ruimte (tangent space). Deze is moeilijker te implementeren en daarom 
+hebben we deze geconverteerd naar apple_objectSpaceNormalMap.png (via 
+Blender), waarbij de RGB waarden rechtstreeks mappen op de XYZ coordinaten 
+van de normalen in het lokale assenstellsel van het object.
+
+Merk op dat aan de achterkant van de appel (daar waar de 'naad' zit in de 
+UV mapping), de normal map niet goed aansluit! Als je daar dus heel 
+duidelijk de 'naad' ziet lopen in uw render: it's not (neccesarily) a bug, 
+it's a feature.
