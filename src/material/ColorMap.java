@@ -13,6 +13,14 @@ public class ColorMap {
 	private double[][] set;
 	//private List<Double> limitVals = new ArrayList<Double>(); 
 	
+	
+	/**
+	 * Create a new colormap for fractal plotting.
+	 * @param minVal minimum value in the set array.
+	 * @param maxVal maximum value in the set array.
+	 * @param set the set containing the fractal data.
+	 * @param scale factor of the color values i.e. 255.
+	 */
 	public ColorMap(double minVal, double maxVal, double[][] set,double scale){
 		//if (colors.size() != limits.size()) {
 		//	throw new IllegalArgumentException("need as many colors as limits!");

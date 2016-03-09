@@ -45,6 +45,9 @@ public class World{
 		else if (choice == "bunny") {
 			bunny(width,height);
 		}
+		else if (choice == "apple") {
+			apple(width,height);
+		}
 		else
 			throw new IllegalArgumentException();
 	}
@@ -151,10 +154,10 @@ public class World{
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(0,0,100), 0.0001,true);
-		this.plights.add(whiteLight);
-		PointLight blueLight = new PointLight(new Point(0,8,4),new Color(0,100,0), 0.001,true);
+		//this.plights.add(whiteLight);
+		PointLight blueLight = new PointLight(new Point(0,8,5),new Color(50,100,50), 0.0001,true);
 		this.plights.add(blueLight);
-		PointLight redLight = new PointLight(new Point(8,0,4),new Color(100,0,0), 0.001,true);
+		PointLight redLight = new PointLight(new Point(8,0,5),new Color(100,50,50), 0.0001,true);
 		this.plights.add(redLight);
 		
 		this.ambient = 0.000;
@@ -181,8 +184,47 @@ public class World{
 		//(Point a,Normal n, Material m,double reflectivity)
 		Plane plane = new Plane(new Point(0,0,0),new Normal(0,0,1),
 				                mat,10);
-		this.shapes.add(plane);
+		this.shapes.add(plane);		
+	}
+	
+	public void apple(int width,int height) {
+		//set the camera.
+		this.camera = new PerspectiveCamera(width, height,
+				new Point(1, 1, 1), new Point(0, 0, 0), new Vector(-1, -1, 0), 90);
+
+		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
+		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.0001,false);
+		this.plights.add(whiteLight);
+		//PointLight blueLight = new PointLight(new Point(0,8,5),new Color(50,100,50), 0.0001,false);
+		//this.plights.add(blueLight);
+		//PointLight redLight = new PointLight(new Point(8,0,5),new Color(100,50,50), 0.0001,false);
+		//this.plights.add(redLight);
 		
+		this.ambient = 0.000;
+		
+		//setup the objects in the scene.
+		Transformation t1 = Transformation.translate(0, 0, 0.15).append(
+				Transformation.rotateX(130).append(Transformation.rotateY(0)));
+				
+		//Triangle triangle = new Triangle(new Point(0,0,0), new Point(1,0,0), new Point(0,1,0),
+		//								new Normal(0,0,1), new Normal(0,0,1), new Normal(0,0,1),
+		//								new Color(100,0,0),1.0,t1);
+		//this.shapes.add(triangle);
+		
+		ObjShape bunny = new ObjShape("./obj/apple/apple.obj",t1,new Color(100,100,100),1.0);
+		this.shapes.add(bunny);
+		
+		
+		Material mat;
+		//mat = new Chess(new Color(100,100,100), new Color(1,1,1),1);
+		//cr = -0.076, ci = 0.651, N = 200, bound = 1, lim = 100
+		//mat = new Julia(new Complex(-0.076,0.652),200,1.5,100, 10);
+		mat = new Monochrome(new Color(100,100,100));
+		
+		//(Point a,Normal n, Material m,double reflectivity)
+		Plane plane = new Plane(new Point(0,0,0),new Normal(0,0,1),
+				                mat,10);
+		this.shapes.add(plane);		
 	}
 
 

@@ -188,6 +188,9 @@ public class ObjShape implements Shape {
 				Triangle triangle = new Triangle(a,b,c,an,bn,cn,this.color,this.reflectivity,this.transformation);
 				this.triangleList.add(triangle);
 				
+				
+				
+				
 			}
 			this.aab = new AxisAlignedBox(new Point(minmax.xMin,minmax.yMin,minmax.zMin),
 										  new Point(minmax.xMax,minmax.yMax,minmax.zMax),
