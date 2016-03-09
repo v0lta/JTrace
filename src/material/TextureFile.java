@@ -16,12 +16,15 @@ public class TextureFile implements Material {
 	private int height;
 	private int width;
 	public final String path;
+	public final double size;
 	
 	
-	public TextureFile(String path){
+	public TextureFile(String path, double size){
 		this.path = path;
 		this.read();
+		this.size = size;
 	}
+	
 	
 	public void read() {
 	        File file = new File(this.path);
@@ -44,24 +47,43 @@ public class TextureFile implements Material {
 	
 	@Override
 	public Color getColor(TextPoint txtPnt) {
-        
-
+        //u and v need to be in [0,1] intitially;
+		double u = Math.abs(txtPnt.u/this.size) % this.size;
+		double v = Math.abs(txtPnt.v/this.size) % this.size;
+		
+		
+		int indu;
+		int indv;
+		
         int[] pixel = new int[3];
-        int u = (int) (txtPnt.u*this.width);
-        int v = (int) (txtPnt.v*this.height);
-        System.out.println(u);
-        System.out.println(v);
-        fileData.getPixel(u,v,pixel);
+        indu = ((int) (u*this.width)) - 1;// % this.width;
+        indv = this.height - ((int) (v*this.height)) - 1;// % this.height;
+        if (indu > this.width - 1) {
+        	indu = this.width - 1;
+        } else if (indu < 0) {
+        	indu = 0;
+        }
+        if (indv > this.width - 1)  {
+        	indv = this.width - 1;
+        } else if (indv < 0){
+        	indv = 0;
+        }
+        
+        
+        fileData.getPixel(indu,indv,pixel);
         //System.out.println(pixel[1]);        
 		return new Color(pixel[0],pixel[1],pixel[2]);
+        //return new Color(1.0,1.0,1.0);
 	}
 	
 	/** 
 	 * A main for debugging.
 	 */
 	public static void main(String[] arguments){
-		TextureFile test = new TextureFile("./obj/apple/apple_texture.jpg");
+		TextureFile test = new TextureFile("./obj/apple/apple_texture.jpg",1.0);
 		test.read();
 	}
+	
+
 
 }

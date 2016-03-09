@@ -125,10 +125,11 @@ public class Renderer {
 		/**********************************************************************
 		 * Initialize the scene
 		 *********************************************************************/
-		//final World world = new World(width, height, "planeAndSphere");
+		//final World world = new World(width, height, "initialWorld");
+		final World world = new World(width, height, "planeAndSphere");
 		//final World world = new World(width, height, "Julia");
 		//final World world = new World(width, height, "bunny");
-		final World world = new World(width, height, "apple");
+		//final World world = new World(width, height, "apple");
 		
 		/**********************************************************************
 		 * Multi-threaded rendering of the scene
@@ -193,54 +194,64 @@ public class Renderer {
 					                //use the found intersection for rendering.
 					                double La = world.ambient;
 					                double Rs = closestInt.reflectivity;
-					                Vector Cs = closestInt.color.toVector();
-					                double[] ambRes = Cs.scale(La).scale(Rs).toArray();
-					                buffer.getPixel(x, y).add(ambRes[0], ambRes[1], ambRes[2],1.0);
 					                
-					                
-					                //add a contribution for each light.
-					                for (PointLight pl: world.plights){
-					                Vector l  = pl.l(closestInt.point);
-					                Vector n  = closestInt.normal.toVector();
-					                Vector toLight = pl.origin.toVector().subtract(closestInt.point.toVector()); 
-					                
-					                double dot = (l.dot(n));
-					                
-					                    if (dot > 0){
-					                    	if (pl.shadows) {
-					                    		//launch a shaow ray.					                    		
-					                    		Ray shadowRay = new Ray(closestInt.point,toLight);
-					                    		shadowInters.clear();
-					                    		for (Shape shadowShape : world.shapes) {
-													List<Intersection> shadowInter = new ArrayList<Intersection>();
-													shadowInter.addAll(shadowShape.intersect(shadowRay));
-													if (shadowInter.isEmpty() == false) {
-														shadowInters.addAll(shadowInter);
+					                Vector Cs;
+					                //if set to false the coloring comes from the normals (for debugging).
+					                if (false) {
+					                	Cs = closestInt.color.toVector();
+					                	double[] ambRes = Cs.scale(La).scale(Rs).toArray();
+					                	buffer.getPixel(x, y).add(ambRes[0], ambRes[1], ambRes[2],1.0);
+					                	
+					                	//add a contribution for each light.
+						                for (PointLight pl: world.plights){
+						                Vector l  = pl.l(closestInt.point);
+						                Vector n  = closestInt.normal.toVector();
+						                Vector toLight = pl.origin.toVector().subtract(closestInt.point.toVector()); 
+						                
+						                double dot = (l.dot(n));
+						                
+						                    if (dot > 0){
+						                    	if (pl.shadows) {
+						                    		//launch a shaow ray.					                    		
+						                    		Ray shadowRay = new Ray(closestInt.point,toLight);
+						                    		shadowInters.clear();
+						                    		for (Shape shadowShape : world.shapes) {
+														List<Intersection> shadowInter = new ArrayList<Intersection>();
+														shadowInter.addAll(shadowShape.intersect(shadowRay));
+														if (shadowInter.isEmpty() == false) {
+															shadowInters.addAll(shadowInter);
+														}
 													}
-												}
-												//see if an intersection was found
-												if (shadowInters.isEmpty()) {
-													//its not in the shadow.
-													//compute distance to light source
+													//see if an intersection was found
+													if (shadowInters.isEmpty()) {
+														//its not in the shadow.
+														//compute distance to light source
+														double d = toLight.lengthSquared();
+														Vector Lp = pl.L();
+									                    Vector Cp = pl.color.toVector();								                    
+									                    double[] lghtRes = Cs.elPrd(Lp).elPrd(Cp).scale(dot).scale(Rs/3.14).scale(1/d).toArray();
+								                    	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);										
+														
+													} 
+						                    	} else {
+						                    		//there are no shadwos directly shade things
 													double d = toLight.lengthSquared();
 													Vector Lp = pl.L();
 								                    Vector Cp = pl.color.toVector();								                    
-								                    double[] lghtRes = Cs.elPrd(Lp).elPrd(Cp).scale(dot).scale(Rs/3.14).scale(1/d).toArray();
-							                    	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);										
-													
-												} 
-					                    	} else {
-					                    		//there are no shadwos directly shade things
-												double d = toLight.lengthSquared();
-												Vector Lp = pl.L();
-							                    Vector Cp = pl.color.toVector();								                    
-							                    double[] lghtRes = Cs.elPrd(Lp).elPrd(Cp).scale(dot).scale(Rs/3.14).scale(1.0/d).toArray();
-						                    	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);
-					                    	}
-					                    	
-					                    }
+								                    double[] lghtRes = Cs.elPrd(Lp).elPrd(Cp).scale(dot).scale(Rs/3.14).scale(1.0/d).toArray();
+							                    	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);
+						                    	}
+						                    	
+						                    }
+						                }
+					                
+					                } else {
+					                	Cs = closestInt.normal.toVector();
+					                	buffer.getPixel(x, y).add(Cs.x,Cs.y,Cs.z);
 					                }
-							}
+					                
+					                
+					                							}
 						}
 					}
 

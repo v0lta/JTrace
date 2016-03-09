@@ -68,15 +68,9 @@ public class Triangle implements Shape {
         Point  ro; 
         Vector rd;
         
-        if (this.transformation != null) {
-            Ray rayInv = this.transformation.transformInverse(ray);
-            ro = rayInv.origin;
-            rd = rayInv.direction;
-        } else {      
-            ro = ray.origin;
-            rd = ray.direction;
-        }
-       
+        Ray rayInv = this.transformation.transformInverse(ray);
+        ro = rayInv.origin;
+        rd = rayInv.direction;
         
         a = pa.x - pb.x; b = pa.x - pc.x; c = rd.x; d = pa.x - ro.x;
         e = pa.y - pb.y; f = pa.y - pc.y; g = rd.y; h = pa.y - ro.y;

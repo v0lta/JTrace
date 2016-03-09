@@ -9,6 +9,8 @@ import math.Constants;
 import math.Intersection;
 import math.Point;
 import math.Ray;
+import math.TextPoint;
+import math.Transformation;
 import math.Vector;
 import math.Normal;
 
@@ -16,15 +18,15 @@ import math.Normal;
  *A class, which allows to intersect planes. 
  */
 public class Plane implements Shape {
-	public final Point a; //point a describing, where the plane is.
-	public final Normal n; //normal n describing the plane's orientation.
-	public final Material m; //the material describes the plane's coloring.
+	public final Point a = new Point(0,0,0); //point a describing, where the plane is.
+	public final Normal n = new Normal(0,0,1); //normal n describing the plane's orientation.
+	public final Transformation transformation;
+	public final Material mat; //the material describes the plane's coloring.
 	public final double reflectivity; //determines how well the plane reflects light.
 	
-    public Plane(Point a,Normal n, Material m,double reflectivity) {
-        this.a = a;  
-        this.n = n;  
-        this.m = m;
+    public Plane(Transformation transformation, Material mat,double reflectivity) {
+    	this.transformation = transformation;
+        this.mat = mat;
         this.reflectivity = reflectivity;
         
     }
@@ -36,10 +38,13 @@ public class Plane implements Shape {
 	@Override
 	public List<Intersection> intersect(Ray ray) {
 		List<Intersection> hits = new ArrayList<Intersection>();
+		Vector ro; 
+        Vector rd;
 		
-    	Vector ro = ray.origin.toVector();
-        Vector rd = ray.direction;
-        
+        Ray rayInv = this.transformation.transformInverse(ray);
+        ro = rayInv.origin.toVector();
+        rd = rayInv.direction;
+
         double t;
         double denomDot = n.toVector().dot(rd); 
         
@@ -51,8 +56,13 @@ public class Plane implements Shape {
                 return hits;
             } else {
                 Vector pointVec = ro.add(rd.scale(t));
-                Color color = m.getColor(pointVec);
-                hits.add(new Intersection(true, pointVec.toPoint(), n, color,reflectivity));
+                
+                Point hitPoint = this.transformation.transform( pointVec.toPoint() );
+                Normal hitNormal = this.transformation.transformInverseTranspose( this.n);
+                TextPoint txtPoint = new TextPoint(pointVec.x,pointVec.y); //the z coordinate of the unit plane is always zero.
+                Color hitClr = mat.getColor(txtPoint);
+                
+                hits.add(new Intersection(true, hitPoint, hitNormal, hitClr,reflectivity));
                 return hits;
             }
         }
