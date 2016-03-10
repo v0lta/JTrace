@@ -184,7 +184,8 @@ public class Renderer {
 									//add a color contribution to the pixel based in the closest intersection.
 				                	double[] ambRes = computeAmbientShading(closestInt.color, world.ambient, closestInt.reflectivity);
 					                //if set to false the coloring comes from the normals (for debugging).
-					                if (true) {
+				                	boolean noNormalsAsColors = true;
+					                if (noNormalsAsColors) {
 					                	//add the ambient Lighting result.
 					                	buffer.getPixel(x, y).add(ambRes[0], ambRes[1], ambRes[2],1.0);
 					                	
@@ -192,10 +193,9 @@ public class Renderer {
 						                for (PointLight pl: world.plights){
 						                Vector l  = pl.l(closestInt.point);
 						                Vector n  = closestInt.normal.toVector();
-						                //Vector n2 = new Vector(Math.abs(n.x),Math.abs(n.y),Math.abs(n.z));
 						                Vector toLight = pl.origin.toVector().subtract(closestInt.point.toVector()); 
 						                double dot = (n.dot(l));						                
-						                    if (dot > 0){
+						                    //if (dot > 0){
 						                    	if (pl.shadows) {
 						                    		//launch a shadow ray.					                    		
 						                    		Ray shadowRay = new Ray(closestInt.point,toLight);
@@ -213,7 +213,7 @@ public class Renderer {
 							                    	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);
 						                    	}
 						                    	
-						                    }
+						                    //}
 						                }
 					                
 					                } else {

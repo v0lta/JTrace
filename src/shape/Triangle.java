@@ -110,7 +110,6 @@ public class Triangle implements Shape {
         Point hitPoint;
         Vector hitNormVec;
         Normal hitNormal;
-        Normal hitNormal2;
         TextPoint hitTxt;
         
         Vector an = this.an.toVector();
@@ -123,7 +122,6 @@ public class Triangle implements Shape {
         hitNormVec = an.scale(1.0 - beta - gamma).add(bn.scale(beta)).add(cn.scale(gamma));
         hitNormal = this.transformation.transformInverseTranspose( hitNormVec.toNormal());
         hitNormal = hitNormal.toVector().normalize().toNormal();
-        // hitNormal2 = this.transformation.transformInverseTranspose( an.toNormal());
         
         hitTxt = at.scale(1 - beta - gamma).add(bt.scale(beta)).add(ct.scale(gamma));
         Color hitClr = mat.getColor(hitTxt);

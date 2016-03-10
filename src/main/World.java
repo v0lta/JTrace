@@ -11,7 +11,6 @@ import material.Material;
 import material.Monochrome;
 import material.TextureFile;
 import math.Color;
-import math.Normal;
 import math.Point;
 import math.Transformation;
 import math.Vector;
@@ -157,30 +156,32 @@ public class World{
 	public void bunny(int width,int height) {
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(10, 0, 10), new Point(0, 0, 0), new Vector(-1, 0, 0), 50);
+				new Point(10, 0, 10), new Point(0, 0, 0), new Vector(-1, 0, 0), 90);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		//PointLight whiteLight = new PointLight(new Point(0,2,10),new Color(100,100,100), 0.001,true);
 		//this.plights.add(whiteLight);
-		PointLight blueLight = new PointLight(new Point(0,8,4),new Color(50,100,50), 0.005,false);
+		PointLight blueLight = new PointLight(new Point(0,8,4),new Color(50,100,50), 0.005,true);
 		this.plights.add(blueLight);
-		PointLight redLight = new PointLight(new Point(8,0,4),new Color(100,50,50), 0.005,false);
+		PointLight redLight = new PointLight(new Point(8,0,4),new Color(100,50,50), 0.005,true);
 		this.plights.add(redLight);
 		
 		this.ambient = 0.0000;
 		
 		//setup the objects in the scene.
-		Transformation t1 = Transformation.translate(0, 2, -1).append(
+		Transformation t1 = Transformation.IDENTITY;
+		t1 = t1.append(Transformation.translate(0, 2, -1)).append(
 				Transformation.rotateX(90).append(Transformation.rotateY(90)));
-				
+		
 		//Triangle triangle = new Triangle(new Point(0,0,0), new Point(1,0,0), new Point(0,1,0),
 		//								new Normal(0,0,1), new Normal(0,0,1), new Normal(0,0,1),
 		//								new Color(100,0,0),1.0,t1);
 		//this.shapes.add(triangle);
 		Material mat;
 		mat = new Monochrome( new Color(100,100,100));
-		//ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0);
-		ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0);
+		ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0);
+		//ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0);
+		//ObjShape bunny = new ObjShape("./obj/sphere.obj",t1,mat,2.0);
 		this.shapes.add(bunny);
 		
 		

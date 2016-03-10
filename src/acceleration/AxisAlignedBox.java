@@ -115,8 +115,11 @@ public class AxisAlignedBox implements Shape {
 		
 		List<Intersection> intList = new ArrayList<Intersection>();
 		
-		Point ro = ray.origin;
-		Vector rd = ray.direction;
+		Point ro;
+		Vector rd;
+        Ray rayInv = this.transformation.transformInverse(ray);
+        ro = rayInv.origin;
+        rd = rayInv.direction;
 		
 		double x0 = p0.x; double y0 = p0.y; double z0 = p0.z;
 		double x1 = p1.x; double y1 = p1.y; double z1 = p1.z;
@@ -199,6 +202,7 @@ public class AxisAlignedBox implements Shape {
 				normal = getNormal(faceOut);
 			}
 			Vector hitPoint = ro.toVector().add(rd.scale(tMin));
+	        hitPoint = this.transformation.transform( hitPoint );
 			intList.add(new Intersection(true,hitPoint.toPoint(),normal,new Color(100,100,100),10));
 		}
 		

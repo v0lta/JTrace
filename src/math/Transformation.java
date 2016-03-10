@@ -1,4 +1,6 @@
 package math;
+import math.Vector;
+import math.Normal;
 
 /**
  * Represents a {@link Transformation} to transform three dimensional objects.
@@ -118,7 +120,14 @@ public class Transformation implements Cloneable {
 	}
 	
 	public Normal transformInverseTranspose(Normal normal) throws NullPointerException {
-		return inverse.transpose().transform(normal);
+		//Matrix inverseTranspose2 = inverse; // inverse.transpose();
+		Vector normVec = normal.toVector();
+		Matrix inverseTranspose = inverse.transpose();
+		normVec = inverseTranspose.transform(normVec);
+		return normVec.toNormal();
+		
+		//the inverse Transpose operation breaks the normal occasionally.
+		//return normal;
 	}
 
 	/**
