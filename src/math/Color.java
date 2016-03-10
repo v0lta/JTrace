@@ -5,7 +5,7 @@ public class Color {
 	public final double g;
 	public final double b;
 	
-	public Color(double r, double b, double g) {
+	public Color(double r, double g, double b) {
 		this.r = r;
 		this.g = g;
 		this.b = b;

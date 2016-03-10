@@ -8,7 +8,6 @@ import java.util.List;
 
 import acceleration.AxisAlignedBox;
 import material.Material;
-import math.Color;
 import math.Intersection;
 import math.Normal;
 import math.Point;
@@ -165,34 +164,46 @@ public class ObjShape implements Shape {
 				minmax.checkVals(x, y, z);
 				
 				//create the normal objects.
-				List<Double> normals = normList.get(asmblyList.get(0).get(2) - 1);
-				x = normals.get(0);
-				y = normals.get(1);
-				z = normals.get(2);
+				List<Double> normal = normList.get(asmblyList.get(0).get(2) - 1);
+				x = normal.get(0);
+				y = normal.get(1);
+				z = normal.get(2);
 				Normal an = new Normal(x,y,z);
 				
+				if (Math.sqrt(x*x + y*y + z*z) < 0.1) {
+					System.err.println("an very small");
+				}
+				
 				//b
-				vertex = normList.get(asmblyList.get(1).get(2) - 1);
-				x = normals.get(0);
-				y = normals.get(1);
-				z = normals.get(2);
+				normal = normList.get(asmblyList.get(1).get(2) - 1);
+				x = normal.get(0);
+				y = normal.get(1);
+				z = normal.get(2);
 				Normal bn = new Normal(x,y,z);
 				
+				if (Math.sqrt(x*x + y*y + z*z) < 0.1) {
+					System.err.println("bn very small");
+				}
+				
 				//c
-				vertex = normList.get(asmblyList.get(2).get(2) - 1);
-				x = normals.get(0);
-				y = normals.get(1);
-				z = normals.get(2);
+				normal = normList.get(asmblyList.get(2).get(2) - 1);
+				x = normal.get(0);
+				y = normal.get(1);
+				z = normal.get(2);
 				Normal cn = new Normal(x,y,z);
+				
+				if (Math.sqrt(x*x + y*y + z*z) < 0.1) {
+					System.err.println("cn veeery small");
+				}
 				
 				//find the texture coordinates.
 				//create the normal objects.
 				//System.out.println(asmblyList);
 				List<Double> textVerts = txtvList.get(asmblyList.get(0).get(1) - 1);
-				//System.out.println(textVerts);
 				double u = textVerts.get(0);
 				double v = textVerts.get(1);
 				TextPoint at = new TextPoint(u,v);
+				
 				
 				textVerts = txtvList.get(asmblyList.get(1).get(1) - 1);
 				u = textVerts.get(0);
@@ -203,6 +214,7 @@ public class ObjShape implements Shape {
 				u = textVerts.get(0);
 				v = textVerts.get(1);
 				TextPoint ct = new TextPoint(u,v);
+				
 				
 				//(Point a, Point b, Point c,
 				//Normal an, Normal bn, Normal cn, Color color,
@@ -256,7 +268,7 @@ public class ObjShape implements Shape {
 		Transformation testTrans = Transformation.createIdentity();
 		Material mat = null;
 			@SuppressWarnings("unused")
-			ObjShape testObj = new ObjShape("./obj/plane.obj",testTrans,mat,1.0);
+			ObjShape testObj = new ObjShape("./obj/testFile.obj",testTrans,mat,1.0);
 	}
 	 
 

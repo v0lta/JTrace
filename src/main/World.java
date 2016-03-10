@@ -89,26 +89,29 @@ public class World{
 	public void planeAndSphere(int width,int height) {
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(1, 1, 1), new Point(0, 0, 0), new Vector(-1, -1, 0), 90);
+				new Point(6, 0, 6), new Point(0, 0, 0), new Vector(-1, 0, 0), 90);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
-		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.0001,true);
+		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.01,true);
 		//this.plights.add(whiteLight);
-		PointLight blueLight = new PointLight(new Point(8,8,10),new Color(10,10,100), 0.001,true);
-		//this.plights.add(blueLight);
-		PointLight redLight = new PointLight(new Point(8,-8,10),new Color(200,10,10), 0.001,true);
-		//this.plights.add(redLight);
+		PointLight blueLight = new PointLight(new Point(8,8,10),new Color(0,0,100), 0.1,true);
+		this.plights.add(blueLight);
+		PointLight redLight = new PointLight(new Point(8,-8,10),new Color(100,0,0), 0.1,true);
+		this.plights.add(redLight);
 		
-		this.ambient = 1.00;
+		this.ambient = 0.1;
 		
 		//setup the objects in the scene.
 		Transformation t1 = Transformation.translate(0.0, 0.0, 0.0);		
-		this.shapes.add(new Sphere(t1,new Color(5.0,5.0,5.0),1));
+		//this.shapes.add(new Sphere(t1,new Color(5.0,5.0,5.0),1));
 		
 		Transformation t2 = Transformation.translate(0, 0, 0.0);
 		Material sphereText = new Monochrome(new Color(100.0,100.0,100.0));
 		ObjShape tessSphere = new ObjShape("./obj/sphere.obj",t2,sphereText,1.5);
-		//this.shapes.add(tessSphere);
+		this.shapes.add(tessSphere);
+		
+		//ObjShape table = new ObjShape("./obj/table.obj",t2,sphereText,1.5);
+		//this.shapes.add(table);
 		
 		
 		
@@ -154,14 +157,14 @@ public class World{
 	public void bunny(int width,int height) {
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(10, 10, 10), new Point(0, 0, 0), new Vector(-1, -1, 0), 90);
+				new Point(10, 0, 10), new Point(0, 0, 0), new Vector(-1, 0, 0), 50);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		//PointLight whiteLight = new PointLight(new Point(0,2,10),new Color(100,100,100), 0.001,true);
 		//this.plights.add(whiteLight);
-		PointLight blueLight = new PointLight(new Point(0,8,4),new Color(50,100,50), 0.0005,true);
+		PointLight blueLight = new PointLight(new Point(0,8,4),new Color(50,100,50), 0.005,false);
 		this.plights.add(blueLight);
-		PointLight redLight = new PointLight(new Point(8,0,4),new Color(100,50,50), 0.0005,true);
+		PointLight redLight = new PointLight(new Point(8,0,4),new Color(100,50,50), 0.005,false);
 		this.plights.add(redLight);
 		
 		this.ambient = 0.0000;
@@ -176,7 +179,8 @@ public class World{
 		//this.shapes.add(triangle);
 		Material mat;
 		mat = new Monochrome( new Color(100,100,100));
-		ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0);
+		//ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0);
+		ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0);
 		this.shapes.add(bunny);
 		
 		
@@ -199,7 +203,7 @@ public class World{
 				new Point(0.8, 0.8, 1.0), new Point(0, 0, 0), new Vector(-1, -1, 0), 90);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
-		PointLight whiteLight = new PointLight(new Point(10,10,10),new Color(100.0,100.0,100.0), 0.01,false);
+		PointLight whiteLight = new PointLight(new Point(10,10,10),new Color(100.0,100.0,100.0), 0.1,false);
 		this.plights.add(whiteLight);
 		
 		this.ambient = 0.000;
@@ -211,15 +215,15 @@ public class World{
 		//								new Color(100,0,0),1.0,t1);
 		//this.shapes.add(triangle);
 		Material objMat;
-		objMat = new TextureFile("./obj/apple/apple_texture.jpg",1.0);
 		//objMat = new Julia(new Complex(-0.076,0.652),600,1,400,2.5);
-		//objMat = new Monochrome( new Color(100,100,100))
-		//ObjShape apple = new ObjShape("./obj/apple/apple.obj",t1,objMat,1.0);
+		//objMat = new Monochrome( new Color(100,100,100));
+		objMat = new TextureFile("./obj/apple/apple_texture.jpg",1.0);
+		ObjShape apple = new ObjShape("./obj/apple/apple.obj",t1,objMat,1.0);
 		//this.shapes.add(apple);
 		
 		t1 = t1.append(Transformation.rotateX(90));
 		Material houseText = new TextureFile("./obj/house/house_texture.jpg",1.0);
-		ObjShape house = new ObjShape("./obj/house/house.obj",t1,houseText,0.005);
+		ObjShape house = new ObjShape("./obj/house/house.obj",t1,houseText,0.6);
 		this.shapes.add(house);
 		
 		
@@ -230,7 +234,7 @@ public class World{
 		
 		//(Point a,Normal n, Material m,double reflectivity)
 		Transformation tPlane = Transformation.translate(0, 0, -5);
-		Plane plane = new Plane(tPlane,mPlane,1);
+		Plane plane = new Plane(tPlane,mPlane,10);
 		this.shapes.add(plane);		
 	}
 
