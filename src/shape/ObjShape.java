@@ -8,6 +8,7 @@ import java.util.List;
 
 import acceleration.AxisAlignedBox;
 import material.Material;
+import math.Constants;
 import math.Intersection;
 import math.Normal;
 import math.Point;
@@ -22,6 +23,7 @@ public class ObjShape implements Shape {
 	public final Material mat;
 	public final List<Triangle> triangleList;
 	private AxisAlignedBox aab;
+	private int accessCount = 0;
 	
 	public ObjShape(String path, Transformation transformation, Material mat,
 					double reflectivity){
@@ -38,6 +40,7 @@ public class ObjShape implements Shape {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	@Override
 	public List<Intersection> intersect(Ray ray) {
 		
@@ -46,14 +49,29 @@ public class ObjShape implements Shape {
 		intersections.clear();
 		
 		//intersections.addAll(this.aab.intersect(ray));
-		
-		//if (false) {
-		if (aab.intersectBool(ray)) {
-			for (Triangle triangle : this.triangleList) {
-				List<Intersection> currentInter;
-				currentInter = triangle.intersect(ray);
-				if (currentInter.isEmpty() == false) {
-					intersections.addAll(currentInter);
+		//if (Constants.compVisualization == true) {
+		if (Constants.compVisualization) {
+			if (aab.intersectBool(ray)) {
+				for (Triangle triangle : this.triangleList) {
+					List<Intersection> currentInter;
+					currentInter = triangle.intersect(ray);
+					if (currentInter.isEmpty() == false) {
+						intersections.addAll(currentInter);
+					}
+				}
+			//update the intersection counter.
+				for (Intersection inter : intersections){
+					inter.accessCount = this.triangleList.size() + 1;
+				}
+			}
+		} else  {
+			if (aab.intersectBool(ray)) {
+				for (Triangle triangle : this.triangleList) {
+					List<Intersection> currentInter;
+					currentInter = triangle.intersect(ray);
+					if (currentInter.isEmpty() == false) {
+						intersections.addAll(currentInter);
+					}
 				}
 			}
 		}

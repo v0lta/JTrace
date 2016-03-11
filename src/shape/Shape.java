@@ -8,7 +8,7 @@ import math.Intersection;
 /**
  * Interface which should be implemented by all {@link Shape}s.
  * 
- * @author Niels Billen
+ * @author Niels Billen, Moritz Wolter
  * @version 0.2
  */
 public interface Shape {

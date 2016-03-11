@@ -161,9 +161,9 @@ public class World{
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		//PointLight whiteLight = new PointLight(new Point(0,2,10),new Color(100,100,100), 0.001,true);
 		//this.plights.add(whiteLight);
-		PointLight blueLight = new PointLight(new Point(0,8,4),new Color(50,100,50), 0.005,true);
+		PointLight blueLight = new PointLight(new Point(0,8,4),new Color(50,100,50), 0.01,true);
 		this.plights.add(blueLight);
-		PointLight redLight = new PointLight(new Point(8,0,4),new Color(100,50,50), 0.005,true);
+		PointLight redLight = new PointLight(new Point(8,0,4),new Color(100,50,50), 0.01,true);
 		this.plights.add(redLight);
 		
 		this.ambient = 0.0000;

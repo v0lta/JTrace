@@ -24,6 +24,7 @@ public class AxisAlignedBox implements Shape {
 	public final Point p0;
 	public final Point p1;
 	public final Transformation transformation;
+	private int accessCount = 0;
 	
 	public AxisAlignedBox(Point p0,Point p1, Transformation transformation){
 		this.p0 = p0;
@@ -31,6 +32,12 @@ public class AxisAlignedBox implements Shape {
 		this.transformation = transformation;
 	}
 
+	
+	/**
+	 * A simple and fast way to find out if a ray has hit the bounding box
+	 * @param ray, the ray the box should be intersected with.
+	 * @return a boolean indicating an intersection.
+	 */
 	public boolean intersectBool(Ray ray) { 
 		
 		Point ro;
@@ -109,10 +116,8 @@ public class AxisAlignedBox implements Shape {
 		return(t0 < t1 && t1 > Constants.epsilon);		
 	}
 	
-	
 	@Override
 	public List<Intersection> intersect(Ray ray) {
-		
 		List<Intersection> intList = new ArrayList<Intersection>();
 		
 		Point ro;
@@ -121,6 +126,11 @@ public class AxisAlignedBox implements Shape {
         ro = rayInv.origin;
         rd = rayInv.direction;
 		
+        if (Constants.compVisualization == true){
+        	accessCount = accessCount + 1;
+        }
+        
+        
 		double x0 = p0.x; double y0 = p0.y; double z0 = p0.z;
 		double x1 = p1.x; double y1 = p1.y; double z1 = p1.z;
 		
@@ -193,6 +203,7 @@ public class AxisAlignedBox implements Shape {
 		
 		double tMin;
 		Normal normal;
+		Vector hitPoint;
 		if ((t0 < t1) && (t1 > Constants.epsilon)) { // hit condition
 			if (t0 > Constants.epsilon) {
 				tMin = t0;
@@ -201,9 +212,13 @@ public class AxisAlignedBox implements Shape {
 				tMin = t1;
 				normal = getNormal(faceOut);
 			}
-			Vector hitPoint = ro.toVector().add(rd.scale(tMin));
+			hitPoint = ro.toVector().add(rd.scale(tMin));
 	        hitPoint = this.transformation.transform( hitPoint );
-			intList.add(new Intersection(true,hitPoint.toPoint(),normal,new Color(100,100,100),10));
+	        
+	        normal = this.transformation.transformInverseTranspose( normal);
+	        normal = normal.toVector().normalize().toNormal();
+	        
+			intList.add(new Intersection(hitPoint.toPoint(),normal,new Color(100,10,10),10,this.accessCount));
 		}
 		
 		//if (intersectBool(ray)){

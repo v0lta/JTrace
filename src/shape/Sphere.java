@@ -24,6 +24,7 @@ public class Sphere implements Shape {
 	public final Transformation transformation;
 	public final Color color;
 	public final double reflectivity;
+	private int accessCount = 0;
 
 	/**
 	 * Creates a new unit {@link Sphere} at the origin, transformed by the given
@@ -54,6 +55,10 @@ public class Sphere implements Shape {
 	public List<Intersection> intersect(Ray ray) {
 		List<Intersection> hits = new ArrayList<Intersection>();
 		Ray transformed = transformation.transformInverse(ray);
+		
+        if (Constants.compVisualization == true){
+        	accessCount = accessCount + 1;
+        }
 
 		Vector o = transformed.origin.toVector();
 
@@ -94,7 +99,7 @@ public class Sphere implements Shape {
 				hitPntT = this.transformation.transform(hitPoint.toPoint());
 				hitNmlT = this.transformation.transformInverseTranspose(hitPoint.toNormal());
 				hitColor = this.color;
-				hits.add(new Intersection(hasInt,hitPntT,hitNmlT,hitColor,this.reflectivity));
+				hits.add(new Intersection(hitPntT,hitNmlT,hitColor,this.reflectivity,this.accessCount));
 				return hits;
 				
 				
@@ -103,7 +108,7 @@ public class Sphere implements Shape {
 				hitPntT = this.transformation.transform(hitPoint.toPoint());
 				hitNmlT = this.transformation.transformInverseTranspose(hitPoint.toNormal());
 				hitColor = this.color;
-				hits.add(new Intersection(hasInt,hitPntT,hitNmlT,hitColor,this.reflectivity));
+				hits.add(new Intersection(hitPntT,hitNmlT,hitColor,this.reflectivity,this.accessCount));
 				return hits;
 			}
 		} else {

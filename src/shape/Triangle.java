@@ -28,6 +28,7 @@ public class Triangle implements Shape {
 	public final Material mat;
 	public final double reflectivity;
 	public final Transformation transformation;
+	private int accessCount = 0;
 
 	
 	
@@ -67,6 +68,11 @@ public class Triangle implements Shape {
         double a,b,c,d,e,f,g,h,i,j,k,l,m,n,p,s,q,r,invDenom,e1,e2,e3,beta,gamma,t;
         Point  ro; 
         Vector rd;
+        
+        if (Constants.compVisualization == true){
+        	accessCount = accessCount + 1;
+        }
+        
         
         Ray rayInv = this.transformation.transformInverse(ray);
         ro = rayInv.origin;
@@ -126,7 +132,7 @@ public class Triangle implements Shape {
         hitTxt = at.scale(1 - beta - gamma).add(bt.scale(beta)).add(ct.scale(gamma));
         Color hitClr = mat.getColor(hitTxt);
         
-        hits.add(new Intersection(true, hitPoint, hitNormal, hitClr,this.reflectivity));
+        hits.add(new Intersection(hitPoint, hitNormal, hitClr,this.reflectivity, this.accessCount));
         return hits;
 	}
 

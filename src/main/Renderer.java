@@ -19,11 +19,10 @@ import gui.ProgressReporter;
 import gui.RenderFrame;
 import main.World;
 import math.Color;
+import math.Constants;
 import math.Intersection;
-import math.Normal;
 import math.Ray;
 import math.Vector;
-import light.Light;
 import light.PointLight;
 import sampling.Sample;
 import shape.Shape;
@@ -183,9 +182,37 @@ public class Renderer {
 									
 									//add a color contribution to the pixel based in the closest intersection.
 				                	double[] ambRes = computeAmbientShading(closestInt.color, world.ambient, closestInt.reflectivity);
-					                //if set to false the coloring comes from the normals (for debugging).
-				                	boolean noNormalsAsColors = true;
-					                if (noNormalsAsColors) {
+					                
+				                	
+				                	if (Constants.normalVisualization) {
+					                	Vector Cs;
+					                	Cs = closestInt.normal.toVector();
+					                	//Cs = closestInt.point.toVector();
+					                	
+					                	if ((Math.abs(Cs.x) + Math.abs(Cs.y) + Math.abs(Cs.z)) < 0.001) {
+					                		System.err.println("black");
+					                	}
+					                	buffer.getPixel(x, y).add((Cs.x),(Cs.y),(Cs.z));
+					                	//buffer.getPixel(x, y).add(Math.abs(Cs.x),Math.abs(Cs.y), Math.abs(Cs.z));
+					                	
+					                } else if (Constants.compVisualization) {
+					                	Double intensity;
+					                	Vector Cs;
+					                	Cs = closestInt.normal.toVector();
+					                	intensity = closestInt.accessCount/1.0;
+				                		//intensity = intersections.size()/1.0;
+				                		//double[] compRes = computeAmbientShading(visColor,intensity , 1.0);
+					                	if (intensity > 1000) {
+					                		buffer.getPixel(x, y).add(intensity,0,0);
+					                	}
+					                	if (intensity == 1) {
+					                		buffer.getPixel(x, y).add(0,intensity,0);
+					                	} else {
+				                		//buffer.getPixel(x, y).add(0,intensity,0);
+					                		buffer.getPixel(x, y).add(0,0,intensity);
+					                	}
+					                	
+					                } else {
 					                	//add the ambient Lighting result.
 					                	buffer.getPixel(x, y).add(ambRes[0], ambRes[1], ambRes[2],1.0);
 					                	
@@ -195,7 +222,7 @@ public class Renderer {
 						                Vector n  = closestInt.normal.toVector();
 						                Vector toLight = pl.origin.toVector().subtract(closestInt.point.toVector()); 
 						                double dot = (n.dot(l));						                
-						                    //if (dot > 0){
+						                    if (dot > 0){
 						                    	if (pl.shadows) {
 						                    		//launch a shadow ray.					                    		
 						                    		Ray shadowRay = new Ray(closestInt.point,toLight);
@@ -213,21 +240,11 @@ public class Renderer {
 							                    	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);
 						                    	}
 						                    	
-						                    //}
+						                    }
 						                }
 					                
-					                } else {
-					                	Vector Cs;
-					                	Cs = closestInt.normal.toVector();
-					                	//Cs = closestInt.point.toVector();
-					                	
-					                	if ((Math.abs(Cs.x) + Math.abs(Cs.y) + Math.abs(Cs.z)) < 0.001) {
-					                		System.err.println("black");
-					                	}
-					                	buffer.getPixel(x, y).add((Cs.x),(Cs.y),(Cs.z));
-					                	//buffer.getPixel(x, y).add(Math.abs(Cs.x),Math.abs(Cs.y), Math.abs(Cs.z));
-					                	
-					                }
+					                } 
+				                	
 					         }
 						}
 					}
@@ -271,10 +288,10 @@ public class Renderer {
 	private static List<Intersection> testforIntsections(List<Shape> shapeList,Ray ray) {
 		List<Intersection> interList = new ArrayList<Intersection>();
 		for (Shape shape : shapeList) {
-			List<Intersection> shadowInter = new ArrayList<Intersection>();
-			shadowInter.addAll(shape.intersect(ray));
-			if (shadowInter.isEmpty() == false) {
-				interList.addAll(shadowInter);
+			List<Intersection> inter = new ArrayList<Intersection>();
+			inter.addAll(shape.intersect(ray));
+			if (inter.isEmpty() == false) {
+				interList.addAll(inter);
 			}
 		}
 		return interList;
