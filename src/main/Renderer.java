@@ -130,8 +130,9 @@ public class Renderer {
 		//final World world = new World(width, height, "initialWorld");
 		//final World world = new World(width, height, "planeAndSphere");
 		//final World world = new World(width, height, "Julia");
-		final World world = new World(width, height, "bunny");
-		//final World world = new World(width, height, "apple");
+		//final World world = new World(width, height, "bunny");
+		final World world = new World(width, height, "apple");
+		//final World world = new World(width, height, "aab");
 		
 		/**********************************************************************
 		 * Multi-threaded rendering of the scene

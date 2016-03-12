@@ -3,6 +3,7 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 
+import acceleration.AxisAlignedBox;
 import light.PointLight;
 import material.Chess;
 import material.Complex;
@@ -45,6 +46,9 @@ public class World{
 		}
 		else if (choice == "apple") {
 			apple(width,height);
+		}
+		else if (choice == "aab") {
+			aab(width,height);
 		}
 		else
 			throw new IllegalArgumentException();
@@ -106,7 +110,7 @@ public class World{
 		
 		Transformation t2 = Transformation.translate(0, 0, 0.0);
 		Material sphereText = new Monochrome(new Color(100.0,100.0,100.0));
-		ObjShape tessSphere = new ObjShape("./obj/sphere.obj",t2,sphereText,1.5);
+		ObjShape tessSphere = new ObjShape("./obj/sphere.obj",t2,sphereText,1.5,0);
 		this.shapes.add(tessSphere);
 		
 		//ObjShape table = new ObjShape("./obj/table.obj",t2,sphereText,1.5);
@@ -179,7 +183,7 @@ public class World{
 		//this.shapes.add(triangle);
 		Material mat;
 		mat = new Monochrome( new Color(100,100,100));
-		ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0);
+		ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,0);
 		//ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0);
 		//ObjShape bunny = new ObjShape("./obj/sphere.obj",t1,mat,2.0);
 		this.shapes.add(bunny);
@@ -219,13 +223,13 @@ public class World{
 		//objMat = new Julia(new Complex(-0.076,0.652),600,1,400,2.5);
 		//objMat = new Monochrome( new Color(100,100,100));
 		objMat = new TextureFile("./obj/apple/apple_texture.jpg",1.0);
-		ObjShape apple = new ObjShape("./obj/apple/apple.obj",t1,objMat,1.0);
-		//this.shapes.add(apple);
+		ObjShape apple = new ObjShape("./obj/apple/apple.obj",t1,objMat,1.0,0);
+		this.shapes.add(apple);
 		
-		t1 = t1.append(Transformation.rotateX(90));
-		Material houseText = new TextureFile("./obj/house/house_texture.jpg",1.0);
-		ObjShape house = new ObjShape("./obj/house/house.obj",t1,houseText,0.6);
-		this.shapes.add(house);
+		//t1 = t1.append(Transformation.rotateX(90));
+		//Material houseText = new TextureFile("./obj/house/house_texture.jpg",1.0);
+		//ObjShape house = new ObjShape("./obj/house/house.obj",t1,houseText,0.6);
+		//this.shapes.add(house);
 		
 		
 		Material mPlane;
@@ -238,5 +242,34 @@ public class World{
 		Plane plane = new Plane(tPlane,mPlane,10);
 		this.shapes.add(plane);		
 	}
+	
+	public void aab(int width,int height) {
+		//set the camera.
+		this.camera = new PerspectiveCamera(width, height,
+				new Point(-5, -5, 5), new Point(0, 0, 0), new Vector(1, 1, 0), 90);
+
+		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
+		PointLight whiteLight = new PointLight(new Point(10,10,10),new Color(100.0,100.0,100.0), 0.1,true);
+		this.plights.add(whiteLight);
+		
+		this.ambient = 0.0001;
+		
+		//setup the objects in the scene.
+		Transformation t1 = Transformation.IDENTITY;
+		
+		AxisAlignedBox aab = new AxisAlignedBox(new Point(0,0,0),new Point(2,2,2),t1);
+		this.shapes.add(aab);
+		
+		Material mPlane;
+		//mPlane = new Monochrome(new Color(100,100,100));
+		//mPlane = new TextureFile("./obj/apple/apple_texture.jpg",1.0);
+		mPlane = new Chess(new Color(100,100,100), new Color(1,1,1),1);
+		
+		//(Point a,Normal n, Material m,double reflectivity)
+		Transformation tPlane = Transformation.translate(0, 0, 0);
+		Plane plane = new Plane(tPlane,mPlane,10);
+		this.shapes.add(plane);		
+	}
+
 
 }
