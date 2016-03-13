@@ -95,16 +95,16 @@ public class AxisAlignedBox implements Shape {
 		Point b = triangle.b;
 		Point c = triangle.c;
 
-		if (((a.x > p0.x) || (a.y > p0.y) || (a.z > p0.z))
-				&& ((a.x < p1.x) || (a.y < p1.y) || (a.z < p1.z))) {
+		if (((a.x > p0.x) && (a.y > p0.y) && (a.z > p0.z))
+				&& ((a.x < p1.x) && (a.y < p1.y) && (a.z < p1.z))) {
 			// a is in
 			return true;
-		} else if (((b.x > p0.x) || (b.y > p0.y) || (b.z > p0.z))
-				&& ((b.x < p1.x) || (b.y < p1.y) || (b.z < p1.z))) {
+		} else if (((b.x > p0.x) && (b.y > p0.y) && (b.z > p0.z))
+				&& ((b.x < p1.x) && (b.y < p1.y) && (b.z < p1.z))) {
 			// b is in
 			return true;
-		} else if (((c.x > p0.x) || (c.y > p0.y) || (c.z > p0.z))
-				&& ((c.x < p1.x) || (c.y < p1.y) || (c.z < p1.z))) {
+		} else if (((c.x > p0.x) && (c.y > p0.y) && (c.z > p0.z))
+				&& ((c.x < p1.x) && (c.y < p1.y) && (c.z < p1.z))) {
 			// c is in
 			return true;
 		} else {
@@ -188,8 +188,8 @@ public class AxisAlignedBox implements Shape {
 		//return false;
 	}
 
-	@Override
-	public List<Intersection> intersect(Ray ray) {
+	
+	public List<Intersection> intersectNormal(Ray ray) {
 		List<Intersection> intList = new ArrayList<Intersection>();
 		intList.clear();
 
@@ -314,5 +314,30 @@ public class AxisAlignedBox implements Shape {
 		}
 
 	}
+
+	
+	@Override
+	public List<Intersection> intersect(Ray ray) {
+		List<Intersection> hits = new ArrayList<Intersection>();
+		if ((this.left != null) && (this.right != null)) {
+			if (this.left.intersectBool(ray)) {
+				hits.addAll(left.intersect(ray));
+			}
+			if (this.right.intersectBool(ray)) {
+				hits.addAll(right.intersect(ray));
+			}
+		} else {
+			//maximum depth reached.
+			if (this.intersectBool(ray)){
+				for (Triangle tri :	this.trianglesInBox) {
+					hits.addAll(tri.intersect(ray));
+				}
+			}
+		}
+		
+		return hits;
+		
+	}
+	
 
 }

@@ -23,7 +23,7 @@ public class ObjShape implements Shape {
 	public final Material mat;
 	public final List<Triangle> triangleList;
 	private AxisAlignedBox aab;
-	private int accessCount = 0;
+	//private int accessCount = 0;
 	private int treeDepth;
 	
 	public ObjShape(String path, Transformation transformation, Material mat,
@@ -33,6 +33,7 @@ public class ObjShape implements Shape {
 		this.reflectivity = reflectivity;
 		this.mat = mat;
 		this.triangleList = new ArrayList<Triangle>();
+		this.treeDepth = treeDepth;
 		
 		try {
 			this.read();
@@ -46,17 +47,18 @@ public class ObjShape implements Shape {
 		
 		//go trough the triangles and find intersections.
 		List<Intersection> intersections = new ArrayList<Intersection>();
-		intersections.clear();
+		//intersections.clear();
 		
-		if (aab.intersectBool(ray)) {
-			for (Triangle triangle : this.triangleList) {
-				List<Intersection> currentInter;
-				currentInter = triangle.intersect(ray);
-				if (currentInter.isEmpty() == false) {
-					intersections.addAll(currentInter);
-				}
-			}
-		}
+		//if (aab.intersectBool(ray)) {
+		//	for (Triangle triangle : this.triangleList) {
+		//		List<Intersection> currentInter;
+		//		currentInter = triangle.intersect(ray);
+		//		if (currentInter.isEmpty() == false) {
+		//			intersections.addAll(currentInter);
+		//		}
+		//	}
+		//}
+		intersections.addAll(this.aab.intersect(ray));
 		return intersections;
 	}
 
@@ -229,6 +231,7 @@ public class ObjShape implements Shape {
 			this.aab = new AxisAlignedBox(new Point(minmax.xMin,minmax.yMin,minmax.zMin),
 										  new Point(minmax.xMax,minmax.yMax,minmax.zMax),
 										  this.transformation);
+			aab.trianglesInBox.addAll(triangleList);
 			aab.split(this.treeDepth); //recursively split the box until the max depth is reached.
 	}
 
@@ -264,13 +267,13 @@ public class ObjShape implements Shape {
 	}
 	
 	/*
-	 *A main for debugging purposes. 
+	 *A main for debugging purposes.
 	 */
 	public static void main(String[] arguments){
 		Transformation testTrans = Transformation.createIdentity();
 		Material mat = null;
 		@SuppressWarnings("unused")
-		ObjShape testObj = new ObjShape("./obj/testFile.obj",testTrans,mat,1.0, 0);
+		ObjShape testObj = new ObjShape("./obj/bunny.obj",testTrans,mat,1.0, 2);
 		System.out.println("done.");
 	}
 	 
