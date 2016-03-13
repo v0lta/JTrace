@@ -31,7 +31,7 @@ public class AxisAlignedBox implements Shape {
 
 	public AxisAlignedBox(Point p0, Point p1, Transformation transformation) {
 
-		// check input
+		// check input (triggers for the bunny but seems to be unnecessary.)
 		if ((p0.x > p1.x) || (p0.y > p1.y) || (p0.z > p1.z)) {
 			System.err.println("Illegal box.");
 		}

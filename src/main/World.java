@@ -47,8 +47,8 @@ public class World{
 		else if (choice == "apple") {
 			apple(width,height);
 		}
-		else if (choice == "aab") {
-			aab(width,height);
+		else if (choice == "dragon") {
+			dragon(width,height);
 		}
 		else
 			throw new IllegalArgumentException();
@@ -243,32 +243,44 @@ public class World{
 		this.shapes.add(plane);		
 	}
 	
-	public void aab(int width,int height) {
+	public void dragon(int width,int height) {
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(-5, -5, 5), new Point(0, 0, 0), new Vector(1, 1, 0), 90);
+				new Point(5, 5, 5), new Point(0, 0, 0), new Vector(-1, -1, 0), 90);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
-		PointLight whiteLight = new PointLight(new Point(10,10,10),new Color(100.0,100.0,100.0), 0.1,true);
-		this.plights.add(whiteLight);
+		//PointLight whiteLight = new PointLight(new Point(0,2,10),new Color(100,100,100), 0.001,true);
+		//this.plights.add(whiteLight);
+		PointLight blueLight = new PointLight(new Point(0,8,8),new Color(50,100,50), 0.01,true);
+		this.plights.add(blueLight);
+		PointLight redLight = new PointLight(new Point(8,0,8),new Color(100,50,50), 0.01,true);
+		this.plights.add(redLight);
 		
-		this.ambient = 0.0001;
+		this.ambient = 0.000;
 		
 		//setup the objects in the scene.
 		Transformation t1 = Transformation.IDENTITY;
+		t1 = t1.append(Transformation.translate(0, 0, 1)).append(
+				Transformation.rotateY(180).append(Transformation.scale(5, 5, 5)));
 		
-		AxisAlignedBox aab = new AxisAlignedBox(new Point(0,0,0),new Point(2,2,2),t1);
-		this.shapes.add(aab);
+		Material mat;
+		mat = new Monochrome( new Color(100,100,100));
+		ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonLowPoly.obj",t1,mat,2.0,6);
+		//ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonHighPoly.obj",t1,mat,2.0,100); //still too much.
+		this.shapes.add(dragon);
+		
 		
 		Material mPlane;
-		//mPlane = new Monochrome(new Color(100,100,100));
-		//mPlane = new TextureFile("./obj/apple/apple_texture.jpg",1.0);
-		mPlane = new Chess(new Color(100,100,100), new Color(1,1,1),1);
+		//mPlane = new Chess(new Color(100,100,100), new Color(1,1,1),1);
+		//cr = -0.076, ci = 0.651, N = 200, bound = 1, lim = 100
+		//mPlane = new Julia(new Complex(-0.076,0.652),200,1,100, 10);
+		mPlane = new Monochrome(new Color(100,100,100));
 		
 		//(Point a,Normal n, Material m,double reflectivity)
-		Transformation tPlane = Transformation.translate(0, 0, 0);
-		Plane plane = new Plane(tPlane,mPlane,10);
-		this.shapes.add(plane);		
+		Transformation tPlane = Transformation.IDENTITY;
+		Plane plane = new Plane(tPlane,mPlane,1);
+		this.shapes.add(plane);
+			
 	}
 
 

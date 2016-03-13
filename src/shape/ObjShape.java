@@ -35,11 +35,16 @@ public class ObjShape implements Shape {
 		this.triangleList = new ArrayList<Triangle>();
 		this.treeDepth = treeDepth;
 		
+		long t = System.nanoTime();
 		try {
 			this.read();
 		} catch (IOException e) {
 			System.out.println("File not found: " + e.getMessage());
 		}
+		long elTimens = System.nanoTime() - t;
+		double elTime = elTimens * Math.pow(10,-9);
+		System.out.println("Tree creation took [s]:");
+		System.out.println(elTime);
 	}
 	
 	@Override
@@ -49,16 +54,21 @@ public class ObjShape implements Shape {
 		List<Intersection> intersections = new ArrayList<Intersection>();
 		//intersections.clear();
 		
-		//if (aab.intersectBool(ray)) {
-		//	for (Triangle triangle : this.triangleList) {
-		//		List<Intersection> currentInter;
-		//		currentInter = triangle.intersect(ray);
-		//		if (currentInter.isEmpty() == false) {
-		//			intersections.addAll(currentInter);
-		//		}
-		//	}
-		//}
-		intersections.addAll(this.aab.intersect(ray));
+		if (Constants.useAccTree) {
+			intersections.addAll(this.aab.intersect(ray));
+		} else {
+			if (aab.intersectBool(ray)) {
+				for (Triangle triangle : this.triangleList) {
+					List<Intersection> currentInter;
+					currentInter = triangle.intersect(ray);
+					if (currentInter.isEmpty() == false) {
+						intersections.addAll(currentInter);
+					}
+				}
+			}
+		}
+		
+		
 		return intersections;
 	}
 
