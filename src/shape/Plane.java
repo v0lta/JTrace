@@ -23,7 +23,7 @@ public class Plane implements Shape {
 	public final Transformation transformation;
 	public final Material mat; //the material describes the plane's coloring.
 	public final double reflectivity; //determines how well the plane reflects light.
-	private int accessCount = 0;
+	private int accessCount = 1;
 	
     public Plane(Transformation transformation, Material mat,double reflectivity) {
     	this.transformation = transformation;
@@ -42,10 +42,6 @@ public class Plane implements Shape {
 		Vector ro; 
         Vector rd;
         
-        if (Constants.compVisualization == true){
-        	accessCount = 1;
-        }
-		
         Ray rayInv = this.transformation.transformInverse(ray);
         ro = rayInv.origin.toVector();
         rd = rayInv.direction;

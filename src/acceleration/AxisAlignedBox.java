@@ -28,6 +28,7 @@ public class AxisAlignedBox implements Shape {
 	public AxisAlignedBox left = null;
 	public AxisAlignedBox right = null;
 	public List<Triangle> trianglesInBox = new ArrayList<Triangle>();
+	private int depth = 0;
 
 	public AxisAlignedBox(Point p0, Point p1, Transformation transformation) {
 
@@ -42,6 +43,7 @@ public class AxisAlignedBox implements Shape {
 	}
 
 	public void split(int depth) {
+		this.depth = depth;
 
 		if (depth > 0) {
 			// split the aab in two along the longest Axis.
@@ -333,10 +335,14 @@ public class AxisAlignedBox implements Shape {
 					hits.addAll(tri.intersect(ray));
 				}
 			}
+			
+			if (Constants.compVisualization){
+				for (Intersection inter : hits) {
+					inter.accessCount = this.trianglesInBox.size() + this.depth;
+				}
+			}
 		}
-		
 		return hits;
-		
 	}
 	
 

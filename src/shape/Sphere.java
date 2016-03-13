@@ -24,7 +24,7 @@ public class Sphere implements Shape {
 	public final Transformation transformation;
 	public final Color color;
 	public final double reflectivity;
-	private int accessCount = 0;
+	private int accessCount = 1;
 
 	/**
 	 * Creates a new unit {@link Sphere} at the origin, transformed by the given
@@ -56,10 +56,6 @@ public class Sphere implements Shape {
 		List<Intersection> hits = new ArrayList<Intersection>();
 		Ray transformed = transformation.transformInverse(ray);
 		
-        if (Constants.compVisualization == true){
-        	accessCount = accessCount + 1;
-        }
-
 		Vector o = transformed.origin.toVector();
 
 		double a = transformed.direction.dot(transformed.direction);

@@ -92,14 +92,14 @@ public class World{
 	public void planeAndSphere(int width,int height) {
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(6, 6, 6), new Point(0, 0, 0), new Vector(-1, -1, 0), 90);
+				new Point(6, 6, 6), new Point(0, 0, 0), new Vector(-1, -1, 0), 45);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
-		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.01,true);
-		//this.plights.add(whiteLight);
-		PointLight blueLight = new PointLight(new Point(8,8,10),new Color(0,0,100), 0.1,true);
+		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.1,true);
+		this.plights.add(whiteLight);
+		PointLight blueLight = new PointLight(new Point(8,8,10),new Color(0,0,100), 0.5,true);
 		this.plights.add(blueLight);
-		PointLight redLight = new PointLight(new Point(8,-8,10),new Color(100,0,0), 0.1,true);
+		PointLight redLight = new PointLight(new Point(8,-8,10),new Color(100,0,0), 0.5,true);
 		this.plights.add(redLight);
 		
 		this.ambient = 0.000;
@@ -109,8 +109,9 @@ public class World{
 		//this.shapes.add(new Sphere(t1,new Color(5.0,5.0,5.0),1));
 		
 		Transformation t2 = Transformation.translate(0, 0, 0.0);
-		Material sphereText = new Monochrome(new Color(100.0,100.0,100.0));
-		ObjShape tessSphere = new ObjShape("./obj/sphere.obj",t2,sphereText,1.5,0);
+		//Material sphereText = new Monochrome(new Color(100.0,100.0,100.0));
+		Material sphereText = new Julia(new Complex(-0.02,0.8),800,1,400, 10);
+		ObjShape tessSphere = new ObjShape("./obj/sphere.obj",t2,sphereText,100,5);
 		this.shapes.add(tessSphere);
 		
 		//ObjShape table = new ObjShape("./obj/table.obj",t2,sphereText,1.5);
@@ -125,8 +126,8 @@ public class World{
 		mPlane = new Monochrome(new Color(100,100,100));
 		
 		//(Point a,Normal n, Material m,double reflectivity)
-		Transformation tPlane = Transformation.translate(1,1,-1);
-		Plane plane = new Plane(tPlane,mPlane,1);
+		Transformation tPlane = Transformation.translate(1,1,-2);
+		Plane plane = new Plane(tPlane,mPlane,0.5);
 		this.shapes.add(plane);
 		
 	}
@@ -147,7 +148,12 @@ public class World{
 		Material mPlane;
 		//mPlane = new Chess(new Color(100,100,100), new Color(1,1,1),1);
 		//cr = -0.076, ci = 0.651, N = 200, bound = 1, lim = 100
-		mPlane = new Julia(new Complex(-0.076,0.652),500,1,200, 10);
+		//mPlane = new Julia(new Complex(-0.07,0.652),800,1,400, 10);
+		mPlane = new Julia(new Complex(-0.02,0.652),800,1,400, 10);
+		
+		//lightning = new Julia(new Complex(-0.02,0.8),800,1,400, 10);
+		mPlane = new Julia(new Complex(-0.02,0.8),800,1,400, 10);
+		
 		//mPlane = new Monochrome(new Color(100,100,100));
 		
 		//(Point a,Normal n, Material m,double reflectivity)

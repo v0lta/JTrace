@@ -30,8 +30,10 @@ public class ColorMap {
 		this.maxVal = maxVal;
 		this.set = set;	
 		
-		this.parulaRescale(scale);
 		//this.parula();
+		this.hot();
+		this.colorRescale(scale);
+		
 		
 		//this.limitVals = limits;
 	}
@@ -52,11 +54,25 @@ public class ColorMap {
 		return retColor.toColor();
 	}
 	
+	public Color getCompColor(int intersections) {
+		double step = (minVal + maxVal)/colors.size();
+		Vector retColor = new Color(0,0,0).toVector();
+		
+		for (int i = 0; i < (colors.size()); i++) {
+			double lb = minVal + i*step;
+			double ub = lb + step;
+			if ((lb <= intersections) && (intersections <= ub)) {
+				retColor = colors.get(i).toVector();
+				//break;
+			}	
+		}
+		return retColor.toColor();
+	}
+	
 	/**
 	 * use parula colors from matlab.
 	 */
-	private void parulaRescale(double alpha){
-		this.parula();
+	private void colorRescale(double alpha){
 		
 		List<Color> tmpClrs = new ArrayList<Color>(); 
 		for (Color color : this.colors) {
@@ -133,6 +149,73 @@ public class ColorMap {
 		this.colors.add(new Color(0.9598,    0.9218,    0.0948));
 		this.colors.add(new Color(0.9661,    0.9514,    0.0755));
 		this.colors.add(new Color(0.9763,    0.9831,    0.0538));		
+	}
+	
+	private void hot() {
+		   this.colors.add(new Color(0.0417,         0,         0));
+		   this.colors.add(new Color(0.0833,         0,         0));
+		   this.colors.add(new Color(0.1250,         0,         0));
+		   this.colors.add(new Color(0.1667,         0,         0));
+		   this.colors.add(new Color(0.2083,         0,         0));
+		   this.colors.add(new Color(0.2500,         0,         0));
+		   this.colors.add(new Color(0.2917,         0,         0));
+		   this.colors.add(new Color(0.3333,         0,         0));
+		   this.colors.add(new Color(0.3750,         0,         0));
+		   this.colors.add(new Color(0.4167,         0,         0));
+		   this.colors.add(new Color(0.4583,         0,         0));
+		   this.colors.add(new Color(0.5000,         0,         0));
+		   this.colors.add(new Color(0.5417,         0,         0));
+		   this.colors.add(new Color(0.5833,         0,         0));
+		   this.colors.add(new Color(0.6250,         0,         0));
+		   this.colors.add(new Color(0.6667,         0,         0));
+		   this.colors.add(new Color(0.7083,         0,         0));
+		   this.colors.add(new Color(0.7500,         0,         0));
+		   this.colors.add(new Color(0.7917,         0,         0));
+		   this.colors.add(new Color(0.8333,         0,         0));
+		   this.colors.add(new Color(0.8750,         0,         0));
+		   this.colors.add(new Color(0.9167,         0,         0));
+		   this.colors.add(new Color(0.9583,         0,         0));
+		   this.colors.add(new Color(1.0000,         0,         0));
+		   this.colors.add(new Color(1.0000,    0.0417,         0));
+		   this.colors.add(new Color(1.0000,    0.0833,         0));
+		   this.colors.add(new Color(1.0000,    0.1250,         0));
+		   this.colors.add(new Color(1.0000,    0.1667,         0));
+		   this.colors.add(new Color(1.0000,    0.2083,         0));
+		   this.colors.add(new Color(1.0000,    0.2500,         0));
+		   this.colors.add(new Color(1.0000,    0.2917,         0));
+		   this.colors.add(new Color(1.0000,    0.3333,         0));
+		   this.colors.add(new Color(1.0000,    0.3750,         0));
+		   this.colors.add(new Color(1.0000,    0.4167,         0));
+		   this.colors.add(new Color(1.0000,    0.4583,         0));
+		   this.colors.add(new Color(1.0000,    0.5000,         0));
+		   this.colors.add(new Color(1.0000,    0.5417,         0));
+		   this.colors.add(new Color(1.0000,    0.5833,         0));
+		   this.colors.add(new Color(1.0000,    0.6250,         0));
+		   this.colors.add(new Color(1.0000,    0.6667,         0));
+		   this.colors.add(new Color(1.0000,    0.7083,         0));
+		   this.colors.add(new Color(1.0000,    0.7500,         0));
+		   this.colors.add(new Color(1.0000,    0.7917,         0));
+		   this.colors.add(new Color(1.0000,    0.8333,         0));
+		   this.colors.add(new Color(1.0000,    0.8750,         0));
+		   this.colors.add(new Color(1.0000,    0.9167,         0));
+		   this.colors.add(new Color(1.0000,    0.9583,         0));
+		   this.colors.add(new Color(1.0000,    1.0000,         0));
+		   this.colors.add(new Color(1.0000,    1.0000,    0.0625));
+		   this.colors.add(new Color(1.0000,    1.0000,    0.1250));
+		   this.colors.add(new Color(1.0000,    1.0000,    0.1875));
+		   this.colors.add(new Color(1.0000,    1.0000,    0.2500));
+		   this.colors.add(new Color(1.0000,    1.0000,    0.3125));
+		   this.colors.add(new Color(1.0000,    1.0000,    0.3750));
+		   this.colors.add(new Color(1.0000,    1.0000,    0.4375));
+		   this.colors.add(new Color(1.0000,    1.0000,    0.5000));
+		   this.colors.add(new Color(1.0000,    1.0000,    0.5625));
+		   this.colors.add(new Color(1.0000,    1.0000,    0.6250));
+		   this.colors.add(new Color(1.0000,    1.0000,    0.6875));
+		   this.colors.add(new Color(1.0000,    1.0000,    0.7500));
+		   this.colors.add(new Color(1.0000,    1.0000,    0.8125));
+		   this.colors.add(new Color(1.0000,    1.0000,    0.8750));
+		   this.colors.add(new Color(1.0000,    1.0000,    0.9375));
+		   this.colors.add(new Color(1.0000,    1.0000,    1.0000));
 	}
 	
 }

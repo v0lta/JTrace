@@ -28,7 +28,7 @@ public class Triangle implements Shape {
 	public final Material mat;
 	public final double reflectivity;
 	public final Transformation transformation;
-	private int accessCount = 0;
+	private int accessCount = 1;
 
 	
 	
@@ -68,11 +68,6 @@ public class Triangle implements Shape {
         double a,b,c,d,e,f,g,h,i,j,k,l,m,n,p,s,q,r,invDenom,e1,e2,e3,beta,gamma,t;
         Point  ro; 
         Vector rd;
-        
-        if (Constants.compVisualization == true){
-        	accessCount = accessCount + 1;
-        }
-        
         
         Ray rayInv = this.transformation.transformInverse(ray);
         ro = rayInv.origin;

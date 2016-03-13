@@ -26,6 +26,7 @@ import math.Vector;
 import light.PointLight;
 import sampling.Sample;
 import shape.Shape;
+import material.ColorMap;
 
 /**
  * Entry point of your renderer.
@@ -41,8 +42,8 @@ public class Renderer {
 	 *            command line arguments.
 	 */
 	public static void main(String[] arguments) {
-		int width = 640;
-		int height = 640;
+		int width = 800;
+		int height = 600;
 		double sensitivity = 1.0;
 		double gamma = 1.5;
 		boolean gui = true;
@@ -128,9 +129,9 @@ public class Renderer {
 		 * Initialize the scene
 		 *********************************************************************/
 		//final World world = new World(width, height, "initialWorld");
-		//final World world = new World(width, height, "planeAndSphere");
+		final World world = new World(width, height, "planeAndSphere");
 		//final World world = new World(width, height, "Julia");
-		final World world = new World(width, height, "bunny");
+		//final World world = new World(width, height, "bunny");
 		//final World world = new World(width, height, "apple");
 		//final World world = new World(width, height, "dragon");
 		
@@ -197,21 +198,18 @@ public class Renderer {
 					                	//buffer.getPixel(x, y).add(Math.abs(Cs.x),Math.abs(Cs.y), Math.abs(Cs.z));
 					                	
 					                } else if (Constants.compVisualization) {
-					                	Double intensity;
-					                	Vector Cs;
-					                	Cs = closestInt.normal.toVector();
-					                	intensity = closestInt.accessCount/1.0;
+					                	int intersectionCount = closestInt.accessCount;
+					                	Color pixelColor;
+
+					                   	ColorMap colorMap = new ColorMap(0.0, 2000.0, null,1.0);
+					                	
 				                		//intensity = intersections.size()/1.0;
 				                		//double[] compRes = computeAmbientShading(visColor,intensity , 1.0);
-					                	if (intensity > 1000) {
-					                		buffer.getPixel(x, y).add(intensity,0,0);
-					                	}
-					                	if (intensity == 1) {
-					                		buffer.getPixel(x, y).add(0,intensity,0);
-					                	} else {
+						                pixelColor = colorMap.getCompColor(intersectionCount);
+						                
 				                		//buffer.getPixel(x, y).add(0,intensity,0);
-					                		buffer.getPixel(x, y).add(0,0,intensity);
-					                	}
+					                	buffer.getPixel(x, y).add(pixelColor.r,pixelColor.g,pixelColor.b);
+					                	
 					                	
 					                } else {
 					                	//add the ambient Lighting result.
