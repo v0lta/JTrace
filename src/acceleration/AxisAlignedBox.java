@@ -45,7 +45,7 @@ public class AxisAlignedBox implements Shape {
 		this.depth = depth;
 		int triCount = this.trianglesInBox.size();
 
-		if ((depth > 0) && (triCount > 5)) {
+		if ((depth > 0) && (triCount > 50)) {
 			// split the aab in two along the longest Axis.
 			double xLength = Math.abs(this.p0.x - this.p1.x);
 			double yLength = Math.abs(this.p0.y - this.p1.y);
@@ -96,22 +96,27 @@ public class AxisAlignedBox implements Shape {
 		Point a = triangle.a;
 		Point b = triangle.b;
 		Point c = triangle.c;
+		double eps = Constants.treeEpsilon;
+		
+		//return true;
+		boolean isIn = false;
 
-		if (((a.x > p0.x) && (a.y > p0.y) && (a.z > p0.z))
-				&& ((a.x < p1.x) && (a.y < p1.y) && (a.z < p1.z))) {
+		if  (((a.x + eps > p0.x) && (a.y + eps > p0.y) && (a.z + eps > p0.z))
+		 && ((a.x - eps < p1.x) && (a.y - eps < p1.y) && (a.z - eps < p1.z))) {
 			// a is in
-			return true;
-		} else if (((b.x > p0.x) && (b.y > p0.y) && (b.z > p0.z))
-				&& ((b.x < p1.x) && (b.y < p1.y) && (b.z < p1.z))) {
+			isIn = true;
+		} 
+		if (((b.x + eps > p0.x) && (b.y + eps > p0.y) && (b.z + eps > p0.z))
+		 && ((b.x - eps < p1.x) && (b.y - eps < p1.y) && (b.z - eps < p1.z))) {
 			// b is in
-			return true;
-		} else if (((c.x > p0.x) && (c.y > p0.y) && (c.z > p0.z))
-				&& ((c.x < p1.x) && (c.y < p1.y) && (c.z < p1.z))) {
-			// c is in
-			return true;
-		} else {
-			return false;
+			isIn = true;
 		}
+		if (((c.x + eps > p0.x) && (c.y + eps > p0.y) && (c.z + eps > p0.z))
+		 && ((c.x - eps < p1.x) && (c.y - eps < p1.y) && (c.z - eps < p1.z))) {
+			// c is in
+			isIn = true;
+		}
+		return isIn;
 	}
 
 	/**
@@ -187,7 +192,6 @@ public class AxisAlignedBox implements Shape {
 			t1 = tzMax;
 
 		return ((t0 < t1) && (t1 > Constants.epsilon));
-		//return false;
 	}
 
 	
