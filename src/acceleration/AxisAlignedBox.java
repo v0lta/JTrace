@@ -32,7 +32,6 @@ public class AxisAlignedBox implements Shape {
 
 	public AxisAlignedBox(Point p0, Point p1, Transformation transformation) {
 
-		// check input (triggers for the bunny but seems to be unnecessary.)
 		if ((p0.x > p1.x) || (p0.y > p1.y) || (p0.z > p1.z)) {
 			System.err.println("Illegal box.");
 		}
@@ -44,8 +43,9 @@ public class AxisAlignedBox implements Shape {
 
 	public void split(int depth) {
 		this.depth = depth;
+		int triCount = this.trianglesInBox.size();
 
-		if (depth > 0) {
+		if ((depth > 0) && (triCount > 5)) {
 			// split the aab in two along the longest Axis.
 			double xLength = Math.abs(this.p0.x - this.p1.x);
 			double yLength = Math.abs(this.p0.y - this.p1.y);
@@ -67,7 +67,7 @@ public class AxisAlignedBox implements Shape {
 				p1Split = new Point(this.p1.x, yNew, this.p1.z);
 			} else {
 				// the largest dimension is z split along z.
-				double zNew = (this.p0.y + this.p1.y) / 2;
+				double zNew = (this.p0.z + this.p1.z) / 2;
 				p0Split = new Point(this.p0.x, this.p0.y, zNew);
 				p1Split = new Point(this.p1.x, this.p1.y, zNew);
 			}
@@ -321,6 +321,11 @@ public class AxisAlignedBox implements Shape {
 	@Override
 	public List<Intersection> intersect(Ray ray) {
 		List<Intersection> hits = new ArrayList<Intersection>();
+		
+		if (Constants.compVisualization){
+			ray.countIntersection();
+		}
+		
 		if ((this.left != null) && (this.right != null)) {
 			if (this.left.intersectBool(ray)) {
 				hits.addAll(left.intersect(ray));
@@ -341,7 +346,7 @@ public class AxisAlignedBox implements Shape {
 					inter.accessCount = this.trianglesInBox.size() + this.depth;
 				}
 			}
-		}
+		}		
 		return hits;
 	}
 	

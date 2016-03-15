@@ -129,9 +129,9 @@ public class Renderer {
 		 * Initialize the scene
 		 *********************************************************************/
 		//final World world = new World(width, height, "initialWorld");
-		final World world = new World(width, height, "planeAndSphere");
+		//final World world = new World(width, height, "planeAndSphere");
 		//final World world = new World(width, height, "Julia");
-		//final World world = new World(width, height, "bunny");
+		final World world = new World(width, height, "bunny");
 		//final World world = new World(width, height, "apple");
 		//final World world = new World(width, height, "dragon");
 		
@@ -198,17 +198,20 @@ public class Renderer {
 					                	//buffer.getPixel(x, y).add(Math.abs(Cs.x),Math.abs(Cs.y), Math.abs(Cs.z));
 					                	
 					                } else if (Constants.compVisualization) {
-					                	int intersectionCount = closestInt.accessCount;
+					                	int intersectionCount = ray.getIntersectionCounter();
 					                	Color pixelColor;
+					                	int max = 2500;
 
-					                   	ColorMap colorMap = new ColorMap(0.0, 2000.0, null,1.0);
-					                	
+					                   	ColorMap colorMap = new ColorMap(0.0, 0, null,1.0);
+					                   	pixelColor = colorMap.getCompColor(intersectionCount);
+					                   	
 				                		//intensity = intersections.size()/1.0;
 				                		//double[] compRes = computeAmbientShading(visColor,intensity , 1.0);
-						                pixelColor = colorMap.getCompColor(intersectionCount);
 						                
-				                		//buffer.getPixel(x, y).add(0,intensity,0);
-					                	buffer.getPixel(x, y).add(pixelColor.r,pixelColor.g,pixelColor.b);
+					                   	//double greenValue = ((double) intersectionCount)/max;						
+					                   	double greenValue = ((double) intersectionCount)/max;
+				                		buffer.getPixel(x, y).add(0,greenValue,0);
+					                	//buffer.getPixel(x, y).add(pixelColor.r,pixelColor.g,pixelColor.b);
 					                	
 					                	
 					                } else {

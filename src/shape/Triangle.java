@@ -64,15 +64,21 @@ public class Triangle implements Shape {
 	@Override
 	public List<Intersection> intersect(Ray ray) {
 		List<Intersection> hits = new ArrayList<Intersection>();
-        Point pa = this.a; Point pb = this.b; Point pc = this.c;
-        double a,b,c,d,e,f,g,h,i,j,k,l,m,n,p,s,q,r,invDenom,e1,e2,e3,beta,gamma,t;
-        Point  ro; 
+		
+		if (Constants.compVisualization){
+			ray.countIntersection();
+		}
+		
+		Point  ro; 
         Vector rd;
         
-        Ray rayInv = this.transformation.transformInverse(ray);
-        ro = rayInv.origin;
-        rd = rayInv.direction;
-        
+		Ray rayInv = this.transformation.transformInverse(ray);
+	    ro = rayInv.origin;
+	    rd = rayInv.direction;
+		
+		Point pa = this.a; Point pb = this.b; Point pc = this.c;
+        double a,b,c,d,e,f,g,h,i,j,k,l,m,n,p,s,q,r,invDenom,e1,e2,e3,beta,gamma,t;
+         
         a = pa.x - pb.x; b = pa.x - pc.x; c = rd.x; d = pa.x - ro.x;
         e = pa.y - pb.y; f = pa.y - pc.y; g = rd.y; h = pa.y - ro.y;
         i = pa.z - pb.z; j = pa.z - pc.z; k = rd.z; l = pa.z - ro.z;

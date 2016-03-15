@@ -42,6 +42,10 @@ public class Plane implements Shape {
 		Vector ro; 
         Vector rd;
         
+        if (Constants.compVisualization){
+        	ray.countIntersection();
+        }
+        
         Ray rayInv = this.transformation.transformInverse(ray);
         ro = rayInv.origin.toVector();
         rd = rayInv.direction;

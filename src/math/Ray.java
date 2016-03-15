@@ -17,7 +17,13 @@ public class Ray implements Cloneable {
 	 * The direction the ray is pointing to.
 	 */
 	public final Vector direction;
-
+	
+	/**
+	 * An intersection counting variable.
+	 */
+	private int intersectionCounter;
+	
+	
 	/**
 	 * Creates a new {@link Ray} starting at the given origin and propagating
 	 * in the given direction.
@@ -36,6 +42,15 @@ public class Ray implements Cloneable {
 			throw new NullPointerException("the given direction is null!");
 		this.origin = point;
 		this.direction = direction;
+		this.intersectionCounter = 0;
+	}
+	
+	public void countIntersection(){
+		this.intersectionCounter = this.intersectionCounter + 1;
+	}
+	
+	public int getIntersectionCounter(){
+		return this.intersectionCounter;
 	}
 
 	/**

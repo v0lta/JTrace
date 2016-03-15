@@ -66,9 +66,7 @@ public class ObjShape implements Shape {
 					}
 				}
 			}
-		}
-		
-		
+		}	
 		return intersections;
 	}
 

@@ -183,14 +183,11 @@ public class World{
 		t1 = t1.append(Transformation.translate(0, 2, -1)).append(
 				Transformation.rotateX(90).append(Transformation.rotateY(90)));
 		
-		//Triangle triangle = new Triangle(new Point(0,0,0), new Point(1,0,0), new Point(0,1,0),
-		//								new Normal(0,0,1), new Normal(0,0,1), new Normal(0,0,1),
-		//								new Color(100,0,0),1.0,t1);
-		//this.shapes.add(triangle);
+
 		Material mat;
 		mat = new Monochrome( new Color(100,100,100));
-		ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,5);
-		//ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0);
+		//ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,3);
+		ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0,10);
 		//ObjShape bunny = new ObjShape("./obj/sphere.obj",t1,mat,2.0);
 		this.shapes.add(bunny);
 		
@@ -228,14 +225,14 @@ public class World{
 		Material objMat;
 		//objMat = new Julia(new Complex(-0.076,0.652),600,1,400,2.5);
 		//objMat = new Monochrome( new Color(100,100,100));
-		objMat = new TextureFile("./obj/apple/apple_texture.jpg",1.0);
-		ObjShape apple = new ObjShape("./obj/apple/apple.obj",t1,objMat,1.0,5);
-		this.shapes.add(apple);
+		//objMat = new TextureFile("./obj/apple/apple_texture.jpg",1.0);
+		//ObjShape apple = new ObjShape("./obj/apple/apple.obj",t1,objMat,1.0,5);
+		//this.shapes.add(apple);
 		
-		//t1 = t1.append(Transformation.rotateX(90));
-		//Material houseText = new TextureFile("./obj/house/house_texture.jpg",1.0);
-		//ObjShape house = new ObjShape("./obj/house/house.obj",t1,houseText,0.6);
-		//this.shapes.add(house);
+		t1 = t1.append(Transformation.rotateX(90));
+		Material houseText = new TextureFile("./obj/house/house_texture.jpg",1.2);
+		ObjShape house = new ObjShape("./obj/house/house.obj",t1,houseText,0.6,0);
+		this.shapes.add(house);
 		
 		
 		Material mPlane;

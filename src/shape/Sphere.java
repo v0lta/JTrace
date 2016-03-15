@@ -54,7 +54,12 @@ public class Sphere implements Shape {
 	@Override
 	public List<Intersection> intersect(Ray ray) {
 		List<Intersection> hits = new ArrayList<Intersection>();
-		Ray transformed = transformation.transformInverse(ray);
+		
+        if (Constants.compVisualization){
+        	ray.countIntersection();
+        }
+        
+        Ray transformed = transformation.transformInverse(ray);
 		
 		Vector o = transformed.origin.toVector();
 
