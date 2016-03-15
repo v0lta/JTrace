@@ -166,7 +166,7 @@ public class World{
 	public void bunny(int width,int height) {
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(10, 0, 10), new Point(0, 0, 0), new Vector(-1, 0, 0), 90);
+				new Point(10, 0, 10), new Point(0, 0, 0), new Vector(-1, 0, 0), 45);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		//PointLight whiteLight = new PointLight(new Point(0,2,10),new Color(100,100,100), 0.001,true);
@@ -180,7 +180,7 @@ public class World{
 		
 		//setup the objects in the scene.
 		Transformation t1 = Transformation.IDENTITY;
-		t1 = t1.append(Transformation.translate(0, 2, -1)).append(
+		t1 = t1.append(Transformation.translate(0, 0.5, -1)).append(
 				Transformation.rotateX(90).append(Transformation.rotateY(90)));
 		
 

@@ -202,7 +202,7 @@ public class Renderer {
 					                	Color pixelColor;
 					                	int max = 2500;
 
-					                   	ColorMap colorMap = new ColorMap(0.0, 2000, null,1.0);
+					                   	ColorMap colorMap = new ColorMap(0.0, max, null,1.0);
 					                   	pixelColor = colorMap.getCompColor(intersectionCount);
 					                   	
 				                		//intensity = intersections.size()/1.0;
