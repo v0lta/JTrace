@@ -28,9 +28,7 @@ public class Triangle implements Shape {
 	public final Material mat;
 	public final double reflectivity;
 	public final Transformation transformation;
-	private int accessCount = 1;
 
-	
 	
 	public Triangle (Point a, Point b, Point c,
 			Normal an, Normal bn, Normal cn,
@@ -133,7 +131,7 @@ public class Triangle implements Shape {
         hitTxt = at.scale(1 - beta - gamma).add(bt.scale(beta)).add(ct.scale(gamma));
         Color hitClr = mat.getColor(hitTxt);
         
-        hits.add(new Intersection(hitPoint, hitNormal, hitClr,this.reflectivity, this.accessCount));
+        hits.add(new Intersection(hitPoint, hitNormal, hitClr,this.reflectivity));
         return hits;
 	}
 

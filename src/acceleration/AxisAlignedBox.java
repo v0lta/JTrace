@@ -286,7 +286,7 @@ public class AxisAlignedBox implements Shape {
 			normal = normal.toVector().normalize().toNormal();
 
 			intList.add(new Intersection(hitPoint.toPoint(), normal, new Color(
-					100, 10, 10), 10, 0));
+					100, 10, 10), 10));
 		}
 
 		// if (intersectBool(ray)){
@@ -338,12 +338,6 @@ public class AxisAlignedBox implements Shape {
 			if (this.intersectBool(ray)){
 				for (Triangle tri :	this.trianglesInBox) {
 					hits.addAll(tri.intersect(ray));
-				}
-			}
-			
-			if (Constants.compVisualization){
-				for (Intersection inter : hits) {
-					inter.accessCount = this.trianglesInBox.size() + this.depth;
 				}
 			}
 		}		

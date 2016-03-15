@@ -5,13 +5,11 @@ public class Intersection {
 	public final Normal normal;
 	public final Color color;
 	public final double reflectivity;
-	public int accessCount;
 	
-	public Intersection(Point point, Normal normal, Color color, double ref, int accessCount) {
+	public Intersection(Point point, Normal normal, Color color, double ref) {
 		this.point = point;
 		this.normal = normal;
 		this.color = color;
 		this.reflectivity = ref;
-		this.accessCount = accessCount;
 	}
 }

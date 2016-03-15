@@ -23,7 +23,7 @@ public class Plane implements Shape {
 	public final Transformation transformation;
 	public final Material mat; //the material describes the plane's coloring.
 	public final double reflectivity; //determines how well the plane reflects light.
-	private int accessCount = 1;
+
 	
     public Plane(Transformation transformation, Material mat,double reflectivity) {
     	this.transformation = transformation;
@@ -67,7 +67,7 @@ public class Plane implements Shape {
                 TextPoint txtPoint = new TextPoint(pointVec.x,pointVec.y); //the z coordinate of the unit plane is always zero.
                 Color hitClr = mat.getColor(txtPoint);
                 
-                hits.add(new Intersection( hitPoint, hitNormal, hitClr,reflectivity, this.accessCount));
+                hits.add(new Intersection( hitPoint, hitNormal, hitClr,reflectivity));
                 return hits;
             }
         }

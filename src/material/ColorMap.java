@@ -30,8 +30,8 @@ public class ColorMap {
 		this.maxVal = maxVal;
 		this.set = set;	
 		
-		//this.parula();
-		this.hot();
+		this.parula();
+		//this.hot();
 		this.colorRescale(scale);
 		
 		
@@ -62,7 +62,7 @@ public class ColorMap {
 			double lb = minVal + i*step;
 			double ub = lb + step;
 			if ((lb <= intersections) && (intersections <= ub)) {
-				retColor = colors.get(i).toVector();
+				retColor = colors.get(i).toVector().scale(intersections);
 				//break;
 			}	
 		}

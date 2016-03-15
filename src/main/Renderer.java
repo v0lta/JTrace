@@ -202,7 +202,7 @@ public class Renderer {
 					                	Color pixelColor;
 					                	int max = 2500;
 
-					                   	ColorMap colorMap = new ColorMap(0.0, 0, null,1.0);
+					                   	ColorMap colorMap = new ColorMap(0.0, 450, null,1.0);
 					                   	pixelColor = colorMap.getCompColor(intersectionCount);
 					                   	
 				                		//intensity = intersections.size()/1.0;
@@ -210,8 +210,8 @@ public class Renderer {
 						                
 					                   	//double greenValue = ((double) intersectionCount)/max;						
 					                   	double greenValue = ((double) intersectionCount)/max;
-				                		buffer.getPixel(x, y).add(0,greenValue,0);
-					                	//buffer.getPixel(x, y).add(pixelColor.r,pixelColor.g,pixelColor.b);
+				                		//buffer.getPixel(x, y).add(0,greenValue,0);
+					                	buffer.getPixel(x, y).add(pixelColor.r,pixelColor.g,pixelColor.b);
 					                	
 					                	
 					                } else {

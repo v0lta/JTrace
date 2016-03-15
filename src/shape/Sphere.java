@@ -24,7 +24,7 @@ public class Sphere implements Shape {
 	public final Transformation transformation;
 	public final Color color;
 	public final double reflectivity;
-	private int accessCount = 1;
+
 
 	/**
 	 * Creates a new unit {@link Sphere} at the origin, transformed by the given
@@ -100,7 +100,7 @@ public class Sphere implements Shape {
 				hitPntT = this.transformation.transform(hitPoint.toPoint());
 				hitNmlT = this.transformation.transformInverseTranspose(hitPoint.toNormal());
 				hitColor = this.color;
-				hits.add(new Intersection(hitPntT,hitNmlT,hitColor,this.reflectivity,this.accessCount));
+				hits.add(new Intersection(hitPntT,hitNmlT,hitColor,this.reflectivity));
 				return hits;
 				
 				
@@ -109,7 +109,7 @@ public class Sphere implements Shape {
 				hitPntT = this.transformation.transform(hitPoint.toPoint());
 				hitNmlT = this.transformation.transformInverseTranspose(hitPoint.toNormal());
 				hitColor = this.color;
-				hits.add(new Intersection(hitPntT,hitNmlT,hitColor,this.reflectivity,this.accessCount));
+				hits.add(new Intersection(hitPntT,hitNmlT,hitColor,this.reflectivity));
 				return hits;
 			}
 		} else {
