@@ -81,38 +81,42 @@ public class World{
 				Transformation.scale(4, 4, 4));
 		Transformation t5 = Transformation.translate(-4, 4, 12).append(
 				Transformation.scale(4, 4, 4));
-		this.shapes.add(new Sphere(t1,new Color(1.0,1.0,1.0),1.));
-		this.shapes.add(new Sphere(t2,new Color(1.0,1.0,1.0),1.));
-		this.shapes.add(new Sphere(t3,new Color(1.0,1.0,1.0),1.));
-		this.shapes.add(new Sphere(t4,new Color(1.0,1.0,1.0),1.));
-		this.shapes.add(new Sphere(t5,new Color(1.0,1.0,1.0),1.));
+		this.shapes.add(new Sphere(t1,new Monochrome(new Color(1.0,1.0,1.0)),1.));
+		this.shapes.add(new Sphere(t2,new Monochrome(new Color(1.0,1.0,1.0)),1.));
+		this.shapes.add(new Sphere(t3,new Monochrome(new Color(1.0,1.0,1.0)),1.));
+		this.shapes.add(new Sphere(t4,new Monochrome(new Color(1.0,1.0,1.0)),1.));
+		this.shapes.add(new Sphere(t5,new Monochrome(new Color(1.0,1.0,1.0)),1.));
 	}
 	
 	
 	public void planeAndSphere(int width,int height) {
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(6, 6, 6), new Point(0, 0, 0), new Vector(-1, -1, 0), 45);
+				new Point(0, 0, 2), new Point(0, 0, 0), new Vector(1, 0, 0), 90);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.1,true);
 		this.plights.add(whiteLight);
-		PointLight blueLight = new PointLight(new Point(8,8,10),new Color(0,0,100), 0.5,true);
-		this.plights.add(blueLight);
-		PointLight redLight = new PointLight(new Point(8,-8,10),new Color(100,0,0), 0.5,true);
-		this.plights.add(redLight);
+		PointLight blueLight = new PointLight(new Point(8,8,10),new Color(10,10,100), 0.5,true);
+		//this.plights.add(blueLight);
+		PointLight redLight = new PointLight(new Point(8,-8,10),new Color(100,10,10), 0.5,true);
+		//this.plights.add(redLight);
 		
-		this.ambient = 0.000;
+		this.ambient = 0.01;
 		
 		//setup the objects in the scene.
-		Transformation t1 = Transformation.translate(0.0, 0.0, 0.0);		
-		//this.shapes.add(new Sphere(t1,new Color(5.0,5.0,5.0),1));
+		Transformation t1 = Transformation.translate(0.0, 0.0, 0.0).append(
+							Transformation.rotateX(90)).append(Transformation.rotateY(0));
+		//Material globeTexture = new TextureFile("./obj/txt/earthNight.jpg",0.5);
+		Material globeTexture = new TextureFile("./obj/txt/SphereGrid.jpg",0.5);
+		Sphere globe = new Sphere(t1,globeTexture,1.0);
+		this.shapes.add(globe);
 		
 		Transformation t2 = Transformation.translate(0, 0, 0.0);
 		//Material sphereText = new Monochrome(new Color(100.0,100.0,100.0));
-		Material sphereText = new Julia(new Complex(-0.02,0.8),800,1,400, 10);
+		Material sphereText = new Julia(new Complex(-0.02,0.8),800,1,400, 10, "parula");
 		ObjShape tessSphere = new ObjShape("./obj/sphere.obj",t2,sphereText,100,5);
-		this.shapes.add(tessSphere);
+		//this.shapes.add(tessSphere);
 		
 		//ObjShape table = new ObjShape("./obj/table.obj",t2,sphereText,1.5);
 		//this.shapes.add(table);
@@ -149,10 +153,10 @@ public class World{
 		//mPlane = new Chess(new Color(100,100,100), new Color(1,1,1),1);
 		//cr = -0.076, ci = 0.651, N = 200, bound = 1, lim = 100
 		//mPlane = new Julia(new Complex(-0.07,0.652),800,1,400, 10);
-		mPlane = new Julia(new Complex(-0.02,0.652),800,1,400, 10);
+		//mPlane = new Julia(new Complex(-0.02,0.652),800,1,400, 10, "parula");
 		
 		//lightning = new Julia(new Complex(-0.02,0.8),800,1,400, 10);
-		mPlane = new Julia(new Complex(-0.02,0.8),800,1,400, 10);
+		mPlane = new Julia(new Complex(-0.02,0.8),800,1,400, 10, "jet");
 		
 		//mPlane = new Monochrome(new Color(100,100,100));
 		
@@ -171,9 +175,9 @@ public class World{
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		//PointLight whiteLight = new PointLight(new Point(0,2,10),new Color(100,100,100), 0.001,true);
 		//this.plights.add(whiteLight);
-		PointLight blueLight = new PointLight(new Point(0,8,4),new Color(50,100,50), 0.01,true);
+		PointLight blueLight = new PointLight(new Point(0,8,4),new Color(50,100,50), 0.01,false);
 		this.plights.add(blueLight);
-		PointLight redLight = new PointLight(new Point(8,0,4),new Color(100,50,50), 0.01,true);
+		PointLight redLight = new PointLight(new Point(8,0,4),new Color(100,50,50), 0.01,false);
 		this.plights.add(redLight);
 		
 		this.ambient = 0.0000;
@@ -186,9 +190,8 @@ public class World{
 
 		Material mat;
 		mat = new Monochrome( new Color(100,100,100));
-		//ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,8);
-		ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0,15);
-		//ObjShape bunny = new ObjShape("./obj/sphere.obj",t1,mat,2.0);
+		ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,20);
+		//ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0,20);
 		this.shapes.add(bunny);
 		
 		
@@ -249,7 +252,7 @@ public class World{
 	public void dragon(int width,int height) {
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(5, 5, 5), new Point(0, 0, 0), new Vector(-1, -1, 0), 90);
+				new Point(5, 0, 5), new Point(0, 0, 0), new Vector(-1, -0, 0), 80);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		//PointLight whiteLight = new PointLight(new Point(0,2,10),new Color(100,100,100), 0.001,true);

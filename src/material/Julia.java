@@ -25,7 +25,7 @@ public class Julia implements Material {
 	 * @param lim kernel limit.
 	 * @param colorScale color factor.
 	 */
-	public Julia(Complex c, int N, double bound, int lim, double colorScale){
+	public Julia(Complex c, int N, double bound, int lim, double colorScale, String colorSet){
 		this.N = N;
 		this.bound = bound;
 		this.set = computeJulia(c ,N,bound,lim);	
@@ -43,7 +43,7 @@ public class Julia implements Material {
 					}
 				}
 			}
-		this.colorMap = new ColorMap(tmpMin,tmpMax,this.set, colorScale);
+		this.colorMap = new ColorMap(tmpMin,tmpMax,this.set, colorScale, colorSet);
 		
 	}
 	
@@ -148,7 +148,7 @@ public class Julia implements Material {
 	public static void main(String[] arguments){
 		int N = 200;
 		Julia mat;
-		mat = new Julia(new Complex(-0.076,0.652),N,1,100,10);
+		mat = new Julia(new Complex(-0.076,0.652),N,1,100,10, "jet");
 
 		BufferedWriter br;
 		try {

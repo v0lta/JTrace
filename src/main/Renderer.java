@@ -131,9 +131,9 @@ public class Renderer {
 		//final World world = new World(width, height, "initialWorld");
 		//final World world = new World(width, height, "planeAndSphere");
 		//final World world = new World(width, height, "Julia");
-		final World world = new World(width, height, "bunny");
+		//final World world = new World(width, height, "bunny");
 		//final World world = new World(width, height, "apple");
-		//final World world = new World(width, height, "dragon");
+		final World world = new World(width, height, "dragon");
 		
 		/**********************************************************************
 		 * Multi-threaded rendering of the scene
@@ -200,9 +200,10 @@ public class Renderer {
 					                } else if (Constants.compVisualization) {
 					                	int intersectionCount = ray.getIntersectionCounter();
 					                	Color pixelColor;
-					                	int max = 2500;
-
-					                   	ColorMap colorMap = new ColorMap(0.0, max, null,1.0);
+					                	//int max = 600;
+					                	int max = 1000; //dragon...
+					                	
+					                   	ColorMap colorMap = new ColorMap(0.0, max, null,1.0, "parula");
 					                   	pixelColor = colorMap.getCompColor(intersectionCount);
 					                   	
 				                		//intensity = intersections.size()/1.0;

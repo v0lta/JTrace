@@ -58,6 +58,83 @@ public class Triangle implements Shape {
 		this.transformation = transformation;		
 	}
 	
+	public Point getCentroid(){
+		double cx = (1.0/3.0) * ((this.a.x) + (this.b.x) + (this.c.x));
+		double cy = (1.0/3.0) * ((this.a.y) + (this.b.y) + (this.c.y));
+		double cz = (1.0/3.0) * ((this.a.z) + (this.b.z) + (this.c.z));
+		return new Point(cx,cy,cz);
+	}
+	
+	public double getLargestCoord(Character axis){
+		switch (axis) {
+		case 'x':
+			if ((a.x >= b.x) && (a.x >= c.x)) {
+				return a.x;
+			}
+			else if ((b.x >= a.x) && (b.x >= c.x)) {
+				return b.x;
+			} else {
+				return c.x;
+			}
+		case 'y':
+			if ((a.y >= b.y) && (a.y >= c.y)) {
+				return a.y;
+			}
+			else if ((b.y >= a.y) && (b.y >= c.y)) {
+				return b.y;
+			} else {
+				return c.y;
+			}
+		case 'z':
+			if ((a.z >= b.z) && (a.z >= c.z)) {
+				return a.z;
+			}
+			else if ((b.z >= a.z) && (b.z >= c.z)) {
+				return b.z;
+			} else {
+				return c.z;
+			}
+		default:
+			System.err.println("Illegal axis in Triangle.largestCoord.");
+			return 0;			
+		}		
+	}
+	
+	
+	public double getSmallestCoord(Character axis){
+		switch (axis) {
+		case 'x':
+			if ((a.x <= b.x) && (a.x <= c.x)) {
+				return a.x;
+			}
+			else if ((b.x <= a.x) && (b.x <= c.x)) {
+				return b.x;
+			} else {
+				return c.x;
+			}
+		case 'y':
+			if ((a.y <= b.y) && (a.y <= c.y)) {
+				return a.y;
+			}
+			else if ((b.y <= a.y) && (b.y <= c.y)) {
+				return b.y;
+			} else {
+				return c.y;
+			}
+		case 'z':
+			if ((a.z <= b.z) && (a.z <= c.z)) {
+				return a.z;
+			}
+			else if ((b.z <= a.z) && (b.z <= c.z)) {
+				return b.z;
+			} else {
+				return c.z;
+			}
+		default:
+			System.err.println("Illegal axis in Triangle.largestCoord.");
+			return 0;			
+		}		
+	}
 	
 	@Override
 	public List<Intersection> intersect(Ray ray) {

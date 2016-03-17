@@ -21,7 +21,7 @@ public class ColorMap {
 	 * @param set the set containing the fractal data.
 	 * @param scale factor of the color values i.e. 255.
 	 */
-	public ColorMap(double minVal, double maxVal, double[][] set,double scale){
+	public ColorMap(double minVal, double maxVal, double[][] set,double scale, String colorSet){
 		//if (colors.size() != limits.size()) {
 		//	throw new IllegalArgumentException("need as many colors as limits!");
 		//}
@@ -30,10 +30,17 @@ public class ColorMap {
 		this.maxVal = maxVal;
 		this.set = set;	
 		
-		this.parula();
-		//this.hot();
-		//this.summer();
-		//this.jet();
+		if (colorSet == "hot"){
+			this.hot();
+		} else if (colorSet == "summer") {
+			this.summer();
+		} else if (colorSet == "jet"){
+			this.jet();
+		} else {
+			this.parula();	
+		}
+		
+		
 		this.colorRescale(scale);
 		
 		

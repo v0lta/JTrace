@@ -232,12 +232,13 @@ public class ObjShape implements Shape {
 				Triangle triangle = new Triangle(a,b,c,an,bn,cn,at,bt,ct,this.mat,this.reflectivity,this.transformation);
 				this.triangleList.add(triangle);
 				
-				
-				
-				
 			}
-			this.aab = new AxisAlignedBox(new Point(minmax.xMin,minmax.yMin,minmax.zMin),
-										  new Point(minmax.xMax,minmax.yMax,minmax.zMax),
+			this.aab = new AxisAlignedBox(new Point(minmax.xMin - Constants.treeEpsilon,
+													minmax.yMin - Constants.treeEpsilon,
+													minmax.zMin - Constants.treeEpsilon),
+										  new Point(minmax.xMax + Constants.treeEpsilon,
+												    minmax.yMax + Constants.treeEpsilon,
+												    minmax.zMax + Constants.treeEpsilon),
 										  this.transformation);
 			aab.trianglesInBox.addAll(triangleList);
 			aab.split(this.treeDepth); //recursively split the box until the max depth is reached.
@@ -281,7 +282,7 @@ public class ObjShape implements Shape {
 		Transformation testTrans = Transformation.createIdentity();
 		Material mat = null;
 		@SuppressWarnings("unused")
-		ObjShape testObj = new ObjShape("./obj/bunny.obj",testTrans,mat,1.0, 2);
+		ObjShape testObj = new ObjShape("./obj/bunny.obj",testTrans,mat,1.0, 1);
 		System.out.println("done.");
 	}
 	 

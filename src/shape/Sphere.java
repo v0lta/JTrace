@@ -3,10 +3,12 @@ package shape;
 import java.util.ArrayList;
 import java.util.List;
 
+import material.Material;
 import math.Constants;
 import math.Normal;
 import math.Point;
 import math.Ray;
+import math.TextPoint;
 import math.Transformation;
 import math.Vector;
 import math.Intersection;
@@ -22,7 +24,7 @@ import math.Color;
  */
 public class Sphere implements Shape {
 	public final Transformation transformation;
-	public final Color color;
+	public final Material material;
 	public final double reflectivity;
 
 
@@ -31,18 +33,18 @@ public class Sphere implements Shape {
 	 * {@link Transformation}.
 	 * 
 	 * @param transformation
-	 *            the transformation applied to this {@link Sphere}.
+	 *          the transformation applied to this {@link Sphere}.
+	 * @param material
+	 * 			defines the color of the spheres surface.
+	 * @param reflectivity 
+	 * 			determines how well the sphere is going to reflect the light.
 	 * @throws NullPointerException
 	 *             when the transformation is null.
 	 */
-	public Sphere(Transformation transformation, Color color,double reflectivity) {
-		if (transformation == null)
-			throw new NullPointerException("the given origin is null!");
-		if (color == null)
-			throw new NullPointerException("the given color is null!");
+	public Sphere(Transformation transformation, Material material, double reflectivity) {
 
 		this.transformation = transformation;
-		this.color = color;
+		this.material = material;
 		this.reflectivity = reflectivity;
 	}
 
@@ -99,7 +101,7 @@ public class Sphere implements Shape {
 				hitPoint = o.add(transformed.direction.scale(t0));
 				hitPntT = this.transformation.transform(hitPoint.toPoint());
 				hitNmlT = this.transformation.transformInverseTranspose(hitPoint.toNormal());
-				hitColor = this.color;
+				hitColor = this.material.getColor(getUV(hitPoint.toPoint()));
 				hits.add(new Intersection(hitPntT,hitNmlT,hitColor,this.reflectivity));
 				return hits;
 				
@@ -108,7 +110,7 @@ public class Sphere implements Shape {
 				hitPoint = o.add(transformed.direction.scale(t1));
 				hitPntT = this.transformation.transform(hitPoint.toPoint());
 				hitNmlT = this.transformation.transformInverseTranspose(hitPoint.toNormal());
-				hitColor = this.color;
+				hitColor = this.material.getColor(getUV(hitPoint.toPoint()));
 				hits.add(new Intersection(hitPntT,hitNmlT,hitColor,this.reflectivity));
 				return hits;
 			}
@@ -117,4 +119,18 @@ public class Sphere implements Shape {
 			return hits;
 		}
 	}
+	
+	private TextPoint getUV(Point hitPoint) {
+		double u,v, theta, phi;
+		phi = Math.atan(hitPoint.x/hitPoint.z);
+		u = phi/(2*Math.PI);
+		theta = Math.acos(hitPoint.y);
+		v = 1.0 - theta/Math.PI;
+		
+		TextPoint txtPoint = new TextPoint(u,v);
+		return txtPoint;
+		
+	}
+	
+	
 }

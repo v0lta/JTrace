@@ -19,6 +19,12 @@ public class TextureFile implements Material {
 	public final double size;
 	
 	
+	/**
+	 * Create a texture file, to make an image file available as texture. 
+	 * @param path the path to the image.
+	 * @param size the size with with the image will contain in the scene.
+	 */
+	
 	public TextureFile(String path, double size){
 		this.path = path;
 		this.read();
@@ -54,6 +60,10 @@ public class TextureFile implements Material {
 		
 		int indu;
 		int indv;
+		
+		if (u > 0.5){
+			System.out.println("hey");
+		}
 		
         int[] pixel = new int[3];
         indu = ((int) (u*this.width)) - 1;// % this.width;

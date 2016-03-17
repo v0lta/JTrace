@@ -1,6 +1,7 @@
 package acceleration;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import math.Color;
@@ -29,7 +30,13 @@ public class AxisAlignedBox implements Shape {
 	public AxisAlignedBox right = null;
 	public List<Triangle> trianglesInBox = new ArrayList<Triangle>();
 	private int depth = 0;
-
+	
+	/**
+	 * Create a new axis aligned bounding box.
+	 * @param p0 the lower point (p0 < p1) along x, y and z.
+	 * @param p1 the upper point.
+	 * @param transformation, is applied to all triangles in the box.
+	 */
 	public AxisAlignedBox(Point p0, Point p1, Transformation transformation) {
 
 		if ((p0.x > p1.x) || (p0.y > p1.y) || (p0.z > p1.z)) {
@@ -40,8 +47,193 @@ public class AxisAlignedBox implements Shape {
 		this.p1 = p1;
 		this.transformation = transformation;
 	}
-
+	
 	public void split(int depth) {
+		this.depth = depth;
+		int triCount = this.trianglesInBox.size();
+		depth = 1;
+		
+		if ((depth > 0) && (triCount > 3)) {
+			
+			// split the aab in two along the longest Axis.
+			int halfList = triCount/2;;
+			List<Triangle> leftList;
+			List<Triangle> rightList;
+			
+			double xLength = Math.abs(this.p0.x - this.p1.x);
+			double yLength = Math.abs(this.p0.y - this.p1.y);
+			double zLength = Math.abs(this.p0.z - this.p1.z);
+
+			Point pLeft;
+			Point pRight;
+
+			if ((xLength > yLength) && (xLength > zLength)) {
+				// the box largest dimension is x
+				TriangleCentComp triCentComp = new TriangleCentComp('x');
+				
+				Collections.sort(this.trianglesInBox,triCentComp);
+				
+				leftList = this.trianglesInBox.subList(0, halfList);
+				rightList = this.trianglesInBox.subList(halfList, triCount);
+				
+				double xNewLeft = largestInLst(leftList,'x') + Constants.treeEpsilon;
+				double xNewRight = smallestInLst(rightList,'x') - Constants.treeEpsilon;
+				pLeft = new Point(xNewLeft, this.p1.y, this.p1.z);
+				pRight = new Point(xNewRight, this.p0.y, this.p0.z);
+
+			} else if ((yLength > xLength) && (yLength > zLength)) {
+				// the largest dimension is z split along y.
+				TriangleCentComp triCentComp = new TriangleCentComp('y');
+				Collections.sort(this.trianglesInBox,triCentComp);
+				
+				leftList = this.trianglesInBox.subList(0, halfList);
+				rightList = this.trianglesInBox.subList(halfList, triCount);
+				
+				double yNewLeft = largestInLst(leftList,'y');
+				double yNewRight = smallestInLst(rightList,'y');
+				pLeft = new Point(this.p1.x, yNewLeft, this.p1.z);
+				pRight = new Point(this.p0.x, yNewRight, this.p0.z); 
+			} else {
+			
+				// the largest dimension is z split along z.
+				TriangleCentComp triCentComp = new TriangleCentComp('z');
+				
+				Collections.sort(this.trianglesInBox,triCentComp);
+				
+				//List<Double> tmpLst = new ArrayList<Double>();
+				//for (Triangle tri : this.trianglesInBox ) {
+				//	tmpLst.add(tri.getCentroid().z);
+				//}
+				
+				leftList = this.trianglesInBox.subList(0, halfList);
+				rightList = this.trianglesInBox.subList(halfList, triCount);
+				
+				
+				double zNewLeft = largestInLst(leftList,'z');
+				double zNewRight = smallestInLst(rightList,'z');
+				pLeft = new Point(this.p1.x, this.p1.y, zNewLeft);
+				pRight = new Point(this.p0.x, this.p0.y, zNewRight);
+			}
+				
+			
+			this.left = new AxisAlignedBox(this.p0, pLeft,
+					this.transformation);
+			this.right = new AxisAlignedBox(pRight, this.p1,
+					this.transformation);
+
+			left.trianglesInBox = leftList;
+			right.trianglesInBox = rightList;
+			
+			//checkBox(this.left,this.right);
+			//checkBox(this.right,this.left);
+
+			depth = depth - 1;
+			left.split(depth);
+			right.split(depth);
+		}
+	}
+	
+	private void checkBox(AxisAlignedBox box, AxisAlignedBox box2){
+		Boolean fail = false;
+		if ((box.p0.x > box.p1.x) || (box.p0.y > box.p1.y) || (box.p0.z > box.p1.z)) {
+			fail = true;
+			System.err.println("Found illegal box");
+		};
+		
+		for (Triangle triangle : box.trianglesInBox){
+			Point a = triangle.a;
+			Point b = triangle.b;
+			Point c = triangle.c;
+			
+			boolean aIn = false;
+			boolean bIn = false;
+			boolean cIn = false;
+
+			if  (((a.x > box.p0.x) && (a.y  > box.p0.y) && (a.z > box.p0.z))
+					&& ((a.x < box.p1.x) && (a.y < box.p1.y) && (a.z < box.p1.z))) {
+				// a is in
+				aIn = true;
+			} 
+			if (((b.x > box.p0.x) && (b.y > box.p0.y) && (b.z > box.p0.z))
+					&& ((b.x < box.p1.x) && (b.y < box.p1.y) && (b.z < box.p1.z))) {
+				// b is in
+				bIn = true;
+			}
+			if (((c.x > box.p0.x) && (c.y > box.p0.y) && (c.z > box.p0.z))
+					&& ((c.x < box.p1.x) && (c.y < box.p1.y) && (c.z < box.p1.z))) {
+				// c is in
+				cIn = true;
+			}
+			if ((aIn == false) || (bIn == false) || (cIn == false)) {
+				fail = true;
+				System.err.println("Found triangle out of box.");				
+			}
+			
+			double maxVal = triangle.getLargestCoord('x');
+			if ((maxVal < a.x) || (maxVal < b.x) || (maxVal < c.x)) {
+				fail = true;
+				System.err.println("Max is not max along x");				
+			}
+			maxVal = triangle.getLargestCoord('y');
+			if ((maxVal < a.y) || (maxVal < b.y) || (maxVal < c.y)) {
+				fail = true;
+				System.err.println("Max is not max along y");				
+			}
+			maxVal = triangle.getLargestCoord('z');
+			if ((maxVal < a.z) || (maxVal < b.z) || (maxVal < c.z)) {
+				fail = true;
+				System.err.println("Max is not max along z");				
+			}
+			
+			double minVal = triangle.getSmallestCoord('x');
+			if ((minVal > a.x) || (minVal > b.x) || (minVal > c.x)) {
+				fail = true;
+				System.err.println("Min is not min along x");				
+			}
+			minVal = triangle.getSmallestCoord('y');
+			if ((minVal > a.y) || (minVal > b.y) || (minVal > c.y)) {
+				fail = true;
+				System.err.println("Min is not min along y");				
+			}
+			minVal = triangle.getSmallestCoord('z');
+			if ((minVal > a.z) || (minVal > b.z) || (minVal > c.z)) {
+				fail = true;
+				System.err.println("Min is not min along z");				
+			}
+			
+			
+			
+			
+		}
+	}
+	
+	private double smallestInLst(List<Triangle> lst, Character axis){
+		double smlst = lst.get(0).getSmallestCoord(axis);
+		double current;
+		
+		for (Triangle tr: lst) {
+			current = tr.getSmallestCoord(axis); 
+			if (current < smlst) {
+				smlst = current;
+			}
+		}
+		return smlst;		
+	}
+	private double largestInLst(List<Triangle> lst, Character axis){
+		double lrgst = lst.get(0).getLargestCoord(axis);
+		double current;
+		
+		for (Triangle tr: lst) {
+			current = tr.getLargestCoord(axis); 
+			if (current > lrgst) {
+				lrgst = current;
+			}
+		}
+		return lrgst;		
+	}
+	
+	
+	public void splitNoSort(int depth) {
 		this.depth = depth;
 		int triCount = this.trianglesInBox.size();
 
@@ -321,7 +513,6 @@ public class AxisAlignedBox implements Shape {
 
 	}
 
-	
 	@Override
 	public List<Intersection> intersect(Ray ray) {
 		List<Intersection> hits = new ArrayList<Intersection>();
