@@ -370,5 +370,9 @@ public class AxisAlignedBox implements Shape {
 		return lrgst;		
 	}
 	
+	public Point getCenter(){
+		Point center = p0.toVector().add(p1.toVector()).scale(0.5).toPoint();
+		return center;
+	}
 	
 }
