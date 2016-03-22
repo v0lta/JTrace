@@ -21,7 +21,7 @@ public class Ray implements Cloneable {
 	/**
 	 * An intersection counting variable.
 	 */
-	private int intersectionCounter;
+	private int intersectionCounter = 0;
 	
 	
 	/**

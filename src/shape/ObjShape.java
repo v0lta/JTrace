@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import acceleration.AxisAlignedBox;
+import acceleration.MiddleSplitBox;
+import acceleration.SortSplitBox;
 import material.Material;
 import math.Constants;
 import math.Intersection;
@@ -233,7 +235,9 @@ public class ObjShape implements Shape {
 				this.triangleList.add(triangle);
 				
 			}
-			this.aab = new AxisAlignedBox(new Point(minmax.xMin - Constants.treeEpsilon,
+			//this.aab = new AxisAlignedBox(new Point(minmax.xMin - Constants.treeEpsilon,
+			this.aab = new MiddleSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
+			//this.aab = new SortSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
 													minmax.yMin - Constants.treeEpsilon,
 													minmax.zMin - Constants.treeEpsilon),
 										  new Point(minmax.xMax + Constants.treeEpsilon,
