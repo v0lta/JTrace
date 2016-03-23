@@ -4,20 +4,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import camera.Camera;
 import shape.Triangle;
 import math.Constants;
 import math.Intersection;
 import math.Point;
 import math.Ray;
 import math.Transformation;
+import math.Vector;
 
 public class SortSplitBox extends AxisAlignedBox {
 	public SortSplitBox left = null;
 	public SortSplitBox right = null;
 	
 	
-	public SortSplitBox(Point p0, Point p1, Transformation transformation) {
-		super(p0, p1, transformation);
+	public SortSplitBox(Point p0, Point p1, Transformation transformation, Camera cam) {
+		super(p0, p1, transformation, cam);
 		
 	}
 	
@@ -98,9 +100,9 @@ public class SortSplitBox extends AxisAlignedBox {
 				
 			
 			this.left = new SortSplitBox(this.p0, pLeft,
-					this.transformation);
+					this.transformation, this.cam);
 			this.right = new SortSplitBox(pRight, this.p1,
-					this.transformation);
+					this.transformation, this.cam);
 
 			left.trianglesInBox = leftList;
 			right.trianglesInBox = rightList;
@@ -114,22 +116,91 @@ public class SortSplitBox extends AxisAlignedBox {
 		}
 	}
 	
-	@Override
 	public List<Intersection> intersect(Ray ray) {
 		List<Intersection> hits = new ArrayList<Intersection>();
-		
+
 		if (Constants.compVisualization){
 			ray.countIntersection();
 		}
 		
 		if ((this.getLeft() != null) && (this.getRight() != null)) {
+			Point leftCenter = this.left.getCenter();
+			leftCenter = this.transformation.transform(leftCenter);
+			Point rightCenter = this.right.getCenter();
+			rightCenter = this.transformation.transform(rightCenter);
+			
+			Vector camPos = super.cam.getOrigin().toVector();
+
+			double leftDist = camPos.subtract(leftCenter.toVector()).length();
+			double rightDist = camPos.subtract(rightCenter.toVector()).length();
+			
+			//check if the distance is significant.
+			//if (false) {
+			if ((Math.abs(leftDist - rightDist)) > 0.1) {			
+				if (leftDist < rightDist){
+					if (this.left.intersectBool(ray)) {
+						hits.addAll(left.intersect(ray));
+					}
+					if (hits.isEmpty()) {
+						if (this.right.intersectBool(ray)) {
+							hits.addAll(right.intersect(ray));
+						}
+					} else {
+						boolean checkBox = false;
+						for(Intersection inter: hits ){
+							if (right.pointInBox(inter.point)) {
+								checkBox = true;
+							}
+						}
+						if (checkBox) {
+							if (this.right.intersectBool(ray)) {
+								hits.addAll(right.intersect(ray));
+							}
+						}
+					} 
+				} else {
+					if (this.right.intersectBool(ray)) {
+						hits.addAll(right.intersect(ray));
+					}
+					if (hits.isEmpty()) {
+						if (this.left.intersectBool(ray)) {
+							hits.addAll(left.intersect(ray));
+						}
+					} else {
+						boolean checkBox = false;
+						for(Intersection inter: hits ){
+							if (left.pointInBox(inter.point)) {
+								checkBox = true;
+							}
+						}
+						if (checkBox) {
+							if (this.left.intersectBool(ray)) {
+								hits.addAll(left.intersect(ray));
+							}
+						}
+					} 
+				}
+			} else {
+				if (this.right.intersectBool(ray)) {
+					hits.addAll(right.intersect(ray));
+				}
+				if (this.left.intersectBool(ray)) {
+					hits.addAll(left.intersect(ray));
+				}
+			} 
+		} 
+
+		if ((this.getLeft() != null) && (this.getRight() == null)) {
 			if (this.left.intersectBool(ray)) {
 				hits.addAll(left.intersect(ray));
 			}
+		}
+		if ((this.getRight() != null) && (this.getLeft() == null)) {
 			if (this.right.intersectBool(ray)) {
 				hits.addAll(right.intersect(ray));
 			}
-		} else {
+		}
+		if ((this.getLeft() == null) && (this.getRight() == null)) {
 			//maximum depth reached.
 			if (this.intersectBool(ray)){
 				for (Triangle tri :	this.trianglesInBox) {
@@ -139,6 +210,6 @@ public class SortSplitBox extends AxisAlignedBox {
 		}		
 		return hits;
 	}
-	
-
 }
+
+

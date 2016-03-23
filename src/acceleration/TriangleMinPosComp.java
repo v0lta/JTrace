@@ -17,10 +17,10 @@ public class TriangleMinPosComp implements Comparator<Triangle> {
 		double minPos2 = tri2.getSmallestCoord(this.axis);
 		
 		if (minPos1 > minPos2) {
-			return -1;
+			return 1;
 		}
 		if (minPos1 < minPos2) {
-			return 1;
+			return -1;
 		}
 		else {
 			return 0;

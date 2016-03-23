@@ -18,10 +18,10 @@ public class TriangleMaxPosComp  implements Comparator<Triangle>{
 		double maxPos2 = tri2.getLargestCoord(this.axis);
 		
 		if (maxPos1 > maxPos2) {
-			return -1;
+			return 1;
 		}
 		if (maxPos1 < maxPos2) {
-			return 1;
+			return -1;
 		}
 		else {
 			return 0;

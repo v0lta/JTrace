@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import camera.Camera;
 import math.Color;
 import math.Constants;
 import math.Intersection;
@@ -28,6 +29,7 @@ public class AxisAlignedBox implements Shape {
 	public final Transformation transformation;
 	public List<Triangle> trianglesInBox = new ArrayList<Triangle>();
 	protected int depth = 0;
+	protected Camera cam;
 	
 	/**
 	 * Create a new axis aligned bounding box.
@@ -35,7 +37,7 @@ public class AxisAlignedBox implements Shape {
 	 * @param p1 the upper point.
 	 * @param transformation, is applied to all triangles in the box.
 	 */
-	public AxisAlignedBox(Point p0, Point p1, Transformation transformation) {
+	public AxisAlignedBox(Point p0, Point p1, Transformation transformation, Camera cam) {
 
 		if ((p0.x > p1.x) || (p0.y > p1.y) || (p0.z > p1.z)) {
 			System.err.println("Illegal box.");
@@ -44,6 +46,7 @@ public class AxisAlignedBox implements Shape {
 		this.p0 = p0;
 		this.p1 = p1;
 		this.transformation = transformation;
+		this.cam = cam;
 	}
 	
 	public void split(int depth) {
@@ -375,4 +378,17 @@ public class AxisAlignedBox implements Shape {
 		return center;
 	}
 	
+	public boolean pointInBox(Point toTest){
+		toTest = transformation.transform(toTest);
+		if ((toTest.x < p0.x) || (toTest.x > p1.x)) {
+			return false;
+		}
+		if ((toTest.y < p0.y) || (toTest.y > p1.y)) {
+			return false;
+		}
+		if ((toTest.z < p0.z) || (toTest.z > p1.z)) {
+			return false;
+		}
+		return true;
+	}
 }

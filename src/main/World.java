@@ -118,7 +118,7 @@ public class World{
 		Transformation t2 = Transformation.translate(0, 0, 0.0);
 		//Material sphereText = new Monochrome(new Color(100.0,100.0,100.0));
 		Material sphereText = new Julia(new Complex(-0.02,0.8),800,1,400, 10, "parula");
-		ObjShape tessSphere = new ObjShape("./obj/sphere.obj",t2,sphereText,100,5);
+		ObjShape tessSphere = new ObjShape("./obj/sphere.obj",t2,sphereText,100,5, this.camera);
 		//this.shapes.add(tessSphere);
 		
 		//ObjShape table = new ObjShape("./obj/table.obj",t2,sphereText,1.5);
@@ -159,7 +159,7 @@ public class World{
 		//mPlane = new Julia(new Complex(-0.02,0.652),800,1,400, 10, "parula");
 		
 		//lightning = new Julia(new Complex(-0.02,0.8),800,1,400, 10);
-		mPlane = new Julia(new Complex(-0.02,0.8),800,1,400, 10, "jet");
+		mPlane = new Julia(new Complex(-0.02,0.8),800,1,400, 10, "parula");
 		
 		//mPlane = new Monochrome(new Color(100,100,100));
 		
@@ -193,19 +193,17 @@ public class World{
 
 		Material mat;
 		mat = new Monochrome( new Color(100,100,100));
-		//ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,30);
-		ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0,20);
+		ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,1, this.camera);
+		//ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0,20, this.camera);
 		this.shapes.add(bunny);
 		
 		
 		Material mPlane;
 		//mPlane = new Chess(new Color(100,100,100), new Color(1,1,1),1);
-		//cr = -0.076, ci = 0.651, N = 200, bound = 1, lim = 100
-		//mPlane = new Julia(new Complex(-0.076,0.652),200,1,100, 10);
 		mPlane = new Monochrome(new Color(100,100,100));
 		
 		//(Point a,Normal n, Material m,double reflectivity)
-		Transformation tPlane = Transformation.IDENTITY;
+		Transformation tPlane = Transformation.translate(0, 0, -5);
 		Plane plane = new Plane(tPlane,mPlane,1);
 		this.shapes.add(plane);
 			
@@ -237,7 +235,7 @@ public class World{
 		
 		t1 = t1.append(Transformation.rotateX(90));
 		Material houseText = new TextureFile("./obj/house/house_texture.jpg",1.2);
-		ObjShape house = new ObjShape("./obj/house/house.obj",t1,houseText,0.6,0);
+		ObjShape house = new ObjShape("./obj/house/house.obj",t1,houseText,0.6,0, this.camera);
 		this.shapes.add(house);
 		
 		
@@ -274,7 +272,7 @@ public class World{
 		
 		Material mat;
 		mat = new Monochrome( new Color(50,100,50));
-		ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonLowPoly.obj",t1,mat,1.0,30);
+		ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonLowPoly.obj",t1,mat,1.0,30, this.camera);
 		//ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonHighPoly.obj",t1,mat,2.0,100); //still too much.
 		this.shapes.add(dragon);
 		
@@ -310,7 +308,7 @@ public class World{
 				
 				Material mat;
 				mat = new Monochrome( new Color(100,100,100));
-				ObjShape venus = new ObjShape("./obj/venus.obj",t1,mat,2.0,20);
+				ObjShape venus = new ObjShape("./obj/venus.obj",t1,mat,2.0,20, this.camera);
 				this.shapes.add(venus);
 				
 				

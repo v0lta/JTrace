@@ -205,7 +205,7 @@ public class Renderer {
 					                	//int max = 400;
 					                	int max = 900; //dragon...
 					                	
-					                   	ColorMap colorMap = new ColorMap(0.0, max, null,1.0, "jet");
+					                   	ColorMap colorMap = new ColorMap(0.0, max, null,1.0, "summer");
 					                   	pixelColor = colorMap.getCompColor(intersectionCount);
 					                   	
 				                		//intensity = intersections.size()/1.0;

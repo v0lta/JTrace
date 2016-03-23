@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import camera.Camera;
 import acceleration.AxisAlignedBox;
 import acceleration.MiddleSplitBox;
 import acceleration.SortSplitBox;
@@ -27,15 +28,17 @@ public class ObjShape implements Shape {
 	private AxisAlignedBox aab;
 	//private int accessCount = 0;
 	private int treeDepth;
+	protected Camera cam;
 	
 	public ObjShape(String path, Transformation transformation, Material mat,
-					double reflectivity, int treeDepth){
+					double reflectivity, int treeDepth, Camera camera){
 		this.path = path;
 		this.transformation = transformation;
 		this.reflectivity = reflectivity;
 		this.mat = mat;
 		this.triangleList = new ArrayList<Triangle>();
 		this.treeDepth = treeDepth;
+		this.cam = camera;
 		
 		long t = System.nanoTime();
 		try {
@@ -236,14 +239,14 @@ public class ObjShape implements Shape {
 				
 			}
 			//this.aab = new AxisAlignedBox(new Point(minmax.xMin - Constants.treeEpsilon,
-			this.aab = new MiddleSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
-			//this.aab = new SortSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
+			this.aab = new SortSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
+			//this.aab = new MiddleSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
 													minmax.yMin - Constants.treeEpsilon,
 													minmax.zMin - Constants.treeEpsilon),
 										  new Point(minmax.xMax + Constants.treeEpsilon,
 												    minmax.yMax + Constants.treeEpsilon,
 												    minmax.zMax + Constants.treeEpsilon),
-										  this.transformation);
+										  this.transformation, this.cam);
 			aab.trianglesInBox.addAll(triangleList);
 			aab.split(this.treeDepth); //recursively split the box until the max depth is reached.
 	}
@@ -283,10 +286,11 @@ public class ObjShape implements Shape {
 	 *A main for debugging purposes.
 	 */
 	public static void main(String[] arguments){
+		Camera cam = null;
 		Transformation testTrans = Transformation.createIdentity();
 		Material mat = null;
 		@SuppressWarnings("unused")
-		ObjShape testObj = new ObjShape("./obj/bunny.obj",testTrans,mat,1.0, 1);
+		ObjShape testObj = new ObjShape("./obj/bunny.obj",testTrans,mat,1.0, 1, cam);
 		System.out.println("done.");
 	}
 	 
