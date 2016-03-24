@@ -137,19 +137,6 @@ public class MiddleSplitBox extends AxisAlignedBox {
 		}
 	}
 
-	private boolean triInBox(Triangle triangle,Point p0,Point p1 ) {
-		double eps = Constants.treeEpsilon;
-		Point centroid = triangle.getCentroid();
-
-		if  (((centroid.x + eps > p0.x) && (centroid.y + eps > p0.y) && (centroid.z + eps > p0.z))
-				&& ((centroid.x - eps < p1.x) && (centroid.y - eps < p1.y) && (centroid.z - eps < p1.z))) {
-			// a is in
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	@Override
 	public List<Intersection> intersect(Ray ray) {
 		List<Intersection> hits = new ArrayList<Intersection>();

@@ -391,4 +391,63 @@ public class AxisAlignedBox implements Shape {
 		}
 		return true;
 	}
+	
+	public boolean triInBox(Triangle triangle,Point p0,Point p1 ) {
+		double eps = Constants.treeEpsilon;
+		Point centroid = triangle.getCentroid();
+
+		if  (((centroid.x + eps > p0.x) && (centroid.y + eps > p0.y) && (centroid.z + eps > p0.z))
+				&& ((centroid.x - eps < p1.x) && (centroid.y - eps < p1.y) && (centroid.z - eps < p1.z))) {
+			// a is in
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Add a triangle to the internal triangle list if triangle centroid is within the box-bounds.
+	 * @param triangle 
+	 */
+	public void addIfIn(Triangle triangle){
+		Point centroid = triangle.getCentroid();
+		if  (((centroid.x > p0.x) && (centroid.y > p0.y) && (centroid.z > p0.z))
+				&& ((centroid.x < p1.x) && (centroid.y < p1.y) && (centroid.z < p1.z))) {
+			// a is in
+			this.trianglesInBox.add(triangle);
+		}
+	}
+	
+	public AxisAlignedBox adjustBounds(Character axis){
+		if (axis == 'x'){
+			double minX = this.smallestInLst(this.trianglesInBox, axis);
+			double maxX = this.largestInLst(this.trianglesInBox, axis);
+			
+			Point adjP0 = new Point(minX, this.p0.y, this.p0.z);
+			Point adjP1 = new Point(maxX, this.p1.y, this.p1.z);
+			return new AxisAlignedBox(adjP0,adjP1,this.transformation,this.cam);
+		} else if (axis == 'y') {
+			double minY = this.smallestInLst(this.trianglesInBox, axis);
+			double maxY = this.largestInLst(this.trianglesInBox, axis);
+			
+			Point adjP0 = new Point(this.p0.x, minY, this.p0.z);
+			Point adjP1 = new Point(this.p1.x, maxY, this.p1.z);
+			return new AxisAlignedBox(adjP0,adjP1,this.transformation,this.cam);
+		} else {
+			double minZ = this.smallestInLst(this.trianglesInBox, axis);
+			double maxZ = this.largestInLst(this.trianglesInBox, axis);
+			
+			Point adjP0 = new Point(this.p0.x, this.p0.y, minZ);
+			Point adjP1 = new Point(this.p1.x, this.p1.y, maxZ);
+			return new AxisAlignedBox(adjP0,adjP1,this.transformation,this.cam);
+		}
+	}
+	
+	public double getVolume() {
+		double x = Math.abs(p0.x - p1.x);
+		double y = Math.abs(p0.y - p1.y);
+		double z = Math.abs(p0.x - p1.z);
+		return x*y*z;
+	}
+	
 }

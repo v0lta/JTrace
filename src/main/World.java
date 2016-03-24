@@ -193,8 +193,8 @@ public class World{
 
 		Material mat;
 		mat = new Monochrome( new Color(100,100,100));
-		ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,1, this.camera);
-		//ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0,20, this.camera);
+		//ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,1, this.camera);
+		ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0,20, this.camera);
 		this.shapes.add(bunny);
 		
 		

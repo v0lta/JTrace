@@ -239,8 +239,8 @@ public class ObjShape implements Shape {
 				
 			}
 			//this.aab = new AxisAlignedBox(new Point(minmax.xMin - Constants.treeEpsilon,
-			this.aab = new SortSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
-			//this.aab = new MiddleSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
+			//this.aab = new SortSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
+			this.aab = new MiddleSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
 													minmax.yMin - Constants.treeEpsilon,
 													minmax.zMin - Constants.treeEpsilon),
 										  new Point(minmax.xMax + Constants.treeEpsilon,
