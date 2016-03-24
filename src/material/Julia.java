@@ -70,7 +70,6 @@ public class Julia implements Material {
 	
 	@Override
 	public Color getColor(Vector pointVec) {
-		//TODO: use something better.
 		TextPoint point = new TextPoint(pointVec.x,pointVec.y);
 		//map input into the space where the julia set has been computed.
 		double x = Math.abs(point.u);

@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import shape.Triangle;
+import math.Constants;
+import math.Intersection;
 import math.Point;
+import math.Ray;
 import math.Transformation;
+import math.Vector;
 import camera.Camera;
 
 public class SahBox extends AxisAlignedBox  {
@@ -19,14 +23,11 @@ public class SahBox extends AxisAlignedBox  {
 	
 	
 	public void split(int depth) {
-		this.depth = depth -1;
 		int triCount = this.trianglesInBox.size();
 
 		if ((depth > 0) && (triCount > 1)) {
 		//if (triCount > 1) {
 				List<AxisAlignedBox> boxes = new ArrayList<AxisAlignedBox>();
-				List<Triangle> leftList = new ArrayList<Triangle>();
-				List<Triangle> rightList = new ArrayList<Triangle>();
 				final int cuts = 4;
 				Character axis;
 				
@@ -35,22 +36,19 @@ public class SahBox extends AxisAlignedBox  {
 				double yLength = Math.abs(this.p0.y - this.p1.y);
 				double zLength = Math.abs(this.p0.z - this.p1.z);
 
-				Point pRight;
-				Point pLeft;
-
 				if ((xLength > yLength) && (xLength > zLength)) {
 					// the box' largest dimension is x
 					axis = 'x';
-					double xStep = (this.p0.x + this.p1.x) / cuts;
+					double xStep = xLength / (cuts+1);
 
-					for (int i = 0; i < cuts; i++) {
+					for (int i = 0; i < (cuts+1); i++) {
 						System.out.println(i);
 						double xSrt = p0.x + i*xStep;
 						double xEnd = xSrt + xStep;
 						
 						Point pSt = new Point(xSrt, this.p0.y, this.p0.z);
 						Point pEd = new Point(xEnd, this.p1.y, this.p1.z);
-						AxisAlignedBox xBox= new AxisAlignedBox(pSt,pEd,this.transformation,this.cam); 
+						SahBox xBox = new SahBox(pSt,pEd,this.transformation,this.cam); 
 
 						for (Triangle triangle : trianglesInBox) {
 							xBox.addIfIn(triangle);
@@ -61,16 +59,16 @@ public class SahBox extends AxisAlignedBox  {
 				} else if ((yLength > xLength) && (yLength > zLength)) {
 					// the box largest dimension is y
 					axis = 'y';
-					double yStep = (this.p0.y + this.p1.y) / cuts;
+					double yStep = yLength / (cuts + 1);
 
-					for (int i = 0; i < cuts; i++) {
+					for (int i = 0; i < (cuts + 1); i++) {
 						System.out.println(i);
 						double ySrt = p0.y + i*yStep;
 						double yEnd = ySrt + yStep;
 						
 						Point pSt = new Point(this.p0.x, ySrt, this.p0.z);
 						Point pEd = new Point(this.p1.y, yEnd, this.p1.z);
-						AxisAlignedBox yBox= new SahBox(pSt,pEd,this.transformation,this.cam); 
+						SahBox yBox = new SahBox(pSt,pEd,this.transformation,this.cam); 
 
 						for (Triangle triangle : trianglesInBox) {
 							yBox.addIfIn(triangle);
@@ -81,15 +79,15 @@ public class SahBox extends AxisAlignedBox  {
 				} else {
 					// the largest dimension is z split along z.
 					axis = 'z';
-					double zStep = (this.p0.z + this.p1.z) / cuts;
+					double zStep = zLength / (cuts + 1);
 
-					for (int i = 0; i < cuts; i++) {
-						double zSrt = p0.y + i*zStep;
+					for (int i = 0; i < (cuts + 1); i++) {
+						double zSrt = p0.z + i*zStep;
 						double zEnd = zSrt + zStep;
 						
 						Point pSt = new Point(this.p0.x, this.p0.y, zSrt);
 						Point pEd = new Point(this.p1.x, this.p1.y, zEnd);
-						AxisAlignedBox zBox= new AxisAlignedBox(pSt,pEd,this.transformation,this.cam); 
+						SahBox zBox= new SahBox(pSt,pEd,this.transformation,this.cam); 
 
 						for (Triangle triangle : trianglesInBox) {
 							zBox.addIfIn(triangle);
@@ -100,23 +98,23 @@ public class SahBox extends AxisAlignedBox  {
 				}
 				
 				//Explore various box combinations.
-				AxisAlignedBox lftBoxBest = null;
-				AxisAlignedBox rgtBoxBest = null;
+				SahBox lftBoxBest = null;
+				SahBox rgtBoxBest = null;
 				double nLft = 0;
 				double vLft = 0;
 				double nRgt = 0;
 				double vRgt = 0;
 				double cost = this.getVolume() * this.trianglesInBox.size();
 
-				for (int i = 0; i < cuts; i++){
+				for (int i = 1; i < (cuts+1); i++){
 					//create large boxes. Dimensions will change according to assigned triangles.
-					AxisAlignedBox lftBox = new SahBox(this.p0,this.p1,this.transformation,this.cam);
-					AxisAlignedBox rgtBox = new SahBox(this.p0,this.p1,this.transformation,this.cam);
+					SahBox lftBox = new SahBox(this.p0,this.p1,this.transformation,this.cam);
+					SahBox rgtBox = new SahBox(this.p0,this.p1,this.transformation,this.cam);
 					for(AxisAlignedBox lftPartBox : boxes.subList(0, i)) {
 						lftBox.trianglesInBox.addAll(lftPartBox.trianglesInBox);
 					}
 					lftBox = lftBox.adjustBounds(axis);
-					for(AxisAlignedBox rgtPartBox : boxes.subList(i, cuts)) {
+					for(AxisAlignedBox rgtPartBox : boxes.subList(i, (cuts+1))) {
 						rgtBox.trianglesInBox.addAll(rgtPartBox.trianglesInBox);
 					}
 					rgtBox = rgtBox.adjustBounds(axis);
@@ -132,21 +130,80 @@ public class SahBox extends AxisAlignedBox  {
 						rgtBoxBest = rgtBox;
 					}
 				}
-
-				this.left.split(this.depth);
-				this.right.split(this.depth);
-
-				if (this.left.trianglesInBox.isEmpty()) {
-					this.left = null;
+				
+				this.left  = lftBoxBest;
+				this.right = rgtBoxBest;
+				
+				depth = depth -1;
+				if (this.left != null) {
+					this.left.split(depth);
 				}
-				if (this.right.trianglesInBox.isEmpty()) {
-					this.right = null;
+				if (this.right != null) {
+					this.right.split(depth);
 				}
 
 		}
 	}
-
 	
+	public SahBox adjustBounds(Character axis){
+		if (this.trianglesInBox.isEmpty() == false) {
+			Point adjP0;
+			Point adjP1;
+			
+			if (axis == 'x'){
+				double minX = this.smallestInLst(this.trianglesInBox, axis);
+				double maxX = this.largestInLst(this.trianglesInBox, axis);
+
+				adjP0 = new Point(minX, this.p0.y, this.p0.z);
+				adjP1 = new Point(maxX, this.p1.y, this.p1.z);
+			} else if (axis == 'y') {
+				double minY = this.smallestInLst(this.trianglesInBox, axis);
+				double maxY = this.largestInLst(this.trianglesInBox, axis);
+
+				adjP0 = new Point(this.p0.x, minY, this.p0.z);
+				adjP1 = new Point(this.p1.x, maxY, this.p1.z);
+			} else {
+				double minZ = this.smallestInLst(this.trianglesInBox, axis);
+				double maxZ = this.largestInLst(this.trianglesInBox, axis);
+
+				adjP0 = new Point(this.p0.x, this.p0.y, minZ);
+				adjP1 = new Point(this.p1.x, this.p1.y, maxZ);
+			}
+			SahBox fixedBox = new SahBox(adjP0,adjP1,this.transformation,this.cam);
+			fixedBox.trianglesInBox.addAll(this.trianglesInBox);
+			return fixedBox;
+		} else {
+			return this;
+		}
+	}
+
+	@Override
+	public List<Intersection> intersect(Ray ray) {
+		List<Intersection> hits = new ArrayList<Intersection>();
+
+		if (Constants.compVisualization){
+			ray.countIntersection();
+		}
+		
+		if ((this.left != null) && (this.right != null)) {
+			if (this.left.intersectBool(ray)) {
+				hits.addAll(left.intersect(ray));
+			}
+			if (this.right.intersectBool(ray)) {
+				hits.addAll(right.intersect(ray));
+			}
+		}
+		if ((this.left == null) && (this.right == null)) {
+			//maximum depth reached.
+			if (this.intersectBool(ray)){
+				for (Triangle tri :	this.trianglesInBox) {
+					hits.addAll(tri.intersect(ray));
+				}
+			}
+		}		
+		return hits;
+	}
+
 	
 	
 	

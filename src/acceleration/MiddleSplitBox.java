@@ -30,7 +30,7 @@ public class MiddleSplitBox extends AxisAlignedBox {
 
 
 	public void split(int depth) {
-		this.depth = depth -1;
+		depth = depth -1;
 		int triCount = this.trianglesInBox.size();
 
 		if ((depth > 0) && (triCount > 1)) {
@@ -124,8 +124,8 @@ public class MiddleSplitBox extends AxisAlignedBox {
 				this.right = new MiddleSplitBox(pRight, this.p1,
 						this.transformation, this.cam);
 				this.right.trianglesInBox = rightList;
-				this.left.split(this.depth);
-				this.right.split(this.depth);
+				this.left.split(depth);
+				this.right.split(depth);
 
 				if (this.left.trianglesInBox.isEmpty()) {
 					this.left = null;

@@ -213,8 +213,8 @@ public class Renderer {
 						                
 					                   	//double greenValue = ((double) intersectionCount)/max;						
 					                   	double greenValue = ((double) intersectionCount)/max;
-				                		//buffer.getPixel(x, y).add(0,greenValue,0);
-					                	buffer.getPixel(x, y).add(pixelColor.r,pixelColor.g,pixelColor.b);
+				                		buffer.getPixel(x, y).add(0,greenValue,0);
+					                	//buffer.getPixel(x, y).add(pixelColor.r,pixelColor.g,pixelColor.b);
 					                	
 					                	
 					                } else {

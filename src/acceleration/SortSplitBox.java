@@ -32,7 +32,6 @@ public class SortSplitBox extends AxisAlignedBox {
 	
 	
 	public void split(int depth) {
-		this.depth = depth;
 		int triCount = this.trianglesInBox.size();
 		depth = 1;
 		

@@ -28,7 +28,6 @@ public class AxisAlignedBox implements Shape {
 	public final Point p1;
 	public final Transformation transformation;
 	public List<Triangle> trianglesInBox = new ArrayList<Triangle>();
-	protected int depth = 0;
 	protected Camera cam;
 	
 	/**
@@ -415,31 +414,6 @@ public class AxisAlignedBox implements Shape {
 				&& ((centroid.x < p1.x) && (centroid.y < p1.y) && (centroid.z < p1.z))) {
 			// a is in
 			this.trianglesInBox.add(triangle);
-		}
-	}
-	
-	public AxisAlignedBox adjustBounds(Character axis){
-		if (axis == 'x'){
-			double minX = this.smallestInLst(this.trianglesInBox, axis);
-			double maxX = this.largestInLst(this.trianglesInBox, axis);
-			
-			Point adjP0 = new Point(minX, this.p0.y, this.p0.z);
-			Point adjP1 = new Point(maxX, this.p1.y, this.p1.z);
-			return new AxisAlignedBox(adjP0,adjP1,this.transformation,this.cam);
-		} else if (axis == 'y') {
-			double minY = this.smallestInLst(this.trianglesInBox, axis);
-			double maxY = this.largestInLst(this.trianglesInBox, axis);
-			
-			Point adjP0 = new Point(this.p0.x, minY, this.p0.z);
-			Point adjP1 = new Point(this.p1.x, maxY, this.p1.z);
-			return new AxisAlignedBox(adjP0,adjP1,this.transformation,this.cam);
-		} else {
-			double minZ = this.smallestInLst(this.trianglesInBox, axis);
-			double maxZ = this.largestInLst(this.trianglesInBox, axis);
-			
-			Point adjP0 = new Point(this.p0.x, this.p0.y, minZ);
-			Point adjP1 = new Point(this.p1.x, this.p1.y, maxZ);
-			return new AxisAlignedBox(adjP0,adjP1,this.transformation,this.cam);
 		}
 	}
 	

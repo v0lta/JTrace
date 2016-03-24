@@ -9,6 +9,7 @@ import java.util.List;
 import camera.Camera;
 import acceleration.AxisAlignedBox;
 import acceleration.MiddleSplitBox;
+import acceleration.SahBox;
 import acceleration.SortSplitBox;
 import material.Material;
 import math.Constants;
@@ -240,7 +241,8 @@ public class ObjShape implements Shape {
 			}
 			//this.aab = new AxisAlignedBox(new Point(minmax.xMin - Constants.treeEpsilon,
 			//this.aab = new SortSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
-			this.aab = new MiddleSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
+			//this.aab = new MiddleSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
+			this.aab = new SahBox(new Point(minmax.xMin - Constants.treeEpsilon,
 													minmax.yMin - Constants.treeEpsilon,
 													minmax.zMin - Constants.treeEpsilon),
 										  new Point(minmax.xMax + Constants.treeEpsilon,
