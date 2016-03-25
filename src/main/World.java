@@ -193,8 +193,8 @@ public class World{
 
 		Material mat;
 		mat = new Monochrome( new Color(100,100,100));
-		ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,20, this.camera);
-		//ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0,30, this.camera);
+		//ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,20, this.camera);
+		ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0,30, this.camera);
 		this.shapes.add(bunny);
 		
 		
@@ -257,9 +257,9 @@ public class World{
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		PointLight whiteLight = new PointLight(new Point(0,2,10),new Color(10,10,10), 0.01,true);
-		//this.plights.add(whiteLight);
+		this.plights.add(whiteLight);
 		PointLight blueLight = new PointLight(new Point(8,8,8),new Color(50,100,50), 0.05,true);
-		//this.plights.add(blueLight);
+		this.plights.add(blueLight);
 		PointLight redLight = new PointLight(new Point(-8,0,8),new Color(100,0,0), 0.05,true);
 		this.plights.add(redLight);
 		
@@ -272,8 +272,8 @@ public class World{
 		
 		Material mat;
 		mat = new Monochrome( new Color(50,100,50));
-		//ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonLowPoly.obj",t1,mat,1.0,30, this.camera);
-		ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonHighPoly.obj",t1,mat,2.0,100, this.camera); //still too much.
+		//ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonLowPoly.obj",t1,mat,1.0,20, this.camera);
+		ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonHighPoly.obj",t1,mat,2.0,25, this.camera); //still too much.
 		this.shapes.add(dragon);
 		
 		

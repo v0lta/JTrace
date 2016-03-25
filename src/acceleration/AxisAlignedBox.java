@@ -422,9 +422,11 @@ public class AxisAlignedBox implements Shape {
 	 * @param triangle 
 	 */
 	public void addIfIn(Triangle triangle){
+		double eps = Constants.treeEpsilon;
 		Point centroid = triangle.getCentroid();
-		if  (((centroid.x > p0.x) && (centroid.y > p0.y) && (centroid.z > p0.z))
-				&& ((centroid.x < p1.x) && (centroid.y < p1.y) && (centroid.z < p1.z))) {
+
+		if  (((centroid.x + eps > p0.x) && (centroid.y + eps > p0.y) && (centroid.z + eps > p0.z))
+				&& ((centroid.x - eps < p1.x) && (centroid.y - eps < p1.y) && (centroid.z - eps < p1.z))) {
 			// a is in
 			this.trianglesInBox.add(triangle);
 		}

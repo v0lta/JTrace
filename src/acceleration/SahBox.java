@@ -28,7 +28,7 @@ public class SahBox extends AxisAlignedBox  {
 		if ((depth > 0) && (triCount > 1)) {
 		//if (triCount > 1) {
 				List<AxisAlignedBox> boxes = new ArrayList<AxisAlignedBox>();
-				final int cuts = 10;
+				final int cuts = 4;
 				Character axis;
 				
 				// split the aab in two along the longest Axis.
