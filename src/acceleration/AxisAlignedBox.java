@@ -377,12 +377,21 @@ public class AxisAlignedBox implements Shape {
 		double cy = (1.0/2.0) * ((this.p0.y) + (this.p1.y));
 		double cz = (1.0/2.0) * ((this.p0.z) + (this.p1.z));
 		Point center = new Point(cx,cy,cz);
-		center = this.transformation.transform(center);		
 		return center;
 	}
 	
+	
+	/**
+	 * Learn if a point is in the transformed box.
+	 * Only for intersection testing not for tree construction.
+	 * @param   toTest transformed interseciton point.
+	 * @return  true if point in the transformed box,
+	 * 			false if not.
+	 */	
 	public boolean pointInBox(Point toTest){
-		//toTest = transformation.transform(toTest);
+		Point p0 = this.transformation.transform(this.p0);
+		Point p1 = this.transformation.transform(this.p1);
+		
 		if ((toTest.x < p0.x) || (toTest.x > p1.x)) {
 			return false;
 		}
@@ -434,11 +443,11 @@ public class AxisAlignedBox implements Shape {
 		double z = Math.abs(p0.x - p1.z);
 		
 		if (axis == 'x'){
-			return y*z;
-		} else if (axis == 'y'){
-			return x*z;
-		} else {
 			return x*y;
+		} else if (axis == 'y'){
+			return y*z;
+		} else {
+			return z*x;
 		}
 		
 	}

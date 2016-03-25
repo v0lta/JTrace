@@ -131,9 +131,9 @@ public class Renderer {
 		//final World world = new World(width, height, "initialWorld");
 		//final World world = new World(width, height, "planeAndSphere");
 		//final World world = new World(width, height, "Julia");
-		final World world = new World(width, height, "bunny");
+		//final World world = new World(width, height, "bunny");
 		//final World world = new World(width, height, "apple");
-		//final World world = new World(width, height, "dragon");
+		final World world = new World(width, height, "dragon");
 		//final World world = new World(width, height, "venus");
 		
 		/**********************************************************************
@@ -201,11 +201,11 @@ public class Renderer {
 					                } else if (Constants.compVisualization) {
 					                	int intersectionCount = ray.getIntersectionCounter();
 					                	Color pixelColor;
-					                	//int max = 200;
+					                	//int max = 180;
 					                	int max = 600;
-					                	//int max = 900; //dragon...
+					                	//int max = 1000; //dragon...
 					                	
-					                   	ColorMap colorMap = new ColorMap(0.0, max, null,1.0, "summer");
+					                   	ColorMap colorMap = new ColorMap(0.0, max, null,1.0, "parula");
 					                   	pixelColor = colorMap.getCompColor(intersectionCount);
 					                   	
 				                		//intensity = intersections.size()/1.0;

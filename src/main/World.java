@@ -193,8 +193,8 @@ public class World{
 
 		Material mat;
 		mat = new Monochrome( new Color(100,100,100));
-		//ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,20, this.camera);
-		ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0,20, this.camera);
+		ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,20, this.camera);
+		//ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0,30, this.camera);
 		this.shapes.add(bunny);
 		
 		
@@ -272,8 +272,8 @@ public class World{
 		
 		Material mat;
 		mat = new Monochrome( new Color(50,100,50));
-		ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonLowPoly.obj",t1,mat,1.0,30, this.camera);
-		//ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonHighPoly.obj",t1,mat,2.0,100); //still too much.
+		//ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonLowPoly.obj",t1,mat,1.0,30, this.camera);
+		ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonHighPoly.obj",t1,mat,2.0,100, this.camera); //still too much.
 		this.shapes.add(dragon);
 		
 		

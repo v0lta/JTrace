@@ -28,7 +28,7 @@ public class SahBox extends AxisAlignedBox  {
 		if ((depth > 0) && (triCount > 1)) {
 		//if (triCount > 1) {
 				List<AxisAlignedBox> boxes = new ArrayList<AxisAlignedBox>();
-				final int cuts = 4;
+				final int cuts = 10;
 				Character axis;
 				
 				// split the aab in two along the longest Axis.
@@ -196,10 +196,12 @@ public class SahBox extends AxisAlignedBox  {
 			ray.countIntersection();
 		}
 		
-		if ((this.left != null) && (this.right != null)) {
+		if (this.left != null)  {
 			if (this.left.intersectBool(ray)) {
 				hits.addAll(left.intersect(ray));
 			}
+		}
+		if (this.right != null) {
 			if (this.right.intersectBool(ray)) {
 				hits.addAll(right.intersect(ray));
 			}
@@ -220,12 +222,14 @@ public class SahBox extends AxisAlignedBox  {
 		List<Intersection> hits = new ArrayList<Intersection>();
 
 		if (Constants.compVisualization){
-			//ray.countIntersection();
+			ray.countIntersection();
 		}
 		
 		if ((this.left != null) && (this.right != null)) {
 			Point leftCenter = this.left.getCenter();
+			leftCenter = this.transformation.transform(leftCenter);
 			Point rightCenter = this.right.getCenter();
+			rightCenter = this.transformation.transform(rightCenter);
 
 			Vector camPos = super.cam.getOrigin().toVector();
 
