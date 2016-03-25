@@ -31,6 +31,16 @@ public class ObjShape implements Shape {
 	private int treeDepth;
 	protected Camera cam;
 	
+	/**
+	 * Create a triangle mesh from a wavefront (.obj) file.
+	 * @param path string with path to the .obj file.
+	 * @param transformation collection of matrices changing
+	 * 		   position and scale.
+	 * @param mat a material object.
+	 * @param reflectivity changes the brightness.
+	 * @param treeDepth the depth of the acceleration tree.
+	 * @param camera object needed for camera position.
+	 */	
 	public ObjShape(String path, Transformation transformation, Material mat,
 					double reflectivity, int treeDepth, Camera camera){
 		this.path = path;

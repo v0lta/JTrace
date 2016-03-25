@@ -3,14 +3,13 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 
-import acceleration.AxisAlignedBox;
 import light.PointLight;
 import material.Chess;
 import material.Complex;
 import material.Julia;
 import material.Material;
 import material.Monochrome;
-import material.TextureFile;
+import material.ObjTextureFile;
 import math.Color;
 import math.Point;
 import math.Transformation;
@@ -95,30 +94,31 @@ public class World{
 	public void planeAndSphere(int width,int height) {
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(0, 0, 2), new Point(0, 0, 0), new Vector(1, 0, 0), 90);
+				new Point(2, 2, 2), new Point(0, 0, 0), new Vector(-1, -1, 0), 90);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
-		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.1,true);
+		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.01,true);
 		this.plights.add(whiteLight);
 		PointLight blueLight = new PointLight(new Point(8,8,10),new Color(10,10,100), 0.5,true);
 		//this.plights.add(blueLight);
 		PointLight redLight = new PointLight(new Point(8,-8,10),new Color(100,10,10), 0.5,true);
 		//this.plights.add(redLight);
 		
-		this.ambient = 0.01;
+		this.ambient = 0.001;
 		
 		//setup the objects in the scene.
 		Transformation t1 = Transformation.translate(0.0, 0.0, 0.0).append(
-							Transformation.rotateX(90)).append(Transformation.rotateY(0));
-		//Material globeTexture = new TextureFile("./obj/txt/earthNight.jpg",0.5);
-		Material globeTexture = new TextureFile("./obj/txt/SphereGrid.jpg",0.5);
+							Transformation.rotateX(90)).append(Transformation.rotateY(45));
+		//Material globeTexture = new ObjTextureFile("./obj/txt/EarthMap.jpg",1.0);
+		Material globeTexture = new ObjTextureFile("./obj/txt/SphereGrid.jpg",1.0);
 		Sphere globe = new Sphere(t1,globeTexture,1.0);
 		this.shapes.add(globe);
 		
-		Transformation t2 = Transformation.translate(0, 0, 0.0);
+		//Transformation t2 = Transformation.translate(0, 0, 0.0);
 		//Material sphereText = new Monochrome(new Color(100.0,100.0,100.0));
-		Material sphereText = new Julia(new Complex(-0.02,0.8),800,1,400, 10, "parula");
-		ObjShape tessSphere = new ObjShape("./obj/sphere.obj",t2,sphereText,100,5, this.camera);
+		//Material sphereText = new Julia(new Complex(-0.02,0.8),800,1,400, 10, "parula");
+		//Material sphereText = new ObjTextureFile("./obj/txt/SphereGrid.jpg",1.0);
+		//ObjShape tessSphere = new ObjShape("./obj/sphere.obj",t2,sphereText,1.0,5, this.camera);
 		//this.shapes.add(tessSphere);
 		
 		//ObjShape table = new ObjShape("./obj/table.obj",t2,sphereText,1.5);
@@ -229,14 +229,14 @@ public class World{
 		Material objMat;
 		//objMat = new Julia(new Complex(-0.076,0.652),600,1,400,2.5);
 		//objMat = new Monochrome( new Color(100,100,100));
-		//objMat = new TextureFile("./obj/apple/apple_texture.jpg",1.0);
-		//ObjShape apple = new ObjShape("./obj/apple/apple.obj",t1,objMat,1.0,5);
-		//this.shapes.add(apple);
+		objMat = new ObjTextureFile("./obj/apple/apple_texture.jpg",1.0);
+		ObjShape apple = new ObjShape("./obj/apple/apple.obj",t1,objMat,1.0,5, this.camera);
+		this.shapes.add(apple);
 		
 		t1 = t1.append(Transformation.rotateX(90));
-		Material houseText = new TextureFile("./obj/house/house_texture.jpg",1.2);
-		ObjShape house = new ObjShape("./obj/house/house.obj",t1,houseText,0.6,0, this.camera);
-		this.shapes.add(house);
+		//Material houseText = new ObjTextureFile("./obj/house/house_texture.jpg",1.2);
+		//ObjShape house = new ObjShape("./obj/house/house.obj",t1,houseText,0.6,0, this.camera);
+		//this.shapes.add(house);
 		
 		
 		Material mPlane;

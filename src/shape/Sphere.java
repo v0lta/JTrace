@@ -123,11 +123,23 @@ public class Sphere implements Shape {
 	private TextPoint getUV(Point hitPoint) {
 		double u,v, theta, phi;
 		phi = Math.atan(hitPoint.x/hitPoint.z);
-		u = phi/(2*Math.PI);
+		u = 1.0 - phi/(Math.PI*2);
 		theta = Math.acos(hitPoint.y);
-		v = 1.0 - theta/Math.PI;
+		v = theta/(Math.PI);
 		
 		TextPoint txtPoint = new TextPoint(u,v);
+		
+		//if (hitPoint.x > 0.9){
+		//	System.out.println("hey x!");
+		//}
+		if (hitPoint.y > 0.9){
+			System.out.println("hey y!");
+		}
+		//if (hitPoint.z > 0.9){
+		//	System.out.println("hey z!");
+		//}
+		
+		
 		return txtPoint;
 		
 	}

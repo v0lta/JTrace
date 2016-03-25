@@ -11,7 +11,7 @@ import math.Color;
 import math.TextPoint;
 import math.Vector;
 
-public class TextureFile implements Material {
+public class ObjTextureFile implements Material {
 	private Raster fileData;
 	private int height;
 	private int width;
@@ -25,7 +25,7 @@ public class TextureFile implements Material {
 	 * @param size the size with with the image will contain in the scene.
 	 */
 	
-	public TextureFile(String path, double size){
+	public ObjTextureFile(String path, double size){
 		this.path = path;
 		this.read();
 		this.size = size;
@@ -57,14 +57,9 @@ public class TextureFile implements Material {
 		double u = Math.abs(txtPnt.u/this.size) % this.size;
 		double v = Math.abs(txtPnt.v/this.size) % this.size;
 		
-		
 		int indu;
 		int indv;
-		
-		if (u > 0.5){
-			System.out.println("hey");
-		}
-		
+	
         int[] pixel = new int[3];
         indu = ((int) (u*this.width)) - 1;// % this.width;
         indv = this.height - ((int) (v*this.height)) - 1;// % this.height;
@@ -90,7 +85,7 @@ public class TextureFile implements Material {
 	 * A main for debugging.
 	 */
 	public static void main(String[] arguments){
-		TextureFile test = new TextureFile("./obj/apple/apple_texture.jpg",1.0);
+		ObjTextureFile test = new ObjTextureFile("./obj/apple/apple_texture.jpg",1.0);
 		test.read();
 	}
 	
