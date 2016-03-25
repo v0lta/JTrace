@@ -202,8 +202,8 @@ public class Renderer {
 					                	int intersectionCount = ray.getIntersectionCounter();
 					                	Color pixelColor;
 					                	//int max = 200;
-					                	//int max = 400;
-					                	int max = 900; //dragon...
+					                	int max = 600;
+					                	//int max = 900; //dragon...
 					                	
 					                   	ColorMap colorMap = new ColorMap(0.0, max, null,1.0, "summer");
 					                   	pixelColor = colorMap.getCompColor(intersectionCount);
@@ -213,8 +213,8 @@ public class Renderer {
 						                
 					                   	//double greenValue = ((double) intersectionCount)/max;						
 					                   	double greenValue = ((double) intersectionCount)/max;
-				                		buffer.getPixel(x, y).add(0,greenValue,0);
-					                	//buffer.getPixel(x, y).add(pixelColor.r,pixelColor.g,pixelColor.b);
+				                		//buffer.getPixel(x, y).add(0,greenValue,0);
+					                	buffer.getPixel(x, y).add(pixelColor.r,pixelColor.g,pixelColor.b);
 					                	
 					                	
 					                } else {

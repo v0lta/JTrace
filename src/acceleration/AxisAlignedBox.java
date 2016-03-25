@@ -1,7 +1,6 @@
 package acceleration;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import camera.Camera;
@@ -39,7 +38,8 @@ public class AxisAlignedBox implements Shape {
 	public AxisAlignedBox(Point p0, Point p1, Transformation transformation, Camera cam) {
 
 		if ((p0.x > p1.x) || (p0.y > p1.y) || (p0.z > p1.z)) {
-			System.err.println("Illegal box.");
+			//System.err.println("Illegal box.");
+			throw new IllegalArgumentException("Illegal box.");
 		}
 
 		this.p0 = p0;
@@ -373,12 +373,16 @@ public class AxisAlignedBox implements Shape {
 	}
 	
 	public Point getCenter(){
-		Point center = p0.toVector().add(p1.toVector()).scale(0.5).toPoint();
+		double cx = (1.0/2.0) * ((this.p0.x) + (this.p1.x));
+		double cy = (1.0/2.0) * ((this.p0.y) + (this.p1.y));
+		double cz = (1.0/2.0) * ((this.p0.z) + (this.p1.z));
+		Point center = new Point(cx,cy,cz);
+		center = this.transformation.transform(center);		
 		return center;
 	}
 	
 	public boolean pointInBox(Point toTest){
-		toTest = transformation.transform(toTest);
+		//toTest = transformation.transform(toTest);
 		if ((toTest.x < p0.x) || (toTest.x > p1.x)) {
 			return false;
 		}
@@ -420,8 +424,23 @@ public class AxisAlignedBox implements Shape {
 	public double getVolume() {
 		double x = Math.abs(p0.x - p1.x);
 		double y = Math.abs(p0.y - p1.y);
-		double z = Math.abs(p0.x - p1.z);
+		double z = Math.abs(p0.z - p1.z);
 		return x*y*z;
+	}
+	
+	public double getSurface(Character axis){
+		double x = Math.abs(p0.x - p1.x);
+		double y = Math.abs(p0.y - p1.y);
+		double z = Math.abs(p0.x - p1.z);
+		
+		if (axis == 'x'){
+			return y*z;
+		} else if (axis == 'y'){
+			return x*z;
+		} else {
+			return x*y;
+		}
+		
 	}
 	
 }
