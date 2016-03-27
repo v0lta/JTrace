@@ -9,6 +9,7 @@ import java.util.List;
 import camera.Camera;
 import acceleration.AxisAlignedBox;
 import acceleration.MiddleSplitBox;
+import acceleration.ParallelSahBox;
 import acceleration.SahBox;
 import acceleration.SortSplitBox;
 import material.Material;
@@ -259,6 +260,15 @@ public class ObjShape implements Shape {
 												    minmax.yMax + Constants.treeEpsilon,
 												    minmax.zMax + Constants.treeEpsilon),
 										  this.transformation, this.cam);
+			
+			/*this.aab = new ParallelSahBox(new Point(minmax.xMin - Constants.treeEpsilon,
+					minmax.yMin - Constants.treeEpsilon,
+					minmax.zMin - Constants.treeEpsilon),
+		    new Point(minmax.xMax + Constants.treeEpsilon,
+				    minmax.yMax + Constants.treeEpsilon,
+				    minmax.zMax + Constants.treeEpsilon),
+		    this.transformation, this.cam, this.treeDepth, this.treeDepth, null);*/
+			
 			aab.trianglesInBox.addAll(triangleList);
 			aab.split(this.treeDepth); //recursively split the box until the max depth is reached.
 	}

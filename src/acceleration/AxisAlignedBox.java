@@ -49,7 +49,8 @@ public class AxisAlignedBox implements Shape {
 	}
 	
 	public void split(int depth) {
-		System.err.println("Splitting implemented in child classes");
+		//System.err.println("Splitting implemented in child classes");
+		throw new UnsupportedOperationException("Splitting implemented in child classes");
 	}
 	
 		
