@@ -94,7 +94,7 @@ public class World{
 	public void planeAndSphere(int width,int height) {
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(2, 2, 2), new Point(0, 0, 0), new Vector(-1, -1, 0), 90);
+				new Point(2, 2, 2), new Point(0, 0, 0), new Vector(0, 0, 1), 90);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.01,true);
@@ -108,9 +108,12 @@ public class World{
 		
 		//setup the objects in the scene.
 		Transformation t1 = Transformation.translate(0.0, 0.0, 0.0).append(
-							Transformation.rotateX(90)).append(Transformation.rotateY(45));
+							Transformation.rotateX(0)).append(
+							Transformation.rotateY(0)).append(
+							Transformation.rotateZ(180));
 		//Material globeTexture = new ObjTextureFile("./obj/txt/EarthMap.jpg",1.0);
-		Material globeTexture = new ObjTextureFile("./obj/txt/SphereGrid.jpg",1.0);
+		Material globeTexture = new ObjTextureFile("./obj/txt/EarthHighRes.jpg",1.0);
+		//Material globeTexture = new ObjTextureFile("./obj/txt/SphereGrid.jpg",1.0);
 		Sphere globe = new Sphere(t1,globeTexture,1.0);
 		this.shapes.add(globe);
 		

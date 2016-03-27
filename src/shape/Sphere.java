@@ -122,23 +122,28 @@ public class Sphere implements Shape {
 	
 	private TextPoint getUV(Point hitPoint) {
 		double u,v, theta, phi;
-		phi = Math.atan(hitPoint.x/hitPoint.z);
-		u = 1.0 - phi/(Math.PI*2);
-		theta = Math.acos(hitPoint.y);
-		v = theta/(Math.PI);
+		phi = Math.atan(hitPoint.y/hitPoint.x) + Math.PI/2;
+		if (hitPoint.x < 0) {
+			phi = phi + Math.PI;
+		}
+		u = phi/(Math.PI*2);
+		theta = Math.acos(hitPoint.z);
+		v = 1 - theta/(Math.PI);
 		
 		TextPoint txtPoint = new TextPoint(u,v);
 		
-		//if (hitPoint.x > 0.9){
-		//	System.out.println("hey x!");
-		//}
-		if (hitPoint.y > 0.9){
-			System.out.println("hey y!");
+		if (u > 1) {
+			System.out.println("error u index to large.");
 		}
-		//if (hitPoint.z > 0.9){
-		//	System.out.println("hey z!");
-		//}
-		
+		if (v > 1) {
+			System.out.println("error v index to large.");
+		}
+		if (u < 0) {
+			System.out.println("error u index to small.");
+		}
+		if (v < 0) {
+			System.out.println("error v index to small.");
+		}
 		
 		return txtPoint;
 		

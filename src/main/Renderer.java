@@ -129,11 +129,11 @@ public class Renderer {
 		 * Initialize the scene
 		 *********************************************************************/
 		//final World world = new World(width, height, "initialWorld");
-		final World world = new World(width, height, "planeAndSphere");
+		//final World world = new World(width, height, "planeAndSphere");
 		//final World world = new World(width, height, "Julia");
 		//final World world = new World(width, height, "bunny");
 		//final World world = new World(width, height, "apple");
-		//final World world = new World(width, height, "dragon");
+		final World world = new World(width, height, "dragon");
 		//final World world = new World(width, height, "venus");
 		
 		/**********************************************************************
