@@ -28,13 +28,12 @@ public class Plane implements Shape {
     public Plane(Transformation transformation, Material mat,double reflectivity) {
     	this.transformation = transformation;
         this.mat = mat;
-        this.reflectivity = reflectivity;
-        
+        this.reflectivity = reflectivity;        
     }
 
     
     /**
-     * The ray object intersection function for a planes without transformations. 
+     * The ray object intersection function for a planes with transformations. 
      */    
 	@Override
 	public List<Intersection> intersect(Ray ray) {

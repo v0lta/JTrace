@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import shape.Triangle;
+import math.Constants;
 import math.Point;
 import math.Transformation;
 import camera.Camera;
@@ -37,7 +38,7 @@ public class ParallelSahBox extends SahBox {
 		if ((depth > 0) && (triCount > 1)) {
 		//if (triCount > 1) {
 				List<AxisAlignedBox> boxes = new ArrayList<AxisAlignedBox>();
-				final int cuts = 4;
+				final int cuts = Constants.sahCuts;
 				Character axis;
 				
 				// split the aab in two along the longest Axis.
@@ -154,14 +155,7 @@ public class ParallelSahBox extends SahBox {
 				
 				this.left  = lftBoxBest;
 				this.right = rgtBoxBest;
-
-				if (this.left != null) {
-					if (this.left.trianglesInBox.isEmpty()) {
-						this.left = null;
-					} else {
-						this.left.split(depth - 1);
-					}
-				}
+				
 				if (this.right != null) {
 					if (this.right.trianglesInBox.isEmpty()) {
 						this.right = null;
@@ -186,6 +180,15 @@ public class ParallelSahBox extends SahBox {
 							service.submit(thread);
 						}
 					}
+
+				if (this.left != null) {
+					if (this.left.trianglesInBox.isEmpty()) {
+						this.left = null;
+					} else {
+						this.left.split(depth - 1);
+					}
+				}
+				
 				}
 				
 				if (this.maxDepth == depth){

@@ -131,10 +131,13 @@ public class Renderer {
 		//final World world = new World(width, height, "initialWorld");
 		//final World world = new World(width, height, "planeAndSphere");
 		//final World world = new World(width, height, "Julia");
-		//final World world = new World(width, height, "bunny");
 		//final World world = new World(width, height, "apple");
-		final World world = new World(width, height, "dragon");
+		//final World world = new World(width, height, "bunny");		
 		//final World world = new World(width, height, "venus");
+		//final World world = new World(width, height, "dragon");
+		//final World world = new World(width, height, "buddha");
+		final World world = new World(width, height, "tea");
+		
 		
 		/**********************************************************************
 		 * Multi-threaded rendering of the scene
@@ -202,10 +205,10 @@ public class Renderer {
 					                	int intersectionCount = ray.getIntersectionCounter();
 					                	Color pixelColor;
 					                	//int max = 180;
-					                	//int max = 600;
-					                	int max = 450; //dragon...
+					                	int max = 600;
+					                	//int max = 900; //dragon...
 					                	
-					                   	ColorMap colorMap = new ColorMap(0.0, max, null,1.0, "jet");
+					                   	ColorMap colorMap = new ColorMap(0.0, max, null,1.0, "hot");
 					                   	pixelColor = colorMap.getCompColor(intersectionCount);
 					                   	
 				                		//intensity = intersections.size()/1.0;
@@ -238,7 +241,23 @@ public class Renderer {
 														//compute distance to light source
 									                    double[] lghtRes = computeShading(closestInt,toLight,pl, dot );
 								                    	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);		
-													} 
+													} else {
+														//see if the intersection is behind the point light.
+														boolean inShadow = false; 
+														for (Intersection shadowInt : shadowInters) {
+															Vector shadowRayHitPnt = shadowInt.point.toVector();
+															double distanceToLight = toLight.lengthSquared();
+															double distanceToHit = closestInt.point.toVector().subtract(shadowRayHitPnt).lengthSquared();
+															if (distanceToHit < distanceToLight) {
+																inShadow = true;  
+															}
+														}
+														if (inShadow == false ){
+										                    double[] lghtRes = computeShading(closestInt,toLight,pl, dot );
+									                    	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);	
+															
+														}
+													}
 						                    	} else {
 						                    		//there are no shadows directly shade things
 								                    double[] lghtRes = computeShading(closestInt,toLight,pl, dot );

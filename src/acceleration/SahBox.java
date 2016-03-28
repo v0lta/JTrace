@@ -28,7 +28,7 @@ public class SahBox extends AxisAlignedBox  {
 		if ((depth > 0) && (triCount > 1)) {
 		//if (triCount > 1) {
 				List<AxisAlignedBox> boxes = new ArrayList<AxisAlignedBox>();
-				final int cuts = 4;
+				final int cuts = Constants.sahCuts;
 				Character axis;
 				
 				// split the aab in two along the longest Axis.
@@ -189,7 +189,7 @@ public class SahBox extends AxisAlignedBox  {
 	}
 
 	//@Override
-	public List<Intersection> intersectSimple(Ray ray) {
+	public List<Intersection> intersectAll(Ray ray) {
 		List<Intersection> hits = new ArrayList<Intersection>();
 
 		if (Constants.compVisualization){
@@ -218,6 +218,7 @@ public class SahBox extends AxisAlignedBox  {
 	}
 
 	@Override
+	//public List<Intersection> intersectNew(Ray ray) {
 	public List<Intersection> intersect(Ray ray) {
 		List<Intersection> hits = new ArrayList<Intersection>();
 
@@ -236,6 +237,7 @@ public class SahBox extends AxisAlignedBox  {
 			double leftDist = camPos.subtract(leftCenter.toVector()).lengthSquared();
 			double rightDist = camPos.subtract(rightCenter.toVector()).lengthSquared();
 			
+			if (Math.abs(leftDist - rightDist) > Constants.objIntersEpsilon) {
 				if (leftDist < rightDist){
 					if (this.left.intersectBool(ray)) {
 						hits.addAll(left.intersect(ray));
@@ -280,7 +282,20 @@ public class SahBox extends AxisAlignedBox  {
 						}
 					} 
 				}
-		} 
+		} else {
+			if (this.left != null)  {
+				if (this.left.intersectBool(ray)) {
+					hits.addAll(left.intersect(ray));
+				}
+			}
+			if (this.right != null) {
+				if (this.right.intersectBool(ray)) {
+					hits.addAll(right.intersect(ray));
+				}
+			}
+		}
+			
+		}
 
 		if ((this.left != null) && (this.right == null)) {
 			if (this.left.intersectBool(ray)) {

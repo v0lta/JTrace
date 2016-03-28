@@ -37,7 +37,7 @@ public class Chess implements Material{
 	
 	@Override
 	public Color getColor(Vector texPoint) {
-		int tmp = ( (int) ( texPoint.x/s) 
+		int tmp = (  (int) ( texPoint.x/s) 
 			       + (int) ( texPoint.y/s)
 			       + (int) ( texPoint.z/s) );
 		int tmp2 = tmp%2;

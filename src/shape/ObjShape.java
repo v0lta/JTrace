@@ -59,6 +59,7 @@ public class ObjShape implements Shape {
 			System.out.println("File not found: " + e.getMessage());
 		}
 		long elTimens = System.nanoTime() - t;
+		//conversion from ns to s.
 		double elTime = elTimens * Math.pow(10,-9);
 		System.out.println("Tree creation took [s]:");
 		System.out.println(elTime);
@@ -92,6 +93,7 @@ public class ObjShape implements Shape {
 	 * @throws IOException the path might not be correct.
 	 */
 	private void read() throws IOException {
+			long t = System.nanoTime();
 			
 			BufferedReader br = new BufferedReader( new FileReader(this.path));
 			
@@ -250,6 +252,16 @@ public class ObjShape implements Shape {
 				this.triangleList.add(triangle);
 				
 			}
+			long elTimens = System.nanoTime() - t;
+			//conversion from ns to s.
+			double elTime = elTimens * Math.pow(10,-9);
+			System.out.println("File reading took [s]:");
+			System.out.println(elTime);
+			
+			long t2 = System.nanoTime();
+
+			boolean singleCore = false;
+			if (singleCore){
 			//this.aab = new AxisAlignedBox(new Point(minmax.xMin - Constants.treeEpsilon,
 			//this.aab = new SortSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
 			//this.aab = new MiddleSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
@@ -260,17 +272,24 @@ public class ObjShape implements Shape {
 												    minmax.yMax + Constants.treeEpsilon,
 												    minmax.zMax + Constants.treeEpsilon),
 										  this.transformation, this.cam);
-			
-			/*this.aab = new ParallelSahBox(new Point(minmax.xMin - Constants.treeEpsilon,
+			} else {
+			this.aab = new ParallelSahBox(new Point(minmax.xMin - Constants.treeEpsilon,
 					minmax.yMin - Constants.treeEpsilon,
 					minmax.zMin - Constants.treeEpsilon),
 		    new Point(minmax.xMax + Constants.treeEpsilon,
 				    minmax.yMax + Constants.treeEpsilon,
 				    minmax.zMax + Constants.treeEpsilon),
-		    this.transformation, this.cam, this.treeDepth, this.treeDepth, null);*/
+		    this.transformation, this.cam, this.treeDepth, this.treeDepth, null);
+			}
 			
 			aab.trianglesInBox.addAll(triangleList);
 			aab.split(this.treeDepth); //recursively split the box until the max depth is reached.
+			
+			long elTimens2 = System.nanoTime() - t2;
+			//conversion from ns to s.
+			elTime = elTimens2 * Math.pow(10,-9);
+			System.out.println("splitting took [s]:");
+			System.out.println(elTime);
 	}
 
 	
