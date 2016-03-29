@@ -34,7 +34,7 @@ public class PointLight implements Light{
 	}
 	
 	/**
-	 * Get the lights intensity scaled color.
+	 * Get the lights color scaled by its intensity.
 	 */	
 	@Override
 	public Vector L() {	

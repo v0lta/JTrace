@@ -260,7 +260,7 @@ public class ObjShape implements Shape {
 			
 			long t2 = System.nanoTime();
 
-			boolean singleCore = false;
+			boolean singleCore = true;
 			if (singleCore){
 			//this.aab = new AxisAlignedBox(new Point(minmax.xMin - Constants.treeEpsilon,
 			//this.aab = new SortSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,

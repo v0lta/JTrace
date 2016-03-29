@@ -132,11 +132,11 @@ public class Renderer {
 		//final World world = new World(width, height, "planeAndSphere");
 		//final World world = new World(width, height, "Julia");
 		//final World world = new World(width, height, "apple");
-		//final World world = new World(width, height, "bunny");		
+		final World world = new World(width, height, "bunny");		
 		//final World world = new World(width, height, "venus");
 		//final World world = new World(width, height, "dragon");
 		//final World world = new World(width, height, "buddha");
-		final World world = new World(width, height, "tea");
+		//final World world = new World(width, height, "tea");
 		
 		
 		/**********************************************************************
@@ -215,16 +215,17 @@ public class Renderer {
 				                		//double[] compRes = computeAmbientShading(visColor,intensity , 1.0);
 						                
 					                   	//double greenValue = ((double) intersectionCount)/max;						
-					                   	double greenValue = ((double) intersectionCount)/max;
-				                		//buffer.getPixel(x, y).add(0,greenValue,0);
+					                   	double whiteValue = ((double) intersectionCount)/max;
+				                		//buffer.getPixel(x, y).add(whiteValue,whiteValue,whiteValue);
 					                	buffer.getPixel(x, y).add(pixelColor.r,pixelColor.g,pixelColor.b);
 					                	
 					                	
 					                } else {
+					                	//TODO: add Phong.
 					                	//add the ambient Lighting result.
 					                	buffer.getPixel(x, y).add(ambRes[0], ambRes[1], ambRes[2],1.0);
 					                	
-					                	//add a contribution for each light source.
+					                	//add a contribution for each point light source.
 						                for (PointLight pl: world.plights){
 						                Vector l  = pl.l(closestInt.point);
 						                Vector n  = closestInt.normal.toVector();
@@ -328,15 +329,31 @@ public class Renderer {
 	}
 	
 	private static double[] computeShading(Intersection inter,Vector toLight,PointLight light, double dot ) {
-		double [] lightRes;
+		Vector lightRes;
 		Vector Cs = inter.color.toVector();
 		Vector Lp = light.L();
 		double Rs = inter.reflectivity;
 		double d = toLight.lengthSquared();		
 		
-		lightRes = Cs.elPrd(Lp).scale(dot).scale(Rs/3.14).scale(1/d).toArray();
-		return lightRes;
+		lightRes = Cs.elPrd(Lp).scale(dot).scale(Rs/3.14).scale(1/d);
 		
+		//phong
+		if (Constants.phong) {
+			Rs = Rs/2;
+			Vector n = inter.normal.toVector();
+			Vector l = light.l(inter.point);
+			n = n.scale(n.dot(l)).scale(2);
+			Vector r = l.scale(-1).add(n); 
+			r = r.normalize();
+			toLight = toLight.normalize();
+			double dot2 = r.dot(toLight);
+			if (dot2 > 0){
+			double phong = Math.pow(dot2, Constants.e);
+			lightRes = lightRes.add(Cs.elPrd(Lp).scale(Rs*phong));
+			}
+		}
+		
+		return lightRes.toArray();
 	}
 	
 	

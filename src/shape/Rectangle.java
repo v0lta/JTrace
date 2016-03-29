@@ -91,4 +91,8 @@ public class Rectangle extends Plane implements LightableShape {
 		return this.transformation.transformInverseTranspose( this.n);
 	}
 
+	@Override
+	public Material getMaterial() {
+		return this.mat;
+	}
 }

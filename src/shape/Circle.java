@@ -80,5 +80,10 @@ public class Circle extends Plane implements LightableShape {
 	public Normal getNormal() {
 		return this.transformation.transformInverseTranspose( this.n );
 	}
+	
+	@Override
+	public Material getMaterial() {
+		return this.mat;
+	}
 
 }

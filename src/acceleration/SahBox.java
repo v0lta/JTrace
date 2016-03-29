@@ -189,7 +189,8 @@ public class SahBox extends AxisAlignedBox  {
 	}
 
 	//@Override
-	public List<Intersection> intersectAll(Ray ray) {
+	public List<Intersection> intersectOld(Ray ray) {
+	//public List<Intersection> intersect(Ray ray) {
 		List<Intersection> hits = new ArrayList<Intersection>();
 
 		if (Constants.compVisualization){

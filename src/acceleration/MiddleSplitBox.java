@@ -136,9 +136,38 @@ public class MiddleSplitBox extends AxisAlignedBox {
 
 		}
 	}
-
+	
 	@Override
 	public List<Intersection> intersect(Ray ray) {
+			List<Intersection> hits = new ArrayList<Intersection>();
+
+			if (Constants.compVisualization){
+				ray.countIntersection();
+			}
+			
+			if (this.left != null)  {
+				if (this.left.intersectBool(ray)) {
+					hits.addAll(left.intersect(ray));
+				}
+			}
+			if (this.right != null) {
+				if (this.right.intersectBool(ray)) {
+					hits.addAll(right.intersect(ray));
+				}
+			}
+			if ((this.left == null) && (this.right == null)) {
+				//maximum depth reached.
+				if (this.intersectBool(ray)){
+					for (Triangle tri :	this.trianglesInBox) {
+						hits.addAll(tri.intersect(ray));
+					}
+				}
+			}		
+			return hits;
+		}
+
+	//@Override
+	public List<Intersection> intersectNew(Ray ray) {
 		List<Intersection> hits = new ArrayList<Intersection>();
 
 		if (Constants.compVisualization){

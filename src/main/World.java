@@ -3,6 +3,7 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 
+import light.AreaLight;
 import light.PointLight;
 import material.Chess;
 import material.Complex;
@@ -30,6 +31,7 @@ import shape.Sphere;
 public class World{
 	public Camera camera;
 	public List<PointLight> plights = new ArrayList<PointLight>();
+	public List<AreaLight>  alights = new ArrayList<AreaLight>();
 	public List<Shape> shapes = new ArrayList<Shape>();
 	public double ambient;
 	
@@ -71,14 +73,14 @@ public class World{
 				new Point(0, 0, 0), new Point(0, 0, 1), new Vector(0, 1, 0), 90);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
-		PointLight blueLight = new PointLight(new Point(8,-8,10),new Color(0,0,200), 10,false);
+		PointLight blueLight = new PointLight(new Point(2,2,0),new Color(0,0,1), 500,true);
 		this.plights.add(blueLight);
-		PointLight redLight = new PointLight(new Point(8,8,10),new Color(200.,0,0), 10,false);
+		PointLight redLight = new PointLight(new Point(-2,2,0),new Color(1.,0,0), 500,true);
 		this.plights.add(redLight);
-		PointLight greenLight = new PointLight(new Point(-8,0,0),new Color(0,200,0), 1,false);
+		PointLight greenLight = new PointLight(new Point(2,-2,0),new Color(0,1,0), 500,true);
 		this.plights.add(greenLight);
 		
-		this.ambient = 1;
+		this.ambient = 0;
 		
 		//setup the objects in the scene.
 		Transformation t1 = Transformation.translate(0, 0, 10).append(
@@ -103,7 +105,8 @@ public class World{
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
 				new Point(2, 2, 2), new Point(0, 0, 0), new Vector(0, 0, 1), 90);
-
+		
+		
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.01,true);
 		this.plights.add(whiteLight);
@@ -112,7 +115,7 @@ public class World{
 		PointLight redLight = new PointLight(new Point(8,-8,10),new Color(100,10,10), 0.5,true);
 		//this.plights.add(redLight);
 		
-		this.ambient = 0.001;
+		this.ambient = 0.000;
 		
 		//setup the objects in the scene.
 		Transformation t1 = Transformation.translate(0.0, 0.0, 0.0).append(
@@ -184,14 +187,14 @@ public class World{
 	public void bunny(int width,int height) {
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(10, 0, 10), new Point(0, 0, 0), new Vector(-1, 0, 0), 45);
+				new Point(10, 0, 10), new Point(0, 0, 0), new Vector(0, 0, 1), 45);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		//PointLight whiteLight = new PointLight(new Point(0,2,10),new Color(100,100,100), 0.001,true);
 		//this.plights.add(whiteLight);
-		PointLight blueLight = new PointLight(new Point(0,8,4),new Color(50,100,50), 0.01,false);
+		PointLight blueLight = new PointLight(new Point(0,8,4),new Color(50,100,50), 0.01,true);
 		this.plights.add(blueLight);
-		PointLight redLight = new PointLight(new Point(8,0,4),new Color(100,50,50), 0.01,false);
+		PointLight redLight = new PointLight(new Point(8,0,4),new Color(100,50,50), 0.01,true);
 		this.plights.add(redLight);
 		
 		this.ambient = 0.0000;
@@ -199,14 +202,16 @@ public class World{
 		//setup the objects in the scene.
 		Transformation t1 = Transformation.IDENTITY;
 		t1 = t1.append(Transformation.translate(0, 0.5, -1)).append(
-				Transformation.rotateX(90).append(Transformation.rotateY(90)));
+				Transformation.rotateX(90)).append(
+				Transformation.rotateY(180)).append( //-90, 0
+				Transformation.rotateZ(0));
 		
 
 		
 		Material mat;
 		mat = new Monochrome( new Color(100,100,100));
-		//ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,30, this.camera);
-		ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0,30, this.camera);
+		ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,30, this.camera);
+		//ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0,30, this.camera);
 		this.shapes.add(bunny);
 		
 		
@@ -383,6 +388,14 @@ public class World{
 		PointLight whiteLight2 = new PointLight(new Point(2,0,4),new Color(10,100,10), 0.001,true);
 		this.plights.add(whiteLight2);
 		
+		//area light
+		Material mLight = new Monochrome( new Color(100,10,10));
+		Transformation tLight = Transformation.translate(0, 0, 4.4).append(Transformation.rotateY(180));
+		Circle circle = new Circle(tLight,mLight,1,1);
+		AreaLight al1 = new AreaLight(circle,1.0);
+		this.alights.add(al1);
+
+		
 		this.ambient = 0.0000;
 		
 		//setup the objects in the scene.
@@ -426,10 +439,7 @@ public class World{
 		Transformation tPlane5 = Transformation.translate(0, 0, 4.5).append(Transformation.rotateY(180));
 		Plane plane5 = new Plane(tPlane5,mPlane5,1);
 		this.shapes.add(plane5);
-		Material mRect = new Monochrome( new Color(100,10,10));
-		Transformation tRect = Transformation.translate(0, 0, 4.4).append(Transformation.rotateY(180));
-		Circle Rect = new Circle(tRect,mRect,1,1);
-		this.shapes.add(Rect);
+
 		
 			
 	}
