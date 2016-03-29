@@ -1,7 +1,7 @@
 package math;
 
 public class Constants {
-	public static final boolean phong = false;
+	public static final boolean phong = true;
 	public static final double  e	= 100; 			 //Phong exponent.
 	public static final double epsilon = 0.05;		 //shadow self intersection prevention.
 	public static final double treeEpsilon = 0.000001; //triangle inclusion noise prevention. dragon  0.00001;

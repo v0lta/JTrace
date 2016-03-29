@@ -392,7 +392,7 @@ public class World{
 		Material mLight = new Monochrome( new Color(100,10,10));
 		Transformation tLight = Transformation.translate(0, 0, 4.4).append(Transformation.rotateY(180));
 		Circle circle = new Circle(tLight,mLight,1,1);
-		AreaLight al1 = new AreaLight(circle,1.0);
+		AreaLight al1 = new AreaLight(circle,1.0,500);
 		this.alights.add(al1);
 
 		

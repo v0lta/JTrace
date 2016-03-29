@@ -13,11 +13,13 @@ public class AreaLight {
 	public final LightableShape shape;
 	public final Material mat;
 	public final double intensity;
+	public final int sampleNo;
 
-	public AreaLight(LightableShape shape, double intensity) {
+	public AreaLight(LightableShape shape, double intensity, int sampleNo) {
 		this.shape = shape;
 		this.mat = shape.getMaterial();
 		this.intensity = intensity;
+		this.sampleNo = sampleNo;
 	}
 	
 	public double pdf(){

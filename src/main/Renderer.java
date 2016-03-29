@@ -23,6 +23,7 @@ import math.Constants;
 import math.Intersection;
 import math.Ray;
 import math.Vector;
+import light.AreaLight;
 import light.PointLight;
 import sampling.Sample;
 import shape.Shape;
@@ -132,11 +133,11 @@ public class Renderer {
 		//final World world = new World(width, height, "planeAndSphere");
 		//final World world = new World(width, height, "Julia");
 		//final World world = new World(width, height, "apple");
-		final World world = new World(width, height, "bunny");		
+		//final World world = new World(width, height, "bunny");		
 		//final World world = new World(width, height, "venus");
 		//final World world = new World(width, height, "dragon");
 		//final World world = new World(width, height, "buddha");
-		//final World world = new World(width, height, "tea");
+		final World world = new World(width, height, "tea");
 		
 		
 		/**********************************************************************
@@ -221,7 +222,6 @@ public class Renderer {
 					                	
 					                	
 					                } else {
-					                	//TODO: add Phong.
 					                	//add the ambient Lighting result.
 					                	buffer.getPixel(x, y).add(ambRes[0], ambRes[1], ambRes[2],1.0);
 					                	
@@ -266,6 +266,13 @@ public class Renderer {
 						                    	}
 						                    	
 						                    }
+						                }
+						                //handle area lights.
+						                Vector p = closestInt.point.toVector();
+						                for(AreaLight al : world.alights){
+						                	for (int i = 0; i < al.sampleNo; i++) {
+						                		
+						                	}
 						                }
 					                
 					                } 
