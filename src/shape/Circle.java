@@ -2,6 +2,7 @@ package shape;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import material.Material;
 import math.Color;
@@ -56,7 +57,6 @@ public class Circle extends Plane implements LightableShape {
                 
                 double x = pointVec.x;
                 double y = pointVec.y;
-                
                 if (((Math.sqrt( x*x + y*y) < this.radius))) {
                 	Point hitPoint = this.transformation.transform( pointVec.toPoint() );
                     Normal hitNormal = this.transformation.transformInverseTranspose( this.n);
@@ -85,5 +85,44 @@ public class Circle extends Plane implements LightableShape {
 	public Material getMaterial() {
 		return this.mat;
 	}
+	
+	@Override 
+	public Transformation getTransformation() {
+		return this.transformation;
+	}
+	
+	/**
+	 * Get a transformed random point on the circles
+	 * surface.
+	 */
+	@Override
+	public Point getRandomPoint(Random r) {
+		double rndR = this.radius * r.nextDouble();
+		double rndAngle = (2*Math.PI)  * r.nextDouble();
+		
+		double randomX = Math.cos(rndAngle)*rndR;
+		double randomY = Math.sin(rndAngle)*rndR;
+		Point p = new Point(randomX,randomY,0.0);
+		p = this.transformation.transform(p);
+		return p;
+	}
 
+	
+	/**
+	 * Learn if a transformed hit point is on the surface.
+	 */
+	public boolean inShape(Point hitPoint) {
+		hitPoint = this.transformation.transformInverse(hitPoint);
+		if (Math.abs(hitPoint.z) < Constants.epsilon){
+			if (((Math.sqrt( hitPoint.x*hitPoint.x +
+					         hitPoint.y*hitPoint.y) < this.radius))) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+	
 }

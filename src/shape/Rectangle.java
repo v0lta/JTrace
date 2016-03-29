@@ -2,6 +2,7 @@ package shape;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import material.Material;
 import math.Color;
@@ -95,4 +96,37 @@ public class Rectangle extends Plane implements LightableShape {
 	public Material getMaterial() {
 		return this.mat;
 	}
+	
+	@Override 
+	public Transformation getTransformation() {
+		return this.transformation;		
+	}
+
+	@Override
+	public Point getRandomPoint(Random r) {
+		double randomX = -this.length/2.0 + this.length * r.nextDouble();
+		double randomY = -this.width/2.0  + this.width  * r.nextDouble();
+		
+		Point p = new Point(randomX,randomY,0);
+		p = this.transformation.transform(p);
+		return p;
+	}
+	
+	/**
+	 * Learn if a transformed hit point is on the surface.
+	 */
+	public boolean inShape(Point hitPoint) {
+		hitPoint = this.transformation.transformInverse(hitPoint);
+		if (Math.abs(hitPoint.z) < Constants.epsilon){
+			if (((Math.abs(hitPoint.x) < this.length) && 
+					(Math.abs(hitPoint.y) < this.width))) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
 }

@@ -378,31 +378,32 @@ public class World{
 	}
 	
 	public void tea(int width,int height) {
+		this.ambient = 0.0000;
+		
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(0, 5, 2), new Point(0, 0, 1), new Vector(0, 0, 1), 100);
+				new Point(0, 5, 4), new Point(0, 0, 2), new Vector(0, 0, 1), 90);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
-		PointLight whiteLight1 = new PointLight(new Point(-2,0,4),new Color(100,10,10), 0.001,true);
-		this.plights.add(whiteLight1);
-		PointLight whiteLight2 = new PointLight(new Point(2,0,4),new Color(10,100,10), 0.001,true);
-		this.plights.add(whiteLight2);
+		PointLight whiteLight1 = new PointLight(new Point(-2,0,4),new Color(10,10,10), 0.01,true);
+		//this.plights.add(whiteLight1);
+		PointLight whiteLight2 = new PointLight(new Point(2,0,4),new Color(10,10,10), 0.01,true);
+		//this.plights.add(whiteLight2);
 		
 		//area light
-		Material mLight = new Monochrome( new Color(100,10,10));
-		Transformation tLight = Transformation.translate(0, 0, 4.4).append(Transformation.rotateY(180));
-		Circle circle = new Circle(tLight,mLight,1,1);
-		AreaLight al1 = new AreaLight(circle,1.0,500);
+		Material mLight = new Monochrome( new Color(1,1,1));
+		Transformation tLight = Transformation.translate(0, 1.0, 4.4).append(Transformation.rotateY(180));
+		Rectangle shape = new Rectangle(tLight,mLight,10000,0.5,0.5);
+		AreaLight al1 = new AreaLight(shape,0.1,1);
 		this.alights.add(al1);
-
+		//this.shapes.add(al1);
 		
-		this.ambient = 0.0000;
 		
 		//setup the objects in the scene.
 		Transformation t1 = Transformation.IDENTITY;
-		t1 = t1.append(Transformation.translate(0, 0, 0)).append(
+		t1 = t1.append(Transformation.translate(0, -1.0, 1.0)).append(
 				Transformation.rotateX(90).append(
-				Transformation.scale(1, 1, 1)).append(
+				Transformation.scale(0.5, 0.5, 0.5)).append(
 				Transformation.rotateZ(0)));
 		
 		Material mat;
@@ -432,13 +433,13 @@ public class World{
 		Plane plane3 = new Plane(tPlane3,mPlane3,1);
 		this.shapes.add(plane3);
 		Material mPlane4 = new Monochrome( new Color(0,100,0));
-		Transformation tPlane4 = Transformation.translate(0, -1, 0).append(Transformation.rotateX(-90));
+		Transformation tPlane4 = Transformation.translate(0, -4, 0).append(Transformation.rotateX(-90));
 		Plane plane4 = new Plane(tPlane4,mPlane4,1);
 		this.shapes.add(plane4);
-		Material mPlane5 = new Monochrome( new Color(10,10,10));
-		Transformation tPlane5 = Transformation.translate(0, 0, 4.5).append(Transformation.rotateY(180));
-		Plane plane5 = new Plane(tPlane5,mPlane5,1);
-		this.shapes.add(plane5);
+		//Material mPlane5 = new Monochrome( new Color(10,10,10));
+		//Transformation tPlane5 = Transformation.translate(0, 0, 5.5).append(Transformation.rotateY(180));
+		//Plane plane5 = new Plane(tPlane5,mPlane5,1);
+		//this.shapes.add(plane5);
 
 		
 			

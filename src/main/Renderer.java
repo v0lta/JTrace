@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -225,7 +226,7 @@ public class Renderer {
 					                	//add the ambient Lighting result.
 					                	buffer.getPixel(x, y).add(ambRes[0], ambRes[1], ambRes[2],1.0);
 					                	
-					                	//add a contribution for each point light source.
+					                	//------------------------ point light sources. -----------------------------------------------
 						                for (PointLight pl: world.plights){
 						                Vector l  = pl.l(closestInt.point);
 						                Vector n  = closestInt.normal.toVector();
@@ -267,14 +268,48 @@ public class Renderer {
 						                    	
 						                    }
 						                }
-						                //handle area lights.
+						                
+						                // --------------------- handle area lights.------------------------------------------------
 						                Vector p = closestInt.point.toVector();
+						                Random r = new Random(1);
 						                for(AreaLight al : world.alights){
+						                	
+						                if (al.shape.inShape(p.toPoint())) {
+						                	// the intersection is on the point light.
+						                	double [] lghtRes = computeAmbientShading(closestInt.color,closestInt.reflectivity,al.intensity);
+						                	//buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);
+						                } else {
+						                	
+						                	Vector lghtVct = new Vector(0.0,0.0,0.0);
 						                	for (int i = 0; i < al.sampleNo; i++) {
-						                		
+						                		//create random number generator with seed for reproducibility.
+						                		Vector pPrime = al.getpPrime(r).toVector();
+					                    		Ray shadowRay = new Ray(p.toPoint(),pPrime);
+					                    		shadowInters = testforIntsections(world.shapes,shadowRay); 
+					                    		if (shadowInters.isEmpty()) {
+													//its not in the shadow.
+													//compute distance to light source
+					                    			lghtVct = lghtVct.add(computeAlShading(closestInt,al,p,pPrime ));
+					                    		} else {
+					                    			boolean inShadow = false; 
+													for (Intersection shadowInt : shadowInters) {
+														Vector shadowRayHitPnt = shadowInt.point.toVector();
+														double distanceToLight = al.l(p, pPrime).lengthSquared();
+														double distanceToHit = p.subtract(shadowRayHitPnt).lengthSquared();
+														if (distanceToHit < distanceToLight) {
+															inShadow = true;  
+															//buffer.getPixel(x, y).add(0, 10, 0,1.0);
+														}
+													}
+													if (inShadow == false ){
+														lghtVct = lghtVct.add(computeAlShading(closestInt,al,p,pPrime ));
+													}
+					                    		}
 						                	}
+						                	Color lghtClr = lghtVct.scale(1.0/al.sampleNo).toColor();
+						                	buffer.getPixel(x, y).add(lghtClr.r, lghtClr.g, lghtClr.b,1.0);
+						                } 
 						                }
-					                
 					                } 
 				                	
 					         }
@@ -342,7 +377,7 @@ public class Renderer {
 		double Rs = inter.reflectivity;
 		double d = toLight.lengthSquared();		
 		
-		lightRes = Cs.elPrd(Lp).scale(dot).scale(Rs/3.14).scale(1/d);
+		lightRes = Cs.elPrd(Lp).scale(dot).scale(Rs/3.14);
 		
 		//phong
 		if (Constants.phong) {
@@ -360,10 +395,20 @@ public class Renderer {
 			}
 		}
 		
-		return lightRes.toArray();
+		return lightRes.scale(1/d).toArray();
 	}
 	
-	
+	private static Vector computeAlShading(Intersection inter, AreaLight al, Vector p, Vector pPrime ){
+		double G = al.G(inter, pPrime.toPoint());
+		Vector La = al.L(pPrime.toPoint());
+		double Rs = inter.reflectivity;
+		Vector Cs = inter.color.toVector();
+		Vector intermediateResult = Cs.elPrd(La).scale(Rs).scale(G).scale(al.shape.getInverseArea());
+		
+		return intermediateResult;
+		
+		
+	}
 	
 	
 }

@@ -1,15 +1,20 @@
 package light;
 
+import java.util.List;
+import java.util.Random;
+
 import shape.LightableShape;
+import shape.Shape;
 import material.Material;
 import math.Color;
 import math.Intersection;
 import math.Normal;
 import math.Point;
+import math.Ray;
 import math.TextPoint;
 import math.Vector;
 
-public class AreaLight {
+public class AreaLight implements Shape  {
 	public final LightableShape shape;
 	public final Material mat;
 	public final double intensity;
@@ -33,8 +38,8 @@ public class AreaLight {
 	/**
 	 * Get the normalized vector pointing to the light source	
 	 */
-	public Vector l(Point hitPoint, Point pPrime) {
-		Vector toLight = pPrime.toVector().subtract(hitPoint.toVector());
+	public Vector l(Vector hitPoint, Vector pPrime) {
+		Vector toLight = pPrime.subtract(hitPoint);
 		toLight = toLight.normalize();
 		return toLight;
 	}
@@ -43,6 +48,9 @@ public class AreaLight {
 	 * Get the lights color scaled by its intensity.
 	 */	
 	public Vector L(Point pPrime) {
+		//transform the point onto the z plane.
+		pPrime = this.shape.getTransformation().transformInverse(pPrime);
+		//the z coordinate is zero and can be neglected.
 		TextPoint txtPoint = new TextPoint(pPrime.x,pPrime.y);
 		Color color = this.mat.getColor(txtPoint);
 		return color.toVector().scale(intensity);
@@ -59,6 +67,16 @@ public class AreaLight {
 		double cosThetaPrime = nPrime.dot(toLight.scale(-1));
 		
 		return (cosThetaI * cosThetaPrime)/lengthSquared;
+	}
+	
+	public Point getpPrime(Random r){
+		Point pPrime = this.shape.getRandomPoint(r);
+		return pPrime;
+	}
+
+	@Override
+	public List<Intersection> intersect(Ray ray) {
+		return this.shape.intersect(ray);
 	}
 	
 	
