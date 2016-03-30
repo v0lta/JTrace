@@ -10,6 +10,7 @@ import material.Complex;
 import material.Julia;
 import material.Material;
 import material.Monochrome;
+import material.MyTextureFile;
 import material.ObjTextureFile;
 import math.Color;
 import math.Point;
@@ -61,6 +62,9 @@ public class World{
 		}
 		else if (choice == "tea") {
 			tea(width,height);
+		}
+		else if (choice == "sun") {
+			sun(width,height);
 		}
 		else
 			throw new IllegalArgumentException();
@@ -393,32 +397,29 @@ public class World{
 		//area light
 		Material mLight = new Monochrome( new Color(1,1,1));
 		Transformation tLight = Transformation.translate(0, 1.0, 4.4).append(Transformation.rotateY(180));
-		Rectangle shape = new Rectangle(tLight,mLight,10000,0.5,0.5);
-		AreaLight al1 = new AreaLight(shape,0.1,1);
+		Rectangle shape = new Rectangle(tLight,mLight,10000,1.0,1.0);
+		AreaLight al1 = new AreaLight(shape,0.1,10);
 		this.alights.add(al1);
-		//this.shapes.add(al1);
+		this.shapes.add(al1);
+		
+		Material sMat = new Monochrome( new Color(10,100,10));
+		Transformation sTr = Transformation.translate(0, 1.0, 2.4).append(Transformation.rotateY(-180));
+		Circle shape2 = new Circle(sTr,sMat,10,1.);
+		//this.shapes.add(shape2);
+		
 		
 		
 		//setup the objects in the scene.
 		Transformation t1 = Transformation.IDENTITY;
-		t1 = t1.append(Transformation.translate(0, -1.0, 1.0)).append(
-				Transformation.rotateX(90).append(
-				Transformation.scale(0.5, 0.5, 0.5)).append(
+		t1 = t1.append(Transformation.translate(0, -0.5, 1.0)).append(
+				Transformation.rotateX(92).append(
+				Transformation.scale(1, 1, 1)).append(
 				Transformation.rotateZ(0)));
 		
 		Material mat;
-		mat = new Monochrome( new Color(100,100,100));
-		ObjShape tea = new ObjShape("./obj/teapot.obj",t1,mat,2.0,30, this.camera);
+		mat = new Monochrome( new Color(35,107,142));
+		ObjShape tea = new ObjShape("./obj/teapot.obj",t1,mat,1.0,30, this.camera);
 		this.shapes.add(tea);
-		
-		/*Transformation t2 = Transformation.IDENTITY;
-		t2 = t2.append(Transformation.translate(0, 1, 0)).append(
-				Transformation.rotateX(90).append(
-				Transformation.scale(0.5, 0.5, 0.5)).append(
-				Transformation.rotateZ(0)));
-		
-		ObjShape tea2 = new ObjShape("./obj/teapot.obj",t2,mat,2.0,30, this.camera);
-		this.shapes.add(tea2);*/
 		
 		Material mPlane1 = new Chess(new Color(100,100,100), new Color(1,1,1),1);
 		Transformation tPlane = Transformation.translate(0, 0, 0);
@@ -440,9 +441,26 @@ public class World{
 		//Transformation tPlane5 = Transformation.translate(0, 0, 5.5).append(Transformation.rotateY(180));
 		//Plane plane5 = new Plane(tPlane5,mPlane5,1);
 		//this.shapes.add(plane5);
+	}
 
+	public void sun(int width,int height) {
+		this.ambient = 0.0001;
 		
-			
+		//set the camera.
+		this.camera = new PerspectiveCamera(width, height,
+				new Point(0, 5, 4), new Point(0, 0, 0), new Vector(0, 0, 1), 90);
+		//area light
+		Material mLight = new MyTextureFile("./obj/mageScene/texture_sun.jpg");
+		Transformation tLight = Transformation.IDENTITY;
+		Sphere shape = new Sphere(tLight,mLight,10);
+		AreaLight al1 = new AreaLight(shape,0.1,10);
+		this.alights.add(al1);
+		this.shapes.add(al1);
+		
+		Material mPlane1 = new Chess(new Color(100,100,100), new Color(1,1,1),1);
+		Transformation tPlane = Transformation.translate(0, 0, -5);
+		Plane plane1 = new Plane(tPlane,mPlane1,1);
+		this.shapes.add(plane1);		
 	}
 	
 	

@@ -31,8 +31,8 @@ public class AreaLight implements Shape  {
 		return this.shape.getInverseArea();
 	}
 	
-	public Normal getNormal() {
-		return this.shape.getNormal();
+	public Normal getNormal(Point pPrime) {
+		return this.shape.getNormal(pPrime);
 	}
 	
 	/**
@@ -62,15 +62,15 @@ public class AreaLight implements Shape  {
 		double lengthSquared = toLight.lengthSquared(); 
 		toLight = toLight.normalize();
 		Vector np = intersection.normal.toVector();
-		Vector nPrime = this.getNormal().toVector();
+		Vector nPrime = this.getNormal(pPrime).toVector();
 		double cosThetaI = np.dot(toLight);
 		double cosThetaPrime = nPrime.dot(toLight.scale(-1));
 		
 		return (cosThetaI * cosThetaPrime)/lengthSquared;
 	}
 	
-	public Point getpPrime(Random r){
-		Point pPrime = this.shape.getRandomPoint(r);
+	public Point getpPrime(){
+		Point pPrime = this.shape.getRandomPoint();
 		return pPrime;
 	}
 

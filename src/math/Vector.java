@@ -326,7 +326,8 @@ public class Vector implements Cloneable, Comparable<Vector> {
 	 * @return this {@link Vector} as a {@link Point}.
 	 */
 	public Normal toNormal() {
-		return new Normal(x, y, z);
+		Vector tmp = this.normalize();
+		return new Normal(tmp.x, tmp.y, tmp.z);
 	}
 
 	/**

@@ -77,7 +77,7 @@ public class Circle extends Plane implements LightableShape {
 	}
 	
 	@Override
-	public Normal getNormal() {
+	public Normal getNormal(Point pPrime) {
 		return this.transformation.transformInverseTranspose( this.n );
 	}
 	
@@ -90,23 +90,6 @@ public class Circle extends Plane implements LightableShape {
 	public Transformation getTransformation() {
 		return this.transformation;
 	}
-	
-	/**
-	 * Get a transformed random point on the circles
-	 * surface.
-	 */
-	@Override
-	public Point getRandomPoint(Random r) {
-		double rndR = this.radius * r.nextDouble();
-		double rndAngle = (2*Math.PI)  * r.nextDouble();
-		
-		double randomX = Math.cos(rndAngle)*rndR;
-		double randomY = Math.sin(rndAngle)*rndR;
-		Point p = new Point(randomX,randomY,0.0);
-		p = this.transformation.transform(p);
-		return p;
-	}
-
 	
 	/**
 	 * Learn if a transformed hit point is on the surface.
@@ -123,6 +106,23 @@ public class Circle extends Plane implements LightableShape {
 		} else {
 			return false;
 		}
+	}
+	
+	/**
+	 * Get a transformed random point on the circles
+	 * surface.
+	 */
+	@Override
+	public Point getRandomPoint() {
+		Random r = new Random();
+		double rndR = this.radius * r.nextDouble();
+		double rndAngle = (2*Math.PI)  * r.nextDouble();
+		
+		double randomX = Math.cos(rndAngle)*rndR;
+		double randomY = Math.sin(rndAngle)*rndR;
+		Point p = new Point(randomX,randomY,0.0);
+		p = this.transformation.transform(p);
+		return p;
 	}
 	
 }

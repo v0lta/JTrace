@@ -11,9 +11,9 @@ import math.Transformation;
 public interface LightableShape extends Shape {
 
 	public double getInverseArea();
-	public Normal getNormal();
+	public Normal getNormal(Point pPrime);
 	public Material getMaterial();
 	public Transformation getTransformation();
-	public Point getRandomPoint(Random r);
+	public Point getRandomPoint();
 	public boolean inShape(Point hitPoint);
 }

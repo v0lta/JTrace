@@ -254,7 +254,8 @@ public class Point implements Cloneable, Comparable<Point> {
 	 * @return this {@link Point} as a {@link Normal}.
 	 */
 	public Normal toNormal() {
-		return new Normal(x, y, z);
+		Vector tmp = new Vector(x,y,z);
+		return tmp.toNormal();
 	}
 
 	/*

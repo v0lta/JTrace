@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -139,6 +138,7 @@ public class Renderer {
 		//final World world = new World(width, height, "dragon");
 		//final World world = new World(width, height, "buddha");
 		final World world = new World(width, height, "tea");
+		//final World world = new World(width, height, "sun");
 		
 		
 		/**********************************************************************
@@ -271,19 +271,18 @@ public class Renderer {
 						                
 						                // --------------------- handle area lights.------------------------------------------------
 						                Vector p = closestInt.point.toVector();
-						                Random r = new Random(1);
 						                for(AreaLight al : world.alights){
 						                	
 						                if (al.shape.inShape(p.toPoint())) {
 						                	// the intersection is on the point light.
 						                	double [] lghtRes = computeAmbientShading(closestInt.color,closestInt.reflectivity,al.intensity);
-						                	//buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);
+						                	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);
 						                } else {
 						                	
 						                	Vector lghtVct = new Vector(0.0,0.0,0.0);
 						                	for (int i = 0; i < al.sampleNo; i++) {
 						                		//create random number generator with seed for reproducibility.
-						                		Vector pPrime = al.getpPrime(r).toVector();
+						                		Vector pPrime = al.getpPrime().toVector();
 					                    		Ray shadowRay = new Ray(p.toPoint(),pPrime);
 					                    		shadowInters = testforIntsections(world.shapes,shadowRay); 
 					                    		if (shadowInters.isEmpty()) {
@@ -294,10 +293,12 @@ public class Renderer {
 					                    			boolean inShadow = false; 
 													for (Intersection shadowInt : shadowInters) {
 														Vector shadowRayHitPnt = shadowInt.point.toVector();
-														double distanceToLight = al.l(p, pPrime).lengthSquared();
+														double distanceToLight = p.subtract(pPrime).lengthSquared();
 														double distanceToHit = p.subtract(shadowRayHitPnt).lengthSquared();
 														if (distanceToHit < distanceToLight) {
-															inShadow = true;  
+															if (al.shape.inShape(shadowInt.point) == false) {
+																inShadow = true;
+															} 
 															//buffer.getPixel(x, y).add(0, 10, 0,1.0);
 														}
 													}

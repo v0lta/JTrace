@@ -88,8 +88,8 @@ public class Rectangle extends Plane implements LightableShape {
 	}
 	
 	@Override
-	public Normal getNormal() {
-		return this.transformation.transformInverseTranspose( this.n);
+	public Normal getNormal(Point pPrime) {
+		return this.transformation.transformInverseTranspose(this.n);
 	}
 
 	@Override
@@ -103,10 +103,10 @@ public class Rectangle extends Plane implements LightableShape {
 	}
 
 	@Override
-	public Point getRandomPoint(Random r) {
+	public Point getRandomPoint() {
+		Random r = new Random();
 		double randomX = -this.length/2.0 + this.length * r.nextDouble();
-		double randomY = -this.width/2.0  + this.width  * r.nextDouble();
-		
+		double randomY = -this.width/2.0  + this.width  * r.nextDouble();		
 		Point p = new Point(randomX,randomY,0);
 		p = this.transformation.transform(p);
 		return p;

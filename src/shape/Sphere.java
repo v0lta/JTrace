@@ -2,6 +2,7 @@ package shape;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import material.Material;
 import math.Constants;
@@ -22,11 +23,10 @@ import math.Color;
  * @author Niels Billen
  * @version 0.2
  */
-public class Sphere implements Shape {
+public class Sphere implements LightableShape {
 	public final Transformation transformation;
 	public final Material material;
 	public final double reflectivity;
-
 
 	/**
 	 * Creates a new unit {@link Sphere} at the origin, transformed by the given
@@ -147,6 +147,57 @@ public class Sphere implements Shape {
 		
 		return txtPoint;
 		
+	}
+
+	@Override
+	public double getInverseArea() {
+		Point test = new Point(1,1,1);
+		test = this.transformation.transform(test);
+		double area = Math.PI*(4/3)*(test.x*test.y*test.z);
+		return area;
+	}
+
+	@Override
+	public Normal getNormal(Point pPrime) {
+		return pPrime.toNormal();
+	}
+
+	@Override
+	public Material getMaterial() {
+		return this.material;
+	}
+
+	@Override
+	public Transformation getTransformation() {
+		return this.transformation;
+	}
+
+	@Override
+	public Point getRandomPoint() {
+		Random r = new Random();
+		double rndR = r.nextDouble();
+		double rndAngle = (2*Math.PI)  * r.nextDouble();
+		double rndAngle2 = (2*Math.PI)  * r.nextDouble();
+		
+		double randomX = Math.cos(rndAngle)*rndR;
+		double randomY = Math.sin(rndAngle)*rndR;
+		double randomZ = Math.sin(rndAngle2)*rndR;
+		Point p = new Point(randomX,randomY,randomZ);
+		p = this.transformation.transform(p);
+		return p;
+	}
+
+	@Override
+	public boolean inShape(Point hitPoint) {
+		hitPoint = this.transformation.transformInverse(hitPoint);
+		double x = hitPoint.x;
+		double y = hitPoint.y;
+		double z = hitPoint.z;
+		if (Math.abs(x*x + y*y + z*z) < 1.0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	
