@@ -120,7 +120,8 @@ public class Sphere implements LightableShape {
 		}
 	}
 	
-	private TextPoint getUV(Point hitPoint) {
+	@Override
+	public TextPoint getUV(Point hitPoint) {
 		double u,v, theta, phi;
 		phi = Math.atan(hitPoint.y/hitPoint.x) + Math.PI/2;
 		if (hitPoint.x < 0) {
@@ -154,12 +155,15 @@ public class Sphere implements LightableShape {
 		Point test = new Point(1,1,1);
 		test = this.transformation.transform(test);
 		double area = Math.PI*(4/3)*(test.x*test.y*test.z);
-		return area;
+		return 1/area;
 	}
 
 	@Override
 	public Normal getNormal(Point pPrime) {
-		return pPrime.toNormal();
+		pPrime = this.transformation.transformInverse(pPrime);
+		Normal normal = pPrime.toNormal(); 
+		normal = this.transformation.transformInverseTranspose(normal);
+		return normal;
 	}
 
 	@Override
@@ -173,18 +177,28 @@ public class Sphere implements LightableShape {
 	}
 
 	@Override
-	public Point getRandomPoint() {
-		Random r = new Random();
-		double rndR = r.nextDouble();
-		double rndAngle = (2*Math.PI)  * r.nextDouble();
-		double rndAngle2 = (2*Math.PI)  * r.nextDouble();
+	public Point getRandomPoint(Point hP) {
+		hP = this.transformation.transformInverse(hP);
+		double r = Math.sqrt(hP.x*hP.x + hP.y*hP.y + hP.z*hP.z);
 		
-		double randomX = Math.cos(rndAngle)*rndR;
-		double randomY = Math.sin(rndAngle)*rndR;
-		double randomZ = Math.sin(rndAngle2)*rndR;
-		Point p = new Point(randomX,randomY,randomZ);
-		p = this.transformation.transform(p);
-		return p;
+		double theta = Math.acos(hP.z/r);
+		double phi   = Math.atan2(hP.y,hP.x);
+		
+		Random rnd = new Random();
+		double rndTheta = -Math.PI/2 + Math.PI*rnd.nextDouble();
+		double rndPhi   = -Math.PI/2 + Math.PI*rnd.nextDouble();
+		
+		theta = theta + rndTheta;
+		phi   = phi   + rndPhi;
+		
+		//radius is 1 
+		double randomX = Math.sin(theta)*Math.cos(phi);
+		double randomY = Math.sin(theta)*Math.sin(phi);
+		double randomZ = Math.cos(theta);
+		
+		Point pPrime = new Point(randomX,randomY,randomZ);
+		pPrime = this.transformation.transform(pPrime);
+		return pPrime;
 	}
 
 	@Override
@@ -193,7 +207,7 @@ public class Sphere implements LightableShape {
 		double x = hitPoint.x;
 		double y = hitPoint.y;
 		double z = hitPoint.z;
-		if (Math.abs(x*x + y*y + z*z) < 1.0) {
+		if (Math.abs(x*x + y*y + z*z) <= (1.0 + Constants.epsilon)) {
 			return true;
 		} else {
 			return false;

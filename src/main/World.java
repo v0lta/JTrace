@@ -444,21 +444,23 @@ public class World{
 	}
 
 	public void sun(int width,int height) {
-		this.ambient = 0.0001;
+		this.ambient = 0.0000;
 		
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
 				new Point(0, 5, 4), new Point(0, 0, 0), new Vector(0, 0, 1), 90);
 		//area light
 		Material mLight = new MyTextureFile("./obj/mageScene/texture_sun.jpg");
-		Transformation tLight = Transformation.IDENTITY;
-		Sphere shape = new Sphere(tLight,mLight,10);
-		AreaLight al1 = new AreaLight(shape,0.1,10);
+		//Material mLight = new Monochrome( new Color(100,10,10));
+		Transformation tLight = Transformation.rotateY(180);
+		//Circle shape = new Circle(tLight,mLight,10,1.); 
+		Sphere shape = new Sphere(tLight,mLight,0.1);
+		AreaLight al1 = new AreaLight(shape,0.1,100);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
 		Material mPlane1 = new Chess(new Color(100,100,100), new Color(1,1,1),1);
-		Transformation tPlane = Transformation.translate(0, 0, -5);
+		Transformation tPlane = Transformation.translate(0, 0, -2);
 		Plane plane1 = new Plane(tPlane,mPlane1,1);
 		this.shapes.add(plane1);		
 	}

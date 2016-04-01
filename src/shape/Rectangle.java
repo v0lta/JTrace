@@ -103,7 +103,7 @@ public class Rectangle extends Plane implements LightableShape {
 	}
 
 	@Override
-	public Point getRandomPoint() {
+	public Point getRandomPoint(Point hitPoint) {
 		Random r = new Random();
 		double randomX = -this.length/2.0 + this.length * r.nextDouble();
 		double randomY = -this.width/2.0  + this.width  * r.nextDouble();		
@@ -128,5 +128,16 @@ public class Rectangle extends Plane implements LightableShape {
 			return false;
 		}
 	}
+
+	@Override
+	public TextPoint getUV(Point pPrime) {
+		//transform the point onto the z plane.
+		pPrime = this.transformation.transformInverse(pPrime);
+		//the z coordinate is zero and can be neglected.
+		TextPoint txtPoint = new TextPoint(pPrime.x,pPrime.y);
+		return txtPoint;
+	}
+	
+
 
 }

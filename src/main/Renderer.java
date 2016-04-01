@@ -137,8 +137,8 @@ public class Renderer {
 		//final World world = new World(width, height, "venus");
 		//final World world = new World(width, height, "dragon");
 		//final World world = new World(width, height, "buddha");
-		final World world = new World(width, height, "tea");
-		//final World world = new World(width, height, "sun");
+		//final World world = new World(width, height, "tea");
+		final World world = new World(width, height, "sun");
 		
 		
 		/**********************************************************************
@@ -282,7 +282,7 @@ public class Renderer {
 						                	Vector lghtVct = new Vector(0.0,0.0,0.0);
 						                	for (int i = 0; i < al.sampleNo; i++) {
 						                		//create random number generator with seed for reproducibility.
-						                		Vector pPrime = al.getpPrime().toVector();
+						                		Vector pPrime = al.getpPrime(p.toPoint()).toVector();
 					                    		Ray shadowRay = new Ray(p.toPoint(),pPrime);
 					                    		shadowInters = testforIntsections(world.shapes,shadowRay); 
 					                    		if (shadowInters.isEmpty()) {
@@ -310,8 +310,8 @@ public class Renderer {
 						                	Color lghtClr = lghtVct.scale(1.0/al.sampleNo).toColor();
 						                	buffer.getPixel(x, y).add(lghtClr.r, lghtClr.g, lghtClr.b,1.0);
 						                } 
-						                }
-					                } 
+						              }
+					              } 
 				                	
 					         }
 						}

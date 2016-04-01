@@ -48,10 +48,7 @@ public class AreaLight implements Shape  {
 	 * Get the lights color scaled by its intensity.
 	 */	
 	public Vector L(Point pPrime) {
-		//transform the point onto the z plane.
-		pPrime = this.shape.getTransformation().transformInverse(pPrime);
-		//the z coordinate is zero and can be neglected.
-		TextPoint txtPoint = new TextPoint(pPrime.x,pPrime.y);
+		TextPoint txtPoint = this.shape.getUV(pPrime);
 		Color color = this.mat.getColor(txtPoint);
 		return color.toVector().scale(intensity);
 	}
@@ -69,8 +66,8 @@ public class AreaLight implements Shape  {
 		return (cosThetaI * cosThetaPrime)/lengthSquared;
 	}
 	
-	public Point getpPrime(){
-		Point pPrime = this.shape.getRandomPoint();
+	public Point getpPrime(Point hitPoint){
+		Point pPrime = this.shape.getRandomPoint(hitPoint);
 		return pPrime;
 	}
 

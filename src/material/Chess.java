@@ -23,8 +23,8 @@ public class Chess implements Material{
 
 	@Override
 	public Color getColor(TextPoint texPoint) {
-		int tmp = ( (int) ( texPoint.u/s) 
-			       + (int) ( texPoint.v/s));
+		int tmp = ( (int) Math.round( texPoint.u/s) 
+			       + (int) Math.round( texPoint.v/s));
 		int tmp2 = tmp%2;
 		
 		if (   tmp2  == 0) {
@@ -37,9 +37,9 @@ public class Chess implements Material{
 	
 	@Override
 	public Color getColor(Vector texPoint) {
-		int tmp = (  (int) ( texPoint.x/s) 
-			       + (int) ( texPoint.y/s)
-			       + (int) ( texPoint.z/s) );
+		int tmp = (  (int) Math.round( texPoint.x/s) 
+			       + (int) Math.round( texPoint.y/s)
+			       + (int) Math.round( texPoint.z/s) );
 		int tmp2 = tmp%2;
 		
 		if (   tmp2  == 0) {

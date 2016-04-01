@@ -78,7 +78,7 @@ public class Circle extends Plane implements LightableShape {
 	
 	@Override
 	public Normal getNormal(Point pPrime) {
-		return this.transformation.transformInverseTranspose( this.n );
+		return this.transformation.transformInverseTranspose( this.n ); //no inverse transformation necessary as pPrime does not matter.
 	}
 	
 	@Override
@@ -113,7 +113,7 @@ public class Circle extends Plane implements LightableShape {
 	 * surface.
 	 */
 	@Override
-	public Point getRandomPoint() {
+	public Point getRandomPoint(Point hitPoint) {
 		Random r = new Random();
 		double rndR = this.radius * r.nextDouble();
 		double rndAngle = (2*Math.PI)  * r.nextDouble();
@@ -123,6 +123,15 @@ public class Circle extends Plane implements LightableShape {
 		Point p = new Point(randomX,randomY,0.0);
 		p = this.transformation.transform(p);
 		return p;
+	}
+	
+	@Override
+	public TextPoint getUV(Point pPrime) {
+		//transform the point onto the z plane.
+		pPrime = this.transformation.transformInverse(pPrime);
+		//the z coordinate is zero and can be neglected.
+		TextPoint txtPoint = new TextPoint(pPrime.x,pPrime.y);
+		return txtPoint;
 	}
 	
 }
