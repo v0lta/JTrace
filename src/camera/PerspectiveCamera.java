@@ -1,5 +1,7 @@
 package camera;
 
+import java.util.Random;
+
 import math.OrthonormalBasis;
 import math.Point;
 import math.Ray;
@@ -121,7 +123,6 @@ public class PerspectiveCamera implements Camera {
 		double v = height * (sample.y * invyResolution - 0.5);
 
 		Vector direction = basis.u.scale(u).add(basis.v.scale(v)).subtract(basis.w);
-
 		return new Ray(origin, direction);
 	}
 	

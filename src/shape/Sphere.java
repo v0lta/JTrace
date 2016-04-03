@@ -178,19 +178,19 @@ public class Sphere implements LightableShape {
 
 	@Override
 	public Point getRandomPoint(Point hP) {
-		hP = this.transformation.transformInverse(hP);
+		Vector vhP = hP.toVector();
+		vhP = this.transformation.transform(new Vector(0,0,0)).subtract(vhP);
+		hP = this.transformation.transformInverse(vhP.toPoint());
 		double r = Math.sqrt(hP.x*hP.x + hP.y*hP.y + hP.z*hP.z);
 		
 		double theta = Math.acos(hP.z/r);
-		double phi   = Math.atan2(hP.y,hP.x);
-		
+		double phi   = Math.atan2(hP.x,hP.y); //TODO: Fallunterscheidung warum nicht y,x?
 		Random rnd = new Random();
 		double rndTheta = -Math.PI/2 + Math.PI*rnd.nextDouble();
 		double rndPhi   = -Math.PI/2 + Math.PI*rnd.nextDouble();
 		
 		theta = theta + rndTheta;
 		phi   = phi   + rndPhi;
-		
 		//radius is 1 
 		double randomX = Math.sin(theta)*Math.cos(phi);
 		double randomY = Math.sin(theta)*Math.sin(phi);

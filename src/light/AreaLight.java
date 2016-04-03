@@ -75,7 +75,5 @@ public class AreaLight implements Shape  {
 	public List<Intersection> intersect(Ray ray) {
 		return this.shape.intersect(ray);
 	}
-	
-	
 
 }

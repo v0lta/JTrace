@@ -48,7 +48,7 @@ public class Renderer {
 		double sensitivity = 1.0;
 		double gamma = 1.5;
 		boolean gui = true;
-		
+
 
 		/**********************************************************************
 		 * Parse the command line arguments
@@ -69,12 +69,12 @@ public class Renderer {
 						gamma = Double.parseDouble(arguments[++i]);
 					else if (arguments[i].equals("-help")) {
 						System.out
-								.println("usage: "
-										+ "[-width  <integer> width of the image] "
-										+ "[-height  <integer> height of the image] "
-										+ "[-sensitivity  <double> scaling factor for the radiance] "
-										+ "[-gamma  <double> gamma correction factor] "
-										+ "[-gui  <boolean> whether to start a graphical user interface]");
+						.println("usage: "
+								+ "[-width  <integer> width of the image] "
+								+ "[-height  <integer> height of the image] "
+								+ "[-sensitivity  <double> scaling factor for the radiance] "
+								+ "[-gamma  <double> gamma correction factor] "
+								+ "[-gui  <boolean> whether to start a graphical user interface]");
 						return;
 					} else {
 						System.err.format("unknown flag \"%s\" encountered!\n",
@@ -139,14 +139,14 @@ public class Renderer {
 		//final World world = new World(width, height, "buddha");
 		//final World world = new World(width, height, "tea");
 		final World world = new World(width, height, "sun");
-		
-		
+
+
 		/**********************************************************************
 		 * Multi-threaded rendering of the scene
 		 *********************************************************************/
 		final ExecutorService service = Executors.newFixedThreadPool(Runtime
 				.getRuntime().availableProcessors());
-		
+
 		// subdivide the buffer in equal sized tiles
 		for (final Tile tile : buffer.subdivide(64, 64)) {
 			// create a thread which renders the specific tile
@@ -165,16 +165,18 @@ public class Renderer {
 					for (int y = tile.yStart; y < tile.yEnd; ++y) {
 						for (int x = tile.xStart; x < tile.xEnd; ++x) {
 							// create a ray 
-							Ray ray = world.camera.generateRay(new Sample(x + 0.5,
-									y + 0.5));
+							//Ray ray = world.camera.generateRay(new Sample(x,y, 0.5));
+							Sample sample = new Sample(x, y, 0.5, Constants.spp, world.camera);
+							List<Ray> rpp = sample.getRays();
 
-							//Intersection test
-							intersections = testforIntsections(world.shapes,ray);
-							//see if an intersection was found
-							if (intersections.isEmpty()) {
-								buffer.getPixel(x, y).add(0, 0, 0);
-								//System.err.println("no hit");
-							} else {
+							for (Ray ray: rpp) {
+								//Intersection test
+								intersections = testforIntsections(world.shapes,ray);
+								//see if an intersection was found
+								if (intersections.isEmpty()) {
+									buffer.getPixel(x, y).add(0, 0, 0);
+									//System.err.println("no hit");
+								} else {
 									//find the intersection closest to the camera.
 									Vector camPos = world.camera.getOrigin().toVector();
 									Vector intPos;
@@ -182,67 +184,67 @@ public class Renderer {
 									dists.clear();
 									for (Intersection currentInter: intersections){
 										intPos = currentInter.point.toVector();
-							            dist = camPos.subtract(intPos).lengthSquared();
+										dist = camPos.subtract(intPos).lengthSquared();
 										dists.add(dist);
 									}
 									int index = dists.indexOf(Collections.min(dists));
 									Intersection closestInt = intersections.get(index);
-									
+
 									//add a color contribution to the pixel based in the closest intersection.
-				                	double[] ambRes = computeAmbientShading(closestInt.color, world.ambient, closestInt.reflectivity);
-					                
-				                	
-				                	if (Constants.normalVisualization) {
-					                	Vector Cs;
-					                	Cs = closestInt.normal.toVector();
-					                	//Cs = closestInt.point.toVector();
-					                	
-					                	if ((Math.abs(Cs.x) + Math.abs(Cs.y) + Math.abs(Cs.z)) < 0.001) {
-					                		System.err.println("black");
-					                	}
-					                	//buffer.getPixel(x, y).add((Cs.x),(Cs.y),(Cs.z));
-					                	buffer.getPixel(x, y).add(Math.abs(Cs.x),Math.abs(Cs.y), Math.abs(Cs.z));
-					                	
-					                } else if (Constants.compVisualization) {
-					                	int intersectionCount = ray.getIntersectionCounter();
-					                	Color pixelColor;
-					                	//int max = 180;
-					                	int max = 600;
-					                	//int max = 900; //dragon...
-					                	
-					                   	ColorMap colorMap = new ColorMap(0.0, max, null,1.0, "hot");
-					                   	pixelColor = colorMap.getCompColor(intersectionCount);
-					                   	
-				                		//intensity = intersections.size()/1.0;
-				                		//double[] compRes = computeAmbientShading(visColor,intensity , 1.0);
-						                
-					                   	//double greenValue = ((double) intersectionCount)/max;						
-					                   	double whiteValue = ((double) intersectionCount)/max;
-				                		//buffer.getPixel(x, y).add(whiteValue,whiteValue,whiteValue);
-					                	buffer.getPixel(x, y).add(pixelColor.r,pixelColor.g,pixelColor.b);
-					                	
-					                	
-					                } else {
-					                	//add the ambient Lighting result.
-					                	buffer.getPixel(x, y).add(ambRes[0], ambRes[1], ambRes[2],1.0);
-					                	
-					                	//------------------------ point light sources. -----------------------------------------------
-						                for (PointLight pl: world.plights){
-						                Vector l  = pl.l(closestInt.point);
-						                Vector n  = closestInt.normal.toVector();
-						                Vector toLight = pl.origin.toVector().subtract(closestInt.point.toVector()); 
-						                double dot = (n.dot(l));						                
-						                    if (dot > 0){
-						                    	if (pl.shadows) {
-						                    		//launch a shadow ray.					                    		
-						                    		Ray shadowRay = new Ray(closestInt.point,toLight);
-						                    		shadowInters = testforIntsections(world.shapes,shadowRay); 
+									double[] ambRes = computeAmbientShading(closestInt.color, world.ambient, closestInt.reflectivity);
+
+
+									if (Constants.normalVisualization) {
+										Vector Cs;
+										Cs = closestInt.normal.toVector();
+										//Cs = closestInt.point.toVector();
+
+										if ((Math.abs(Cs.x) + Math.abs(Cs.y) + Math.abs(Cs.z)) < 0.001) {
+											System.err.println("black");
+										}
+										//buffer.getPixel(x, y).add((Cs.x),(Cs.y),(Cs.z));
+										buffer.getPixel(x, y).add(Math.abs(Cs.x),Math.abs(Cs.y), Math.abs(Cs.z));
+
+									} else if (Constants.compVisualization) {
+										int intersectionCount = ray.getIntersectionCounter();
+										Color pixelColor;
+										//int max = 180;
+										int max = 600;
+										//int max = 900; //dragon...
+
+										ColorMap colorMap = new ColorMap(0.0, max, null,1.0, "hot");
+										pixelColor = colorMap.getCompColor(intersectionCount);
+
+										//intensity = intersections.size()/1.0;
+										//double[] compRes = computeAmbientShading(visColor,intensity , 1.0);
+
+										//double greenValue = ((double) intersectionCount)/max;						
+										double whiteValue = ((double) intersectionCount)/max;
+										//buffer.getPixel(x, y).add(whiteValue,whiteValue,whiteValue);
+										buffer.getPixel(x, y).add(pixelColor.r,pixelColor.g,pixelColor.b);
+
+
+									} else {
+										//add the ambient Lighting result.
+										buffer.getPixel(x, y).add(ambRes[0], ambRes[1], ambRes[2],1.0);
+
+										//------------------------ point light sources. -----------------------------------------------
+										for (PointLight pl: world.plights){
+											Vector l  = pl.l(closestInt.point);
+											Vector n  = closestInt.normal.toVector();
+											Vector toLight = pl.origin.toVector().subtract(closestInt.point.toVector()); 
+											double dot = (n.dot(l));						                
+											if (dot > 0){
+												if (pl.shadows) {
+													//launch a shadow ray.					                    		
+													Ray shadowRay = new Ray(closestInt.point,toLight);
+													shadowInters = testforIntsections(world.shapes,shadowRay); 
 													//see if an intersection was found
 													if (shadowInters.isEmpty()) {
 														//its not in the shadow.
 														//compute distance to light source
-									                    double[] lghtRes = computeShading(closestInt,toLight,pl, dot );
-								                    	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);		
+														double[] lghtRes = computeShading(closestInt,toLight,pl, dot );
+														buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);		
 													} else {
 														//see if the intersection is behind the point light.
 														boolean inShadow = false; 
@@ -255,68 +257,68 @@ public class Renderer {
 															}
 														}
 														if (inShadow == false ){
-										                    double[] lghtRes = computeShading(closestInt,toLight,pl, dot );
-									                    	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);	
-															
+															double[] lghtRes = computeShading(closestInt,toLight,pl, dot );
+															buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);	
+
 														}
 													}
-						                    	} else {
-						                    		//there are no shadows directly shade things
-								                    double[] lghtRes = computeShading(closestInt,toLight,pl, dot );
-							                    	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);
-						                    	}
-						                    	
-						                    }
-						                }
-						                
-						                // --------------------- handle area lights.------------------------------------------------
-						                Vector p = closestInt.point.toVector();
-						                for(AreaLight al : world.alights){
-						                	
-						                if (al.shape.inShape(p.toPoint())) {
-						                	// the intersection is on the point light.
-						                	double [] lghtRes = computeAmbientShading(closestInt.color,closestInt.reflectivity,al.intensity);
-						                	buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);
-						                } else {
-						                	
-						                	Vector lghtVct = new Vector(0.0,0.0,0.0);
-						                	for (int i = 0; i < al.sampleNo; i++) {
-						                		//create random number generator with seed for reproducibility.
-						                		Vector pPrime = al.getpPrime(p.toPoint()).toVector();
-					                    		Ray shadowRay = new Ray(p.toPoint(),pPrime);
-					                    		shadowInters = testforIntsections(world.shapes,shadowRay); 
-					                    		if (shadowInters.isEmpty()) {
-													//its not in the shadow.
-													//compute distance to light source
-					                    			lghtVct = lghtVct.add(computeAlShading(closestInt,al,p,pPrime ));
-					                    		} else {
-					                    			boolean inShadow = false; 
-													for (Intersection shadowInt : shadowInters) {
-														Vector shadowRayHitPnt = shadowInt.point.toVector();
-														double distanceToLight = p.subtract(pPrime).lengthSquared();
-														double distanceToHit = p.subtract(shadowRayHitPnt).lengthSquared();
-														if (distanceToHit < distanceToLight) {
-															if (al.shape.inShape(shadowInt.point) == false) {
-																inShadow = true;
-															} 
-															//buffer.getPixel(x, y).add(0, 10, 0,1.0);
-														}
-													}
-													if (inShadow == false ){
+												} else {
+													//there are no shadows directly shade things
+													double[] lghtRes = computeShading(closestInt,toLight,pl, dot );
+													buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);
+												}
+
+											}
+										}
+
+										// --------------------- handle area lights.------------------------------------------------
+										Vector p = closestInt.point.toVector();
+										for(AreaLight al : world.alights){
+
+											if (al.shape.inShape(p.toPoint())) {
+												// the intersection is on the point light.
+												double [] lghtRes = computeAmbientShading(closestInt.color,closestInt.reflectivity,al.intensity);
+												buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);
+											} else {
+
+												Vector lghtVct = new Vector(0.0,0.0,0.0);
+												for (int i = 0; i < al.sampleNo; i++) {
+													//create random number generator with seed for reproducibility.
+													Vector pPrime = al.getpPrime(p.toPoint()).toVector();
+													Ray shadowRay = new Ray(p.toPoint(),pPrime);
+													shadowInters = testforIntsections(world.shapes,shadowRay); 
+													if (shadowInters.isEmpty()) {
+														//its not in the shadow.
+														//compute distance to light source
 														lghtVct = lghtVct.add(computeAlShading(closestInt,al,p,pPrime ));
+													} else {
+														boolean inShadow = false; 
+														for (Intersection shadowInt : shadowInters) {
+															Vector shadowRayHitPnt = shadowInt.point.toVector();
+															double distanceToLight = p.subtract(pPrime).lengthSquared();
+															double distanceToHit = p.subtract(shadowRayHitPnt).lengthSquared();
+															if (distanceToHit < distanceToLight) {
+																if (al.shape.inShape(shadowInt.point) == false) {
+																	inShadow = true;
+																} 
+																//buffer.getPixel(x, y).add(0, 10, 0,1.0);
+															}
+														}
+														if (inShadow == false ){
+															lghtVct = lghtVct.add(computeAlShading(closestInt,al,p,pPrime ));
+														}
 													}
-					                    		}
-						                	}
-						                	Color lghtClr = lghtVct.scale(1.0/al.sampleNo).toColor();
-						                	buffer.getPixel(x, y).add(lghtClr.r, lghtClr.g, lghtClr.b,1.0);
-						                } 
-						              }
-					              } 
-				                	
-					         }
+												}
+												Color lghtClr = lghtVct.scale(1.0/al.sampleNo).toColor();
+												buffer.getPixel(x, y).add(lghtClr.r, lghtClr.g, lghtClr.b,1.0);
+											} 
+										}
+									} 
+
+								}
+							}
 						}
 					}
-
 					// update the graphical user interface
 					if (panel != null)
 						panel.update(tile);
@@ -352,7 +354,7 @@ public class Renderer {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static List<Intersection> testforIntsections(List<Shape> shapeList,Ray ray) {
 		List<Intersection> interList = new ArrayList<Intersection>();
 		for (Shape shape : shapeList) {
@@ -364,22 +366,22 @@ public class Renderer {
 		}
 		return interList;
 	}
-	
+
 	private static double[] computeAmbientShading(Color intersectionPointColor,Double La, Double Rs) {
 		Vector Cs = intersectionPointColor.toVector();
 		double[] ambRes = Cs.scale(La).scale(Rs).toArray();
 		return ambRes;		
 	}
-	
+
 	private static double[] computeShading(Intersection inter,Vector toLight,PointLight light, double dot ) {
 		Vector lightRes;
 		Vector Cs = inter.color.toVector();
 		Vector Lp = light.L();
 		double Rs = inter.reflectivity;
 		double d = toLight.lengthSquared();		
-		
+
 		lightRes = Cs.elPrd(Lp).scale(dot).scale(Rs/3.14);
-		
+
 		//phong
 		if (Constants.phong) {
 			Rs = Rs/2;
@@ -391,25 +393,25 @@ public class Renderer {
 			toLight = toLight.normalize();
 			double dot2 = r.dot(toLight);
 			if (dot2 > 0){
-			double phong = Math.pow(dot2, Constants.e);
-			lightRes = lightRes.add(Cs.elPrd(Lp).scale(Rs*phong));
+				double phong = Math.pow(dot2, Constants.e);
+				lightRes = lightRes.add(Cs.elPrd(Lp).scale(Rs*phong));
 			}
 		}
-		
+
 		return lightRes.scale(1/d).toArray();
 	}
-	
+
 	private static Vector computeAlShading(Intersection inter, AreaLight al, Vector p, Vector pPrime ){
 		double G = al.G(inter, pPrime.toPoint());
 		Vector La = al.L(pPrime.toPoint());
 		double Rs = inter.reflectivity;
 		Vector Cs = inter.color.toVector();
 		Vector intermediateResult = Cs.elPrd(La).scale(Rs).scale(G).scale(al.shape.getInverseArea());
-		
+
 		return intermediateResult;
-		
-		
+
+
 	}
-	
-	
+
+
 }

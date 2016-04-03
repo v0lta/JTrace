@@ -19,6 +19,7 @@ import math.Vector;
 import camera.Camera;
 import camera.PerspectiveCamera;
 import shape.Circle;
+import shape.Cube;
 import shape.ObjShape;
 import shape.Plane;
 import shape.Rectangle;
@@ -148,7 +149,7 @@ public class World{
 		mPlane = new Chess(new Color(100,100,100), new Color(1,1,1),1);
 		//cr = -0.076, ci = 0.651, N = 200, bound = 1, lim = 100
 		//mat = new Julia(new Complex(-0.076,0.652),200,1,100, 10);
-		mPlane = new Monochrome(new Color(100,100,100));
+		//mPlane = new Monochrome(new Color(100,100,100));
 		
 		//(Point a,Normal n, Material m,double reflectivity)
 		Transformation tPlane = Transformation.translate(1,1,-2);
@@ -207,7 +208,7 @@ public class World{
 		Transformation t1 = Transformation.IDENTITY;
 		t1 = t1.append(Transformation.translate(0, 0.5, -1)).append(
 				Transformation.rotateX(90)).append(
-				Transformation.rotateY(180)).append( //-90, 0
+				Transformation.rotateY(90)).append( //-90, 0
 				Transformation.rotateZ(0));
 		
 
@@ -444,25 +445,56 @@ public class World{
 	}
 
 	public void sun(int width,int height) {
-		this.ambient = 0.0000;
+		this.ambient = 0.001;
 		
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
 				new Point(0, 5, 4), new Point(0, 0, 0), new Vector(0, 0, 1), 90);
+		//PointLight whiteLight1 = new PointLight(new Point(-2.5, 4, 1.5),new Color(10,10,10), 1.5,true);
+		//this.plights.add(whiteLight1);
+		
 		//area light
-		Material mLight = new MyTextureFile("./obj/mageScene/texture_sun.jpg");
-		//Material mLight = new Monochrome( new Color(100,10,10));
-		Transformation tLight = Transformation.rotateY(180);
-		//Circle shape = new Circle(tLight,mLight,10,1.); 
+		Material mLight = new MyTextureFile("./obj/cubeEarth/texture_sun.jpg");
+		//Material mLight = new MyTextureFile("./obj/mageScene/textureSunBlue.jpg");
+		Transformation tLight = Transformation.translate(-2.5, 4.5, 1.5);
 		Sphere shape = new Sphere(tLight,mLight,0.1);
 		AreaLight al1 = new AreaLight(shape,0.1,100);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
+		Material mEarth = new MyTextureFile("./obj/cubeEarth/EarthWithClouds.jpg");
+		Transformation tEarth = Transformation.IDENTITY;
+		Sphere earth = new Sphere(tEarth,mEarth,1.01);
+		this.shapes.add(earth);
+		
+		Material mMoon = new MyTextureFile("./obj/cubeEarth/moon.jpg");
+		Transformation tMoon = Transformation.translate(-1.5, -0.5, 0.5).append(Transformation.scale(0.27, 0.27, 0.27));
+		Sphere moon = new Sphere(tMoon, mMoon, 1.5);
+		this.shapes.add(moon);
+		
+		Material mCube = new ObjTextureFile("./obj/cubeEarth/borg2.jpg",2.0);
+		//Material mCube = new Monochrome(new Color(100,0,0));
+		Transformation tCube = Transformation.IDENTITY.append(
+							   	Transformation.translate(-1.5, 1.5, 1)).append(
+							   	Transformation.rotateZ(8)).append(
+							   	Transformation.rotateX(0)).append(
+							   	Transformation.scale(0.2, 0.2, 0.2));
+		Cube cube = new Cube(tCube, mCube, 1.0);
+		this.shapes.add(cube);
+		
+		Transformation tCube2 = Transformation.IDENTITY.append(
+			   	Transformation.translate(-1.0, 2.0, 0.5)).append(
+			   	Transformation.rotateZ(4)).append(
+			   	Transformation.rotateX(-25)).append(
+			   	Transformation.scale(0.25, 0.25, 0.25));
+		Cube cube2 = new Cube(tCube2, mCube, 1.0);
+		this.shapes.add(cube2);
+		
+		
 		Material mPlane1 = new Chess(new Color(100,100,100), new Color(1,1,1),1);
 		Transformation tPlane = Transformation.translate(0, 0, -2);
-		Plane plane1 = new Plane(tPlane,mPlane1,1);
-		this.shapes.add(plane1);		
+		Plane plane1 = new Plane(tPlane,mPlane1,0.8);
+		//this.shapes.add(plane1);		
 	}
 	
 	
