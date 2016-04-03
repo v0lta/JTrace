@@ -449,16 +449,16 @@ public class World{
 		
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(0, 5, 4), new Point(0, 0, 0), new Vector(0, 0, 1), 90);
+				new Point(0, 4, 4), new Point(0, 0, 0), new Vector(0, 0, 1), 75);
 		//PointLight whiteLight1 = new PointLight(new Point(-2.5, 4, 1.5),new Color(10,10,10), 1.5,true);
 		//this.plights.add(whiteLight1);
 		
 		//area light
 		Material mLight = new MyTextureFile("./obj/cubeEarth/texture_sun.jpg");
 		//Material mLight = new MyTextureFile("./obj/mageScene/textureSunBlue.jpg");
-		Transformation tLight = Transformation.translate(-2.5, 4.5, 1.5);
+		Transformation tLight = Transformation.translate(-2.5, 3.5, 1.5);
 		Sphere shape = new Sphere(tLight,mLight,0.1);
-		AreaLight al1 = new AreaLight(shape,0.1,100);
+		AreaLight al1 = new AreaLight(shape,0.1,150);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
@@ -472,7 +472,7 @@ public class World{
 		Sphere moon = new Sphere(tMoon, mMoon, 1.5);
 		this.shapes.add(moon);
 		
-		Material mCube = new ObjTextureFile("./obj/cubeEarth/borg2.jpg",2.0);
+		Material mCube = new ObjTextureFile("./obj/cubeEarth/borg2.jpg",3.0);
 		//Material mCube = new Monochrome(new Color(100,0,0));
 		Transformation tCube = Transformation.IDENTITY.append(
 							   	Transformation.translate(-1.5, 1.5, 1)).append(
@@ -491,10 +491,16 @@ public class World{
 		this.shapes.add(cube2);
 		
 		
-		Material mPlane1 = new Chess(new Color(100,100,100), new Color(1,1,1),1);
-		Transformation tPlane = Transformation.translate(0, 0, -2);
-		Plane plane1 = new Plane(tPlane,mPlane1,0.8);
-		//this.shapes.add(plane1);		
+		//Material mPlane1 = new Chess(new Color(100,100,100), new Color(1,1,1),1);
+		Material mPlane1 = new ObjTextureFile("./obj/cubeEarth/space.jpg",20.0);
+		Transformation tPlane = Transformation.translate(4.2, -4, 4).append(
+								Transformation.rotateX(-45));
+		Rectangle plane1 = new Rectangle(tPlane,mPlane1,0.8,10,10);
+		this.shapes.add(plane1);		
+		AreaLight al2 = new AreaLight(plane1,0.0005,1);
+		this.alights.add(al2);
+		this.shapes.add(al2);
+		
 	}
 	
 	
