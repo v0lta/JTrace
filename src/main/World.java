@@ -21,6 +21,7 @@ import camera.PerspectiveCamera;
 import shape.Circle;
 import shape.Cube;
 import shape.ObjShape;
+import shape.ObjShapeWithNrmlMap;
 import shape.Plane;
 import shape.Rectangle;
 import shape.Shape;
@@ -289,12 +290,12 @@ public class World{
 		//objMat = new Monochrome( new Color(100,100,100));
 		objMat = new ObjTextureFile("./obj/apple/apple_texture.jpg",1.0);
 		ObjShape apple = new ObjShape("./obj/apple/apple.obj",t1,objMat,1.0,5, this.camera);
-		this.shapes.add(apple);
+		//this.shapes.add(apple);
 		
 		t1 = t1.append(Transformation.rotateX(90));
 		Material houseText = new ObjTextureFile("./obj/house/house_texture.jpg",1.0);
 		ObjShape house = new ObjShape("./obj/house/house.obj",t1,houseText,0.6,0, this.camera);
-		//this.shapes.add(house);
+		this.shapes.add(house);
 		
 		
 		Material mPlane;
@@ -311,15 +312,14 @@ public class World{
 	public void dragon(int width,int height) {
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(5, 0, 5), new Point(0, 0, 0), new Vector(-1, -0, 0), 80);
+				new Point(5, 0, 5), new Point(0, 0, 0), new Vector(0, 0, 1), 80);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
-		PointLight whiteLight = new PointLight(new Point(0,2,10),new Color(10,10,10), 0.01,true);
-		this.plights.add(whiteLight);
-		PointLight blueLight = new PointLight(new Point(8,8,8),new Color(50,100,50), 0.05,true);
-		this.plights.add(blueLight);
-		PointLight redLight = new PointLight(new Point(-8,0,8),new Color(100,0,0), 0.05,true);
+		PointLight redLight = new PointLight(new Point(-5,5,8),new Color(100,10,10), 0.01,true);
 		this.plights.add(redLight);
+		PointLight whiteLight = new PointLight(new Point(5,0,8),new Color(100,100,100), 0.01,true);
+		this.plights.add(whiteLight);
+		
 		
 		this.ambient = 0.000;
 		
@@ -330,8 +330,13 @@ public class World{
 		
 		Material mat;
 		mat = new Monochrome( new Color(50,100,50));
-		//ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonLowPoly.obj",t1,mat,1.0,20, this.camera);
-		ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonHighPoly.obj",t1,mat,2.0,25, this.camera);
+		//mat = new ObjTextureFile("./obj/dragonLowPoly/dragonNormalMap4k.jpg",3.0);
+		
+		
+		//ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonLowPoly.obj",t1,mat,2.0,20, this.camera);
+		ObjShape dragon = new ObjShapeWithNrmlMap("./obj/dragonLowPoly/dragonLowPoly.obj",
+				"./obj/dragonLowPoly/dragonNormalMap4k.jpg",t1,mat,2.0,20, this.camera); //png will crash.!!
+		//ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonHighPoly.obj",t1,mat,2.0,25, this.camera);
 		this.shapes.add(dragon);
 		
 		
@@ -339,9 +344,10 @@ public class World{
 		mPlane = new Monochrome(new Color(100,100,100));
 		
 		//(Point a,Normal n, Material m,double reflectivity)
-		Transformation tPlane = Transformation.IDENTITY;
+		Transformation tPlane = Transformation.translate(0, 0, -0.5);
 		Plane plane = new Plane(tPlane,mPlane,1);
 		this.shapes.add(plane);
+
 	}
 
 	public void buddha(int width,int height) {
@@ -355,20 +361,24 @@ public class World{
 		PointLight whiteLight2 = new PointLight(new Point(4,4,4),new Color(10,10,10), 1.0,true);
 		this.plights.add(whiteLight2);
 		
-		this.ambient = 0.0000;
+		//this.ambient = 0.0500;
 		
 		//setup the objects in the scene.
 		Transformation t1 = Transformation.IDENTITY;
 		t1 = t1.append(Transformation.translate(0, 0, 0)).append(
 				Transformation.scale(5, 5, 5).append(
 				Transformation.rotateY(180)).append(
-				Transformation.rotateZ(-120)));
+				Transformation.rotateZ(200)));
 		
 		Material mat;
 		mat = new Monochrome( new Color(0.5,1,0.5));
+		//mat = new ObjTextureFile("./obj/buddhaLowPoly/buddhaNormalMap4k.jpg",1.0);
+		
 		//mat = new Julia(new Complex(-0.02,0.652),800,0.5,400, 100, "parula");
-		//ObjShape buddha = new ObjShape("./obj/buddhaLowPoly/buddhaLowPoly.obj",t1,mat,10.0,25, this.camera);
-		ObjShape buddha = new ObjShape("./obj/buddhaLowPoly/buddhaHighPoly.obj",t1,mat,10.0,25, this.camera);
+		ObjShape buddha = new ObjShape("./obj/buddhaLowPoly/buddhaLowPoly.obj",t1,mat,10.0,25, this.camera);
+		//ObjShape buddha = new ObjShapeWithNrmlMap("./obj/buddhaLowPoly/buddhaLowPoly.obj",
+		//		"./obj/buddhaLowPoly/buddhaNormalMap4k.jpg",t1,mat,1.0,20, this.camera);
+		//ObjShape buddha = new ObjShape("./obj/buddhaLowPoly/buddhaHighPoly.obj",t1,mat,10.0,25, this.camera);
 		this.shapes.add(buddha);
 		
 		

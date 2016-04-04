@@ -125,9 +125,6 @@ public class Transformation implements Cloneable {
 		Matrix inverseTranspose = inverse.transpose();
 		normVec = inverseTranspose.transform(normVec);
 		return normVec.toNormal();
-		
-		//the inverse Transpose operation breaks the normal occasionally.
-		//return normal;
 	}
 
 	/**

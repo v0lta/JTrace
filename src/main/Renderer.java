@@ -135,10 +135,10 @@ public class Renderer {
 		//final World world = new World(width, height, "apple");
 		//final World world = new World(width, height, "bunny");		
 		//final World world = new World(width, height, "venus");
-		//final World world = new World(width, height, "dragon");
+		final World world = new World(width, height, "dragon");
 		//final World world = new World(width, height, "buddha");
 		//final World world = new World(width, height, "tea");
-		final World world = new World(width, height, "sun");
+		//final World world = new World(width, height, "sun");
 
 
 		/**********************************************************************
@@ -195,15 +195,9 @@ public class Renderer {
 
 
 									if (Constants.normalVisualization) {
-										Vector Cs;
-										Cs = closestInt.normal.toVector();
-										//Cs = closestInt.point.toVector();
-
-										if ((Math.abs(Cs.x) + Math.abs(Cs.y) + Math.abs(Cs.z)) < 0.001) {
-											System.err.println("black");
-										}
-										//buffer.getPixel(x, y).add((Cs.x),(Cs.y),(Cs.z));
-										buffer.getPixel(x, y).add(Math.abs(Cs.x),Math.abs(Cs.y), Math.abs(Cs.z));
+										Color Cs;
+										Cs = closestInt.normal.toVector().toColor();
+										buffer.getPixel(x, y).add(0.5 + 0.5*Cs.r,0.5 + 0.5*Cs.g, 0.5 + 0.5*Cs.b);
 
 									} else if (Constants.compVisualization) {
 										int intersectionCount = ray.getIntersectionCounter();

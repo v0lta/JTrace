@@ -6,51 +6,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import camera.Camera;
-import acceleration.AxisAlignedBox;
-import acceleration.MiddleSplitBox;
+import shape.ObjShape.Extremes;
 import acceleration.ParallelSahBox;
 import acceleration.SahBox;
-import acceleration.SortSplitBox;
 import material.Material;
+import material.ObjTextureFile;
 import math.Constants;
-import math.Intersection;
 import math.Normal;
 import math.Point;
-import math.Ray;
 import math.TextPoint;
 import math.Transformation;
+import camera.Camera;
 
-public class ObjShape implements Shape {
-	public final String path;
-	public final Transformation transformation;
-	public final double reflectivity;
-	public final Material mat;
-	public final List<Triangle> triangleList;
-	protected AxisAlignedBox aab;
-	//private int accessCount = 0;
-	protected int treeDepth;
-	protected Camera cam;
+public class ObjShapeWithNrmlMap extends ObjShape {
+	ObjTextureFile nMapFile;
 	
-	/**
-	 * Create a triangle mesh from a wavefront (.obj) file.
-	 * @param path string with path to the .obj file.
-	 * @param transformation collection of matrices changing
-	 * 		   position and scale.
-	 * @param mat a material object.
-	 * @param reflectivity changes the brightness.
-	 * @param treeDepth the depth of the acceleration tree.
-	 * @param camera object needed for camera position.
-	 */	
-	public ObjShape(String path, Transformation transformation, Material mat,
-					double reflectivity, int treeDepth, Camera camera){
-		this.path = path;
-		this.transformation = transformation;
-		this.reflectivity = reflectivity;
-		this.mat = mat;
-		this.triangleList = new ArrayList<Triangle>();
-		this.treeDepth = treeDepth;
-		this.cam = camera;
+	public ObjShapeWithNrmlMap(String path,String nMapPath, Transformation transformation,
+			Material mat, double reflectivity, int treeDepth, Camera camera) {
+		super(path, nMapPath, transformation, mat, reflectivity, treeDepth, camera);
+		this.nMapFile = new ObjTextureFile(nMapPath, 1.0);
 		
 		long t = System.nanoTime();
 		try {
@@ -66,46 +40,10 @@ public class ObjShape implements Shape {
 	}
 	
 	/**
-	 * Second constructor for use in children where read() is not executed,
-	 */
-	protected ObjShape(String path, String nMapPath, Transformation transformation, Material mat,
-			double reflectivity, int treeDepth, Camera camera){
-		this.path = path;
-		this.transformation = transformation;
-		this.reflectivity = reflectivity;
-		this.mat = mat;
-		this.triangleList = new ArrayList<Triangle>();
-		this.treeDepth = treeDepth;
-		this.cam = camera;
-	}
-	
-	@Override
-	public List<Intersection> intersect(Ray ray) {
-		
-		//go trough the triangles and find intersections.
-		List<Intersection> intersections = new ArrayList<Intersection>();
-		//intersections.clear();
-		
-		if (Constants.useAccTree) {
-			intersections.addAll(this.aab.intersect(ray));
-		} else {
-			if (aab.intersectBool(ray)) {
-				for (Triangle triangle : this.triangleList) {
-					List<Intersection> currentInter;
-					currentInter = triangle.intersect(ray);
-					if (currentInter.isEmpty() == false) {
-						intersections.addAll(currentInter);
-					}
-				}
-			}
-		}	
-		return intersections;
-	}
-
-	/**
 	 * Read in the object data from an ".obj" file.
 	 * @throws IOException the path might not be correct.
 	 */
+	@Override
 	protected void read() throws IOException {
 			long t = System.nanoTime();
 			
@@ -165,16 +103,7 @@ public class ObjShape implements Shape {
 					}
 					fList.add(fsOuter);
 				}
-				//For debug print the current line.
-				//System.out.println(currentLine);	
 			}
-			
-			//For debug print what was read in.
-			//System.out.println(vertList);
-			//System.out.println(txtvList);
-			//System.out.println(normList);
-			//System.out.println(fList);
-			
 			//close the buffered reader.
 			br.close();		
 			
@@ -262,8 +191,11 @@ public class ObjShape implements Shape {
 				//(Point a, Point b, Point c,
 				//Normal an, Normal bn, Normal cn, Color color,
 				//double reflectivity, Transformation transformation)
-				Triangle triangle = new Triangle(a,b,c,an,bn,cn,at,bt,ct,this.mat,this.reflectivity,this.transformation);
-				this.triangleList.add(triangle);
+				//Triangle triangle = new Triangle(a,b,c,an,bn,cn,at,bt,ct,this.mat,this.reflectivity,this.transformation);
+				//TriangleWithNrmlMap triNrmlMap = new TriangleWithNrmlMap(this.nMapFile,triangle);
+				TriangleWithNrmlMap triNrmlMap = new TriangleWithNrmlMap(this.nMapFile, a,b,c,an,bn,cn,at,bt,ct,
+													this.mat,this.reflectivity,this.transformation);
+				this.triangleList.add(triNrmlMap);
 				
 			}
 			long elTimens = System.nanoTime() - t;
@@ -282,76 +214,5 @@ public class ObjShape implements Shape {
 			System.out.println("splitting took [s]:");
 			System.out.println(elTime);
 	}
-	
-	protected void createTree(Extremes minmax){
-		boolean singleCore = true;
-		if (singleCore){
-		//this.aab = new AxisAlignedBox(new Point(minmax.xMin - Constants.treeEpsilon,
-		//this.aab = new SortSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
-		//this.aab = new MiddleSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
-		this.aab = new SahBox(new Point(minmax.xMin - Constants.treeEpsilon,
-												minmax.yMin - Constants.treeEpsilon,
-												minmax.zMin - Constants.treeEpsilon),
-									  new Point(minmax.xMax + Constants.treeEpsilon,
-											    minmax.yMax + Constants.treeEpsilon,
-											    minmax.zMax + Constants.treeEpsilon),
-									  this.transformation, this.cam);
-		} else {
-		this.aab = new ParallelSahBox(new Point(minmax.xMin - Constants.treeEpsilon,
-				minmax.yMin - Constants.treeEpsilon,
-				minmax.zMin - Constants.treeEpsilon),
-	    new Point(minmax.xMax + Constants.treeEpsilon,
-			    minmax.yMax + Constants.treeEpsilon,
-			    minmax.zMax + Constants.treeEpsilon),
-	    this.transformation, this.cam, this.treeDepth, this.treeDepth, null);
-		}
-		
-		aab.trianglesInBox.addAll(triangleList);
-		aab.split(this.treeDepth); //recursively split the box until the max depth is reached.
-	}
-
-	
-	
-	protected class Extremes{
-		public double xMax = 0;public  double xMin = 0;
-		public double yMax = 0;public  double yMin = 0;
-		public double zMax = 0;public  double zMin = 0;
-		
-		public Extremes(){};
-		
-		public void checkVals(double x,double y,double z){
-			if (xMin > x){
-				this.xMin = x;
-			}
-			if (xMax < x){
-				this.xMax = x;
-			}
-			if (yMin > y){
-				this.yMin = y;
-			}
-			if (yMax < y){
-				this.yMax = y;
-			}
-			if (zMin > z){
-				this.zMin = z;
-			}
-			if (zMax < z){
-				this.zMax = z;
-			}
-		}
-	}
-	
-	/*
-	 *A main for debugging purposes.
-	 */
-	public static void main(String[] arguments){
-		Camera cam = null;
-		Transformation testTrans = Transformation.createIdentity();
-		Material mat = null;
-		@SuppressWarnings("unused")
-		ObjShape testObj = new ObjShape("./obj/bunny.obj",testTrans,mat,1.0, 1, cam);
-		System.out.println("done.");
-	}
-	 
 
 }

@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import shape.ObjShape;
 import math.Color;
 import math.TextPoint;
 import math.Vector;
@@ -85,8 +86,14 @@ public class ObjTextureFile implements Material {
 	 * A main for debugging.
 	 */
 	public static void main(String[] arguments){
-		ObjTextureFile test = new ObjTextureFile("./obj/apple/apple_texture.jpg",1.0);
+		//ObjTextureFile test = new ObjTextureFile("./obj/apple/apple_texture.jpg",1.0);
+		ObjTextureFile test = new ObjTextureFile("./obj/dragonLowPoly/dragonNormalMap4k.jpg",1.0);
 		test.read();
+		TextPoint testPnt = new TextPoint(0.5,0.5);
+		Color testColor = test.getColor(testPnt);
+		System.out.println(testColor.r);
+		System.out.println(testColor.g);
+		System.out.println(testColor.b);
 	}
 	
 
