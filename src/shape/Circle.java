@@ -17,13 +17,12 @@ import math.Transformation;
 import math.Vector;
 
 public class Circle extends Plane implements LightableShape {
-	public final double radius;
+	public final double radius = 1;
 	public final double inverseArea;
 	
 	public Circle(Transformation transformation, Material mat,
-			double reflectivity, double radius) {
+			double reflectivity) {
 		super(transformation, mat, reflectivity);
-		this.radius = radius;
 		this.inverseArea = 1.0/(Math.PI * radius * radius);
 	}
 	

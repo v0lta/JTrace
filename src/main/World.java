@@ -365,7 +365,6 @@ public class World{
 		Transformation tPlane = Transformation.translate(0, 0, -0.5);
 		Plane plane = new Plane(tPlane,mPlane,1);
 		this.shapes.add(plane);
-
 	}
 
 	public void buddha(int width,int height) {
@@ -436,7 +435,7 @@ public class World{
 		Specular phong = new PhongSpecular(25.0,0,1);
 		Material sMat = new Monochrome(phong,  new Color(10,100,10));
 		Transformation sTr = Transformation.translate(0, 1.0, 2.4).append(Transformation.rotateY(-180));
-		Circle shape2 = new Circle(sTr,sMat,10,1.);
+		Circle shape2 = new Circle(sTr,sMat,10);
 		//this.shapes.add(shape2);
 	
 		//setup the objects in the scene.
@@ -535,7 +534,7 @@ public class World{
 	
 	
 	public void richter(int width,int height) {
-		this.ambient = 0.0001;
+		this.ambient = 0.0000;
 		
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
@@ -550,17 +549,17 @@ public class World{
 		ColorMap colorMap = new ColorMap(0.0, 1.0, null,1.0, "hot");
 		Material mRichter = new RandomChess(noSpec, colorMap, 0.1,20);
 		Transformation tRichterLight = Transformation.translate(0, 8.0, 1.0).append(Transformation.rotateX(90));
-		Rectangle shape = new Rectangle(tRichterLight,mRichter,1);
+		Circle shape = new Circle(tRichterLight,mRichter,1);
 		AreaLight al1 = new AreaLight(shape,1.0,10);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
 		//Material mPlane1 = new Chess(new Color(100,100,100), new Color(1,1,1),1);
 		//Specular spec = new PhongSpecular(25.0,0,1);
-		Specular spec = new CookTorranceSpecular(0.117,0.0137,1);
+		Specular spec = new CookTorranceSpecular(0.399,0.00837,0.1);
 		Material gery = new Monochrome(spec, new Color(10,10,10));
 		Transformation tPlane = Transformation.translate(0, 0, 0);
-		Plane plane1 = new Plane(tPlane,gery,1);
+		Plane plane1 = new Plane(tPlane,gery,4);
 		this.shapes.add(plane1);
 		
 	}
@@ -591,7 +590,7 @@ public class World{
 		
 		Material mGreenLight = new Monochrome(npSpec, new Color(10,100,10));
 		Transformation tGreenLight = Transformation.translate(-2, 8.0, 2.0).append(Transformation.rotateX(90));
-		Circle shape2 = new Circle(tGreenLight,mGreenLight,1,1.0);
+		Circle shape2 = new Circle(tGreenLight,mGreenLight,1);
 		AreaLight al2 = new AreaLight(shape2,0.1,10);
 		this.alights.add(al2);
 		this.shapes.add(al2);

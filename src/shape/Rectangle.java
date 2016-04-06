@@ -102,8 +102,8 @@ public class Rectangle extends Plane implements LightableShape {
 	@Override
 	public LightIntersection getRandomPoint(Point hitPoint) {
 		Random r = new Random();
-		double randomX = -1.0/2.0 + 1.0 * r.nextDouble();
-		double randomY = -1.0/2.0  + 1.0  * r.nextDouble();		
+		double randomX = -1.0 + 2.0 * r.nextDouble();
+		double randomY = -1.0 + 2.0  * r.nextDouble();		
 		Point p = new Point(randomX,randomY,0);
 		TextPoint txtPoint = new TextPoint(p.x,p.y);
 		p = this.transformation.transform(p);

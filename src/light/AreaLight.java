@@ -63,7 +63,13 @@ public class AreaLight implements Shape  {
 		double cosThetaI = np.dot(toLight);
 		double cosThetaPrime = nPrime.dot(toLight.scale(-1));
 		
-		return (cosThetaI * cosThetaPrime)/lengthSquared;
+		double G = (cosThetaI * cosThetaPrime)/lengthSquared;
+		
+		if (G < 0){
+			G = 0;
+		}
+		
+		return G;
 	}
 	
 	public LightIntersection getpPrime(Point hitPoint){

@@ -378,7 +378,6 @@ public class Renderer {
 		Vector Lp = light.L();
 		double Rs = inter.reflectivity;
 		double d = toLight.lengthSquared();		
-
 		lightRes = Cs.elPrd(Lp).scale(dot).scale(Rs/Math.PI).scale(1/d);
 
 		//specular
@@ -399,18 +398,14 @@ public class Renderer {
 		Vector Cs = hitClr.toVector();
 		Vector intermediateResult = Cs.elPrd(La).scale(Rs).scale(G).scale(al.shape.getInverseArea());
 		
-		
 		//specular
 		Vector N = inter.normal.toVector();
-		Vector L = pPrime.subtract(p);
-		L = L.normalize();
+		Vector L = pPrime.subtract(p).normalize();
 		Vector V = cam.getOrigin().subtract(inter.point).normalize();
-		double phong = inter.mat.getSpecular(N, L, V);
-		Vector Lp = al.mat.getColor(lightInt.txtPnt).toVector(); //ok??
-		intermediateResult = intermediateResult.add(Lp.scale(Rs*phong));
+		double spec = inter.mat.getSpecular(N, L, V);
+		Vector Lp = al.mat.getColor(lightInt.txtPnt).toVector();
+		intermediateResult = intermediateResult.add(Cs.elPrd(Lp).scale(spec));
 		return intermediateResult;
 
 	}
-
-
 }
