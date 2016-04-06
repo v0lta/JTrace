@@ -30,32 +30,30 @@ public class Cube implements Shape {
 	private void setUp(){
 		Material mat = this.mat;
 		double reflectivity = this.reflectivity;
-		double length = 1;
-		double width = 1;
 		
 		Transformation trafox1 = Transformation.IDENTITY.append(
 				Transformation.translate(1, 0, 0)).append(
 				Transformation.rotateY(-90));
-		Rectangle x1 = new Rectangle(trafox1, mat, reflectivity, length, width);
+		Rectangle x1 = new Rectangle(trafox1, mat, reflectivity);
 		Transformation trafoxm1 = Transformation.IDENTITY.append(
 				Transformation.translate(-1, 0, 0)).append(
 				Transformation.rotateY(90));
-		Rectangle xm1 = new Rectangle(trafoxm1, mat, reflectivity, length, width);
+		Rectangle xm1 = new Rectangle(trafoxm1, mat, reflectivity);
 		Transformation trafoy1 = Transformation.IDENTITY.append(
 				Transformation.translate(0, 1, 0)).append(
 				Transformation.rotateX(-90));
-		Rectangle y1  = new Rectangle(trafoy1, mat, reflectivity, length, width);
+		Rectangle y1  = new Rectangle(trafoy1, mat, reflectivity);
 		Transformation trafoym1 = Transformation.IDENTITY.append(
 				Transformation.translate(0, -1, 0)).append(
 				Transformation.rotateX(90));
-		Rectangle ym1 = new Rectangle(trafoym1, mat, reflectivity, length, width);
+		Rectangle ym1 = new Rectangle(trafoym1, mat, reflectivity);
 		Transformation trafoz1 = Transformation.IDENTITY.append(
 				Transformation.translate(0, 0, 1));
-		Rectangle z1  = new Rectangle(trafoz1, mat, reflectivity, length, width);
+		Rectangle z1  = new Rectangle(trafoz1, mat, reflectivity);
 		Transformation trafozm1 = Transformation.IDENTITY.append(
 				Transformation.translate(0, 0, -1)).append(
 				Transformation.rotateY(180));
-		Rectangle zm1 = new Rectangle(trafozm1, mat, reflectivity, length, width);
+		Rectangle zm1 = new Rectangle(trafozm1, mat, reflectivity);
 		
 		this.rects.add(x1);
 		this.rects.add(xm1);

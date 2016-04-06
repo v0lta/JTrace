@@ -1,7 +1,9 @@
 package material;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import math.Color;
 import math.Vector;
@@ -42,8 +44,6 @@ public class ColorMap {
 		
 		
 		this.colorRescale(scale);
-		
-		
 		//this.limitVals = limits;
 	}
 	public Color getColor(int indexX, int indexY){
@@ -77,6 +77,17 @@ public class ColorMap {
 		}
 		return retColor.toColor();
 	}
+	
+	public void shuffleColors() {
+		long seed = System.nanoTime();
+		Collections.shuffle(this.colors, new Random(seed));
+		Collections.shuffle(this.colors, new Random(seed));
+	}
+	
+	public List<Color> getColors() {
+		return this.colors;
+	}
+	
 	
 	/**
 	 * use parula colors from matlab.

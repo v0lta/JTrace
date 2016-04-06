@@ -16,8 +16,6 @@ import math.Transformation;
 import math.Vector;
 
 public class Rectangle extends Plane implements LightableShape {
-	public final double width;
-	public final double length;
 	public final double inverseArea;
 
 	/**
@@ -30,11 +28,9 @@ public class Rectangle extends Plane implements LightableShape {
 	 */
 	
 	public Rectangle(Transformation transformation, Material mat,
-			double reflectivity, double length, double width) {
+			double reflectivity) {
 		super(transformation, mat, reflectivity);
-		this.width = width;
-		this.length = length;
-		this.inverseArea = 1.0/(length*width);
+		this.inverseArea = 1.0/(2*2);
 	}
 	
     /**
@@ -66,8 +62,8 @@ public class Rectangle extends Plane implements LightableShape {
             } else {
                 Vector pointVec = ro.add(rd.scale(t));
                 
-                if (((Math.abs(pointVec.x) < this.length) && 
-                	 (Math.abs(pointVec.y) < this.width))) {
+                if (((Math.abs(pointVec.x) < 1.0) && 
+                	 (Math.abs(pointVec.y) < 1.0))) {
                 	Point hitPoint = this.transformation.transform( pointVec.toPoint() );
                     Normal hitNormal = this.transformation.transformInverseTranspose( this.n);
                     TextPoint txtPoint = new TextPoint(pointVec.x,pointVec.y); //the z coordinate of the unit plane is always zero.
@@ -105,8 +101,8 @@ public class Rectangle extends Plane implements LightableShape {
 	@Override
 	public Point getRandomPoint(Point hitPoint) {
 		Random r = new Random();
-		double randomX = -this.length/2.0 + this.length * r.nextDouble();
-		double randomY = -this.width/2.0  + this.width  * r.nextDouble();		
+		double randomX = -1.0/2.0 + 1.0 * r.nextDouble();
+		double randomY = -1.0/2.0  + 1.0  * r.nextDouble();		
 		Point p = new Point(randomX,randomY,0);
 		p = this.transformation.transform(p);
 		return p;
@@ -118,8 +114,8 @@ public class Rectangle extends Plane implements LightableShape {
 	public boolean inShape(Point hitPoint) {
 		hitPoint = this.transformation.transformInverse(hitPoint);
 		if (Math.abs(hitPoint.z) < Constants.epsilon){
-			if (((Math.abs(hitPoint.x) < this.length) && 
-					(Math.abs(hitPoint.y) < this.width))) {
+			if (((Math.abs(hitPoint.x) < 1.0) && 
+					(Math.abs(hitPoint.y) < 1.0))) {
 				return true;
 			} else {
 				return false;
