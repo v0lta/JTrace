@@ -1,7 +1,6 @@
 package light;
 
 import java.util.List;
-import java.util.Random;
 
 import shape.LightableShape;
 import shape.Shape;
@@ -19,12 +18,22 @@ public class AreaLight implements Shape  {
 	public final Material mat;
 	public final double intensity;
 	public final int sampleNo;
+	public final double beta;
+	
+	/**
+	 * Instantiate an area light of form shape.
+	 * @param shape the geometric shape of the new light.
+	 * @param intensity the brightness of the new light.
+	 * @param sampleNo the monte-carlo integration samples.
+	 * @param beta the allowed angle of incoming angles with the light normal.
+	 */
 
-	public AreaLight(LightableShape shape, double intensity, int sampleNo) {
+	public AreaLight(LightableShape shape, double intensity, int sampleNo, double beta) {
 		this.shape = shape;
 		this.mat = shape.getMaterial();
 		this.intensity = intensity;
 		this.sampleNo = sampleNo;
+		this.beta = (180 - beta) * (Math.PI/180);
 	}
 	
 	public double pdf(){
@@ -47,7 +56,7 @@ public class AreaLight implements Shape  {
 	/**
 	 * Get the lights color scaled by its intensity.
 	 */	
-	public Vector L(Point pPrime) {
+	public Vector L(Point pPrime) {		
 		TextPoint txtPoint = this.shape.getUV(pPrime);
 		Color color = this.mat.getColor(txtPoint);
 		return color.toVector().scale(intensity);
@@ -65,6 +74,11 @@ public class AreaLight implements Shape  {
 		
 		double G = (cosThetaI * cosThetaPrime)/lengthSquared;
 		
+		nPrime = this.getNormal(pPrime).toVector();
+		double betaTest = Math.acos(toLight.dot(nPrime));
+		if (betaTest < beta){
+			//G = 0;
+		}
 		if (G < 0){
 			G = 0;
 		}

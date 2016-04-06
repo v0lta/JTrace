@@ -1,6 +1,5 @@
 package light;
 
-import math.Color;
 import math.Point;
 import math.Vector;
 

@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import material.Material;
-import math.Color;
 import math.Intersection;
 import math.Normal;
 import math.Point;
 import math.Ray;
-import math.TextPoint;
 import math.Transformation;
 
 public class Cube implements Shape {

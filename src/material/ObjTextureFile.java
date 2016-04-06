@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import shape.ObjShape;
 import math.Color;
 import math.TextPoint;
 import math.Vector;

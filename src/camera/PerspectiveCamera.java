@@ -1,7 +1,5 @@
 package camera;
 
-import java.util.Random;
-
 import math.OrthonormalBasis;
 import math.Point;
 import math.Ray;

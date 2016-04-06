@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import material.Material;
-import math.Color;
 import math.Constants;
 import math.Intersection;
 import math.Normal;
@@ -205,8 +204,6 @@ public class Triangle implements Shape {
         hitNormal = this.transformation.transformInverseTranspose( hitNormVec.toNormal());
         
         hitTxt = at.scale(1 - beta - gamma).add(bt.scale(beta)).add(ct.scale(gamma));
-        Color hitClr = mat.getColor(hitTxt);
-        
         hits.add(new Intersection(hitPoint, hitTxt, hitNormal, this.mat,this.reflectivity));
         return hits;
 	}

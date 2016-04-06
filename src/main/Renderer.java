@@ -140,8 +140,8 @@ public class Renderer {
 		//final World world = new World(width, height, "dragon");
 		//final World world = new World(width, height, "buddha");
 		//final World world = new World(width, height, "tea");
-		//final World world = new World(width, height, "sun");
-		final World world = new World(width, height, "richter");
+		final World world = new World(width, height, "sun");
+		//final World world = new World(width, height, "richter");
 		//final World world = new World(width, height, "force");
 
 		/**********************************************************************

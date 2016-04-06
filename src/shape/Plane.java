@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import material.Material;
-import math.Color;
 import math.Constants;
 import math.Intersection;
 import math.Point;

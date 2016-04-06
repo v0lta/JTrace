@@ -6,7 +6,6 @@ import java.util.Random;
 
 import light.LightIntersection;
 import material.Material;
-import math.Color;
 import math.Constants;
 import math.Intersection;
 import math.Normal;

@@ -14,7 +14,6 @@ import math.TextPoint;
 import math.Transformation;
 import math.Vector;
 import math.Intersection;
-import math.Color;
 
 
 /**
