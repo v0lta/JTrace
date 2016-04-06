@@ -64,9 +64,9 @@ public class Plane implements Shape {
                 Point hitPoint = this.transformation.transform( pointVec.toPoint() );
                 Normal hitNormal = this.transformation.transformInverseTranspose( this.n);
                 TextPoint txtPoint = new TextPoint(pointVec.x,pointVec.y); //the z coordinate of the unit plane is always zero.
-                Color hitClr = mat.getColor(txtPoint);
+                Material hitMat = mat;
                 
-                hits.add(new Intersection( hitPoint, hitNormal, hitClr,reflectivity));
+                hits.add(new Intersection( hitPoint, txtPoint, hitNormal, hitMat,reflectivity));
                 return hits;
             }
         }

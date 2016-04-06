@@ -85,25 +85,19 @@ public class TriangleWithNrmlMap extends Triangle {
         }
         
         Point hitPoint;
-        Vector hitNormVec;
         Normal hitNormal;
         TextPoint hitTxt;
-        
-        Vector an = this.an.toVector();
-        Vector bn = this.bn.toVector();
-        Vector cn = this.cn.toVector();
         
         hitPoint = ro.add(rd.scale(t)); 
         hitPoint = this.transformation.transform( hitPoint );
         
         hitTxt = at.scale(1 - beta - gamma).add(bt.scale(beta)).add(ct.scale(gamma));
-        Color hitClr = mat.getColor(hitTxt);
         
         Color nrmlClr = nMapFile.getColor(hitTxt);
         hitNormal = new Normal(-1.0 + 2*(nrmlClr.r/255), -1.0 + 2*(nrmlClr.g/255), -1.0 + 2*(nrmlClr.b/255));
         hitNormal = this.transformation.transformInverseTranspose( hitNormal);
         
-        hits.add(new Intersection(hitPoint, hitNormal, hitClr,this.reflectivity));
+        hits.add(new Intersection(hitPoint, hitTxt, hitNormal, this.mat, this.reflectivity));
         return hits;
 	}
 	

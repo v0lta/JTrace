@@ -207,7 +207,7 @@ public class Triangle implements Shape {
         hitTxt = at.scale(1 - beta - gamma).add(bt.scale(beta)).add(ct.scale(gamma));
         Color hitClr = mat.getColor(hitTxt);
         
-        hits.add(new Intersection(hitPoint, hitNormal, hitClr,this.reflectivity));
+        hits.add(new Intersection(hitPoint, hitTxt, hitNormal, this.mat,this.reflectivity));
         return hits;
 	}
 

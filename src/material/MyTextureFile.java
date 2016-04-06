@@ -16,16 +16,19 @@ public class MyTextureFile implements Material {
 	private int height;
 	private int width;
 	public final String path;
+	public final Specular spec;
 	
 	/**
 	 * Create a texture file, to make an image file available as texture. 
 	 * This implementation follows the procedure outlined in the ray
 	 * Tracing from the ground up book.
 	 * @param path the path to the image.
+	 * @param specular part of the desired brdf.
 	 */
-	public MyTextureFile(String path){
+	public MyTextureFile(Specular spec, String path){
 		this.path = path;
 		this.read();
+		this.spec = spec;
 	}
 	
 	
@@ -64,6 +67,11 @@ public class MyTextureFile implements Material {
         fileData.getPixel(indu,indv,pixel);
 		return new Color(pixel[0],pixel[1],pixel[2]);
         //return new Color(indu,indv,0);
+	}
+	
+	@Override
+	public double getSpecular(Vector N, Vector L, Vector V) {
+		return this.spec.getSpecular(N, L, V);
 	}
 }
 	

@@ -81,7 +81,7 @@ public class Cube implements Shape {
 	private Intersection TransformIntersection(Intersection inter) {
         Point hitPoint = this.transformation.transform( inter.point );
         Normal hitNormal = this.transformation.transformInverseTranspose( inter.normal);
-        return new Intersection( hitPoint, hitNormal, inter.color, inter.reflectivity);
+        return new Intersection( hitPoint, inter.txtPnt, hitNormal, inter.mat, inter.reflectivity);
 	}
 
 }

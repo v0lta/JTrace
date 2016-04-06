@@ -1,5 +1,6 @@
 package shape;
 
+import light.LightIntersection;
 import material.Material;
 import math.Normal;
 import math.Point;
@@ -13,7 +14,7 @@ public interface LightableShape extends Shape {
 	public Normal getNormal(Point pPrime);
 	public Material getMaterial();
 	public Transformation getTransformation();
-	public Point getRandomPoint(Point hitPoint);
+	public LightIntersection getRandomPoint(Point hitPoint);
 	public boolean inShape(Point hitPoint);
 	public TextPoint getUV(Point pPrime);
 }

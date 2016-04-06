@@ -66,8 +66,8 @@ public class AreaLight implements Shape  {
 		return (cosThetaI * cosThetaPrime)/lengthSquared;
 	}
 	
-	public Point getpPrime(Point hitPoint){
-		Point pPrime = this.shape.getRandomPoint(hitPoint);
+	public LightIntersection getpPrime(Point hitPoint){
+		LightIntersection pPrime = this.shape.getRandomPoint(hitPoint);
 		return pPrime;
 	}
 

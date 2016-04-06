@@ -18,18 +18,21 @@ public class ObjTextureFile implements Material {
 	private int width;
 	public final String path;
 	public final double size;
+	public final Specular spec;
 	
 	
 	/**
 	 * Create a texture file, to make an image file available as texture. 
 	 * @param path the path to the image.
 	 * @param size the size with with the image will contain in the scene.
+	 * @param spec specular part of the brdf.
 	 */
 	
-	public ObjTextureFile(String path, double size){
+	public ObjTextureFile(Specular spec, String path, double size){
 		this.path = path;
 		this.read();
 		this.size = size;
+		this.spec = spec;
 	}
 	
 	
@@ -87,13 +90,19 @@ public class ObjTextureFile implements Material {
 	 */
 	public static void main(String[] arguments){
 		//ObjTextureFile test = new ObjTextureFile("./obj/apple/apple_texture.jpg",1.0);
-		ObjTextureFile test = new ObjTextureFile("./obj/dragonLowPoly/dragonNormalMap4k.jpg",1.0);
+		Specular noSpec = new NoSpec();
+		ObjTextureFile test = new ObjTextureFile(noSpec,"./obj/dragonLowPoly/dragonNormalMap4k.jpg",1.0);
 		test.read();
 		TextPoint testPnt = new TextPoint(0.5,0.5);
 		Color testColor = test.getColor(testPnt);
 		System.out.println(testColor.r);
 		System.out.println(testColor.g);
 		System.out.println(testColor.b);
+	}
+	
+	@Override
+	public double getSpecular(Vector N, Vector L, Vector V) {
+		return this.spec.getSpecular(N, L, V);
 	}
 	
 

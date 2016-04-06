@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import light.LightIntersection;
 import material.Material;
 import math.Constants;
 import math.Normal;
@@ -20,7 +21,7 @@ import math.Color;
  * Represents a three-dimensional {@link Sphere} with radius one and centered at
  * the origin, which is transformed by the given {@link Transformation}.
  * 
- * @author Niels Billen
+ * @author Niels Billen and Moritz Wolter
  * @version 0.2
  */
 public class Sphere implements LightableShape {
@@ -95,23 +96,18 @@ public class Sphere implements LightableShape {
 			Vector hitPoint;
 			Point hitPntT;
 			Normal hitNmlT;
-			Color hitColor;
 			//the hit point with the smaller t is closer to the camera.
 			if (t0 < t1) {
 				hitPoint = o.add(transformed.direction.scale(t0));
 				hitPntT = this.transformation.transform(hitPoint.toPoint());
 				hitNmlT = this.transformation.transformInverseTranspose(hitPoint.toNormal());
-				hitColor = this.material.getColor(getUV(hitPoint.toPoint()));
-				hits.add(new Intersection(hitPntT,hitNmlT,hitColor,this.reflectivity));
+				hits.add(new Intersection(hitPntT,getUV(hitPoint.toPoint()),hitNmlT,this.material,this.reflectivity));
 				return hits;
-				
-				
 			} else {
 				hitPoint = o.add(transformed.direction.scale(t1));
 				hitPntT = this.transformation.transform(hitPoint.toPoint());
 				hitNmlT = this.transformation.transformInverseTranspose(hitPoint.toNormal());
-				hitColor = this.material.getColor(getUV(hitPoint.toPoint()));
-				hits.add(new Intersection(hitPntT,hitNmlT,hitColor,this.reflectivity));
+				hits.add(new Intersection(hitPntT,getUV(hitPoint.toPoint()),hitNmlT,this.material,this.reflectivity));
 				return hits;
 			}
 		} else {
@@ -134,16 +130,16 @@ public class Sphere implements LightableShape {
 		TextPoint txtPoint = new TextPoint(u,v);
 		
 		if (u > 1) {
-			System.out.println("error u index to large.");
+			System.err.println("error u index to large.");
 		}
 		if (v > 1) {
-			System.out.println("error v index to large.");
+			System.err.println("error v index to large.");
 		}
 		if (u < 0) {
-			System.out.println("error u index to small.");
+			System.err.println("error u index to small.");
 		}
 		if (v < 0) {
-			System.out.println("error v index to small.");
+			System.err.println("error v index to small.");
 		}
 		
 		return txtPoint;
@@ -177,7 +173,7 @@ public class Sphere implements LightableShape {
 	}
 
 	@Override
-	public Point getRandomPoint(Point hP) {
+	public LightIntersection getRandomPoint(Point hP) {
 		Vector vhP = hP.toVector();
 		vhP = this.transformation.transform(new Vector(0,0,0)).subtract(vhP);
 		hP = this.transformation.transformInverse(vhP.toPoint());
@@ -197,8 +193,10 @@ public class Sphere implements LightableShape {
 		double randomZ = Math.cos(theta);
 		
 		Point pPrime = new Point(randomX,randomY,randomZ);
+		TextPoint txtPnt = getUV(pPrime);
+		
 		pPrime = this.transformation.transform(pPrime);
-		return pPrime;
+		return new LightIntersection(txtPnt, pPrime);
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import light.LightIntersection;
 import material.Material;
 import math.Color;
 import math.Constants;
@@ -67,9 +68,9 @@ public class Rectangle extends Plane implements LightableShape {
                 	Point hitPoint = this.transformation.transform( pointVec.toPoint() );
                     Normal hitNormal = this.transformation.transformInverseTranspose( this.n);
                     TextPoint txtPoint = new TextPoint(pointVec.x,pointVec.y); //the z coordinate of the unit plane is always zero.
-                    Color hitClr = mat.getColor(txtPoint);
+                    Material hitMat = mat;
                     
-                    hits.add(new Intersection( hitPoint, hitNormal, hitClr,reflectivity));
+                    hits.add(new Intersection( hitPoint, txtPoint, hitNormal, hitMat,reflectivity));
                     return hits;
                 } else {
                 	return hits;
@@ -99,13 +100,14 @@ public class Rectangle extends Plane implements LightableShape {
 	}
 
 	@Override
-	public Point getRandomPoint(Point hitPoint) {
+	public LightIntersection getRandomPoint(Point hitPoint) {
 		Random r = new Random();
 		double randomX = -1.0/2.0 + 1.0 * r.nextDouble();
 		double randomY = -1.0/2.0  + 1.0  * r.nextDouble();		
 		Point p = new Point(randomX,randomY,0);
+		TextPoint txtPoint = new TextPoint(p.x,p.y);
 		p = this.transformation.transform(p);
-		return p;
+		return new LightIntersection(txtPoint,p);
 	}
 	
 	/**

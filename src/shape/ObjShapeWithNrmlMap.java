@@ -10,7 +10,9 @@ import shape.ObjShape.Extremes;
 import acceleration.ParallelSahBox;
 import acceleration.SahBox;
 import material.Material;
+import material.NoSpec;
 import material.ObjTextureFile;
+import material.Specular;
 import math.Constants;
 import math.Normal;
 import math.Point;
@@ -24,7 +26,8 @@ public class ObjShapeWithNrmlMap extends ObjShape {
 	public ObjShapeWithNrmlMap(String path,String nMapPath, Transformation transformation,
 			Material mat, double reflectivity, int treeDepth, Camera camera) {
 		super(path, nMapPath, transformation, mat, reflectivity, treeDepth, camera);
-		this.nMapFile = new ObjTextureFile(nMapPath, 1.0);
+		Specular noSpec = new NoSpec();
+		this.nMapFile = new ObjTextureFile(noSpec,nMapPath, 1.0);
 		
 		long t = System.nanoTime();
 		try {

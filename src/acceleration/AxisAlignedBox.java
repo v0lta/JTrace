@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import camera.Camera;
+import material.Monochrome;
+import material.NoSpec;
 import math.Color;
 import math.Constants;
 import math.Intersection;
 import math.Normal;
 import math.Point;
 import math.Ray;
+import math.TextPoint;
 import math.Transformation;
 import math.Vector;
 import shape.Shape;
@@ -299,8 +302,8 @@ public class AxisAlignedBox implements Shape {
 			normal = this.transformation.transformInverseTranspose(normal);
 			normal = normal.toVector().normalize().toNormal();
 
-			intList.add(new Intersection(hitPoint.toPoint(), normal, new Color(
-					100, 10, 10), 10));
+			intList.add(new Intersection(hitPoint.toPoint(),new TextPoint(0,0), normal,
+					    new Monochrome(new NoSpec(),new Color(100, 10, 10)), 10));
 		}
 
 		// if (intersectBool(ray)){

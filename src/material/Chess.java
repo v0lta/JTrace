@@ -8,14 +8,17 @@ public class Chess implements Material{
 	public final Color color1;
 	public final Color color2;
 	public final double s;
+	public final Specular spec;
 	
 	/**
 	 * Creates material, which looks like a chess board.
+	 * @param spec the specular part of the brdf.
 	 * @param color1 first rectangle color
 	 * @param color2 second rectangle color
 	 * @param s 	the rectangle size.
 	 */	
-	public Chess(Color color1, Color color2, double s) {
+	public Chess(Specular spec, Color color1, Color color2, double s) {
+		this.spec = spec;
 		this.color1 = color1;
 		this.color2 = color2;
 		this.s = s;
@@ -48,6 +51,11 @@ public class Chess implements Material{
 		} else {
 			return this.color2;
 		}
+	}
+
+	@Override
+	public double getSpecular(Vector N, Vector L, Vector V) {
+		return this.spec.getSpecular(N, L, V);
 	}
 
 }

@@ -171,5 +171,10 @@ public class Julia implements Material {
 		}
 		
 	}
+	
+	public double getSpecular(Vector N, Vector L, Vector V){
+		return 1.0;
+	}
+	
 
 }

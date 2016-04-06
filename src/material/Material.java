@@ -21,4 +21,5 @@ public interface Material {
 	 */
 	public Color getColor(TextPoint txtPnt);	
 	public Color getColor(Vector hitPoint );
+	public double getSpecular(Vector N, Vector L, Vector V);
 }

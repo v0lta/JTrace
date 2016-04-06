@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import light.LightIntersection;
 import material.Material;
 import math.Color;
 import math.Constants;
@@ -61,8 +62,8 @@ public class Circle extends Plane implements LightableShape {
                 	Point hitPoint = this.transformation.transform( pointVec.toPoint() );
                     Normal hitNormal = this.transformation.transformInverseTranspose( this.n);
                     TextPoint txtPoint = new TextPoint(pointVec.x,pointVec.y); //the z coordinate of the unit plane is always zero.
-                    Color hitClr = mat.getColor(txtPoint);
-                    hits.add(new Intersection( hitPoint, hitNormal, hitClr,reflectivity));
+                    Material hitMat = this.mat;
+                    hits.add(new Intersection( hitPoint, txtPoint, hitNormal, hitMat, reflectivity));
                     return hits;
                 } else {
                 	return hits;
@@ -113,7 +114,7 @@ public class Circle extends Plane implements LightableShape {
 	 * surface.
 	 */
 	@Override
-	public Point getRandomPoint(Point hitPoint) {
+	public LightIntersection getRandomPoint(Point hitPoint) {
 		Random r = new Random();
 		double rndR = this.radius * r.nextDouble();
 		double rndAngle = (2*Math.PI)  * r.nextDouble();
@@ -121,8 +122,9 @@ public class Circle extends Plane implements LightableShape {
 		double randomX = Math.cos(rndAngle)*rndR;
 		double randomY = Math.sin(rndAngle)*rndR;
 		Point p = new Point(randomX,randomY,0.0);
+		TextPoint txtPoint = new TextPoint(p.x,p.y);
 		p = this.transformation.transform(p);
-		return p;
+		return new LightIntersection(txtPoint,p);
 	}
 	
 	@Override

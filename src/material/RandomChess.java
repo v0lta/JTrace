@@ -1,7 +1,5 @@
 package material;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import math.Color;
@@ -12,20 +10,21 @@ public class RandomChess implements Material {
 	public final ColorMap map;
 	public final int colorNo;
 	public final double s;
+	public final Specular spec;
 	
-	public RandomChess(ColorMap colors, double s, int colorNo) {
+	public RandomChess(Specular spec, ColorMap colors, double s, int colorNo) {
 		this.map = colors;
 		this.colorNo = colorNo;
 		this.s = s;
 		this.map.shuffleColors();
+		this.spec = spec;
 	}
 
 	@Override
 	public Color getColor(TextPoint texPoint) {
 		int tmpU = (int) Math.round((0.5 + texPoint.u/2)*10); 
 		int tmpV = (int) Math.round((0.5 + texPoint.v/2)*10);
-		int seed = tmpU + tmpV;
-		
+				
 		Random r1 = new Random(tmpU);
 		Random r2 = new Random(tmpV);
 		//int rndInt = r1.nextInt(colorNo)*r2.nextInt(colorNo);
@@ -44,10 +43,10 @@ public class RandomChess implements Material {
 	public Color getColor(Vector texPoint) {
 		int tmpX = (int) Math.round( texPoint.x/s); 
 		int tmpY = (int) Math.round( texPoint.y/s);
-		int tmpZ = (int) Math.round( texPoint.y/s);
+		//int tmpZ = (int) Math.round( texPoint.y/s);
 		int index1 = tmpX%colorNo;
 		int index2 = tmpY%colorNo;
-		int index3 = tmpZ%colorNo;
+		//int index3 = tmpZ%colorNo;
 		
 		int tmp = (  (int) Math.round( texPoint.x/s) 
 			       + (int) Math.round( texPoint.y/s)
@@ -60,6 +59,11 @@ public class RandomChess implements Material {
 		} else {
 			return this.map.getColors().get(index2);
 		}
+	}
+	
+	@Override
+	public double getSpecular(Vector N, Vector L, Vector V) {
+		return this.spec.getSpecular(N, L, V);
 	}
 
 
