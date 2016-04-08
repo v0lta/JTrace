@@ -24,8 +24,9 @@ public class ObjShapeWithNrmlMap extends ObjShape {
 	ObjTextureFile nMapFile;
 	
 	public ObjShapeWithNrmlMap(String path,String nMapPath, Transformation transformation,
-			Material mat, double reflectivity, int treeDepth, Camera camera) {
-		super(path, nMapPath, transformation, mat, reflectivity, treeDepth, camera);
+			Material mat, double reflectivity, int treeDepth, Camera camera, double treeEps, double objInterEps) {
+		super(path, nMapPath, transformation, mat, reflectivity, treeDepth,
+			camera, treeEps, objInterEps);
 		Specular noSpec = new NoSpec();
 		this.nMapFile = new ObjTextureFile(noSpec,nMapPath, 1.0);
 		

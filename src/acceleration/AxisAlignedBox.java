@@ -31,6 +31,8 @@ public class AxisAlignedBox implements Shape {
 	public final Transformation transformation;
 	public List<Triangle> trianglesInBox = new ArrayList<Triangle>();
 	protected Camera cam;
+	public final double treeEpsilon;
+	public final double objIntersEpsilon;
 	
 	/**
 	 * Create a new axis aligned bounding box.
@@ -38,7 +40,7 @@ public class AxisAlignedBox implements Shape {
 	 * @param p1 the upper point.
 	 * @param transformation, is applied to all triangles in the box.
 	 */
-	public AxisAlignedBox(Point p0, Point p1, Transformation transformation, Camera cam) {
+	public AxisAlignedBox(Point p0, Point p1, Transformation transformation, Camera cam, double treeEps, double objEps) {
 
 		if ((p0.x > p1.x) || (p0.y > p1.y) || (p0.z > p1.z)) {
 			//System.err.println("Illegal box.");
@@ -49,6 +51,8 @@ public class AxisAlignedBox implements Shape {
 		this.p1 = p1;
 		this.transformation = transformation;
 		this.cam = cam;
+		this.treeEpsilon = treeEps;
+		this.objIntersEpsilon = objEps;
 	}
 	
 	public void split(int depth) {
@@ -409,7 +413,7 @@ public class AxisAlignedBox implements Shape {
 	}
 	
 	public boolean triInBox(Triangle triangle,Point p0,Point p1 ) {
-		double eps = Constants.treeEpsilon;
+		double eps = this.treeEpsilon;
 		Point centroid = triangle.getCentroid();
 
 		if  (((centroid.x + eps > p0.x) && (centroid.y + eps > p0.y) && (centroid.z + eps > p0.z))
@@ -426,7 +430,7 @@ public class AxisAlignedBox implements Shape {
 	 * @param triangle 
 	 */
 	public void addIfIn(Triangle triangle){
-		double eps = Constants.treeEpsilon;
+		double eps = this.treeEpsilon;
 		Point centroid = triangle.getCentroid();
 
 		if  (((centroid.x + eps > p0.x) && (centroid.y + eps > p0.y) && (centroid.z + eps > p0.z))

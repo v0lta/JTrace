@@ -121,8 +121,9 @@ public class Circle extends Plane implements LightableShape {
 		double randomY = Math.sin(rndAngle)*rndR;
 		Point p = new Point(randomX,randomY,0.0);
 		TextPoint txtPoint = new TextPoint(p.x,p.y);
-		p = this.transformation.transform(p);
-		return new LightIntersection(txtPoint,p);
+		Normal n = this.transformation.transformInverseTranspose(this.n);
+		p = this.transformation.transform(p);		
+		return new LightIntersection(txtPoint,p,n);
 	}
 	
 	@Override

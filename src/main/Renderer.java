@@ -45,7 +45,7 @@ public class Renderer {
 	 *            command line arguments.
 	 */
 	public static void main(String[] arguments) {
-		int width = 800;
+		int width = 600;
 		int height = 600;
 		double sensitivity = 1.0;
 		double gamma = 1.5;
@@ -132,6 +132,7 @@ public class Renderer {
 		 * Initialize the scene
 		 *********************************************************************/
 		//final World world = new World(width, height, "initialWorld");
+		final World world = new World(width, height, "sphereWorld");
 		//final World world = new World(width, height, "planeAndSphere");
 		//final World world = new World(width, height, "Julia");
 		//final World world = new World(width, height, "apple");
@@ -140,9 +141,10 @@ public class Renderer {
 		//final World world = new World(width, height, "dragon");
 		//final World world = new World(width, height, "buddha");
 		//final World world = new World(width, height, "tea");
-		final World world = new World(width, height, "sun");
+		//final World world = new World(width, height, "sun");
 		//final World world = new World(width, height, "richter");
 		//final World world = new World(width, height, "force");
+		
 
 		/**********************************************************************
 		 * Multi-threaded rendering of the scene
@@ -169,7 +171,7 @@ public class Renderer {
 						for (int x = tile.xStart; x < tile.xEnd; ++x) {
 							// create a ray 
 							//Ray ray = world.camera.generateRay(new Sample(x,y, 0.5));
-							Sample sample = new Sample(x, y, 0.5, Constants.spp, world.camera);
+							Sample sample = new Sample(x, y, 0.5, world.spp, world.camera);
 							List<Ray> rpp = sample.getRays();
 
 							for (Ray ray: rpp) {
@@ -231,6 +233,7 @@ public class Renderer {
 											Vector n  = closestInt.normal.toVector();
 											Vector toLight = pl.origin.toVector().subtract(closestInt.point.toVector()); 
 											double dot = (n.dot(l));						                
+											//if (true){
 											if (dot > 0){
 												if (pl.shadows) {
 													//launch a shadow ray.					                    		
@@ -256,7 +259,6 @@ public class Renderer {
 														if (inShadow == false ){
 															double[] lghtRes = computeShading(closestInt,toLight,pl, dot, world.camera);
 															buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);	
-
 														}
 													}
 												} else {
@@ -282,33 +284,40 @@ public class Renderer {
 												for (int i = 0; i < al.sampleNo; i++) {
 													//create random number generator with seed for reproducibility.
 													LightIntersection lightInt = al.getpPrime(p.toPoint());
-													Ray shadowRay = new Ray(p.toPoint(), lightInt.pPrime.toVector());
-													shadowInters = testforIntsections(world.shapes,shadowRay); 
-													if (shadowInters.isEmpty()) {
-														//its not in the shadow.
-														//compute distance to light source
-														lghtVct = lghtVct.add(computeAlShading(closestInt,al,p,lightInt, world.camera ));
-													} else {
-														boolean inShadow = false; 
-														for (Intersection shadowInt : shadowInters) {
-															Vector shadowRayHitPnt = shadowInt.point.toVector();
-															double distanceToLight = p.subtract(lightInt.pPrime.toVector()).lengthSquared();
-															double distanceToHit = p.subtract(shadowRayHitPnt).lengthSquared();
-															if (distanceToHit < distanceToLight) {
-																if (al.shape.inShape(shadowInt.point) == false) {
-																	inShadow = true;
-																} 
-																//buffer.getPixel(x, y).add(0, 10, 0,1.0);
+													
+													Vector NPrime = lightInt.nPrime.toVector();
+													Vector L = p.subtract(lightInt.pPrime.toVector()).normalize();
+									
+													if (NPrime.dot(L) > 0){
+														Ray shadowRay = new Ray(p.toPoint(), lightInt.pPrime.toVector());
+														shadowInters = testforIntsections(world.shapes,shadowRay); 
+														if (shadowInters.isEmpty()) {
+															//its not in the shadow.
+															//compute distance to light source
+															lghtVct = lghtVct.add(computeAlShading(closestInt,al,p,lightInt, world.camera ));
+														} else {
+															boolean inShadow = false; 
+															for (Intersection shadowInt : shadowInters) {
+																Vector shadowRayHitPnt = shadowInt.point.toVector();
+																double distanceToLight = p.subtract(lightInt.pPrime.toVector()).lengthSquared();
+																double distanceToHit = p.subtract(shadowRayHitPnt).lengthSquared();
+																if (distanceToHit < distanceToLight) {
+																	if (al.shape.inShape(shadowInt.point) == false) {
+																		inShadow = true;
+																	} 
+																	//buffer.getPixel(x, y).add(0, 10, 0,1.0);
+																}
+															}
+															if (inShadow == false ){
+																lghtVct = lghtVct.add(computeAlShading(closestInt,al,p,lightInt, world.camera ));
 															}
 														}
-														if (inShadow == false ){
-															lghtVct = lghtVct.add(computeAlShading(closestInt,al,p,lightInt, world.camera ));
-														}
-													}
-												}
-												Color lghtClr = lghtVct.scale(1.0/al.sampleNo).toColor();
-												buffer.getPixel(x, y).add(lghtClr.r, lghtClr.g, lghtClr.b,1.0);
-											} 
+													
+													Color lghtClr = lghtVct.scale(1.0/al.sampleNo).toColor();
+													buffer.getPixel(x, y).add(lghtClr.r, lghtClr.g, lghtClr.b,1.0);
+													} 
+												} 
+											}
 										}
 									} 
 
@@ -397,7 +406,7 @@ public class Renderer {
 		Color hitClr = inter.mat.getColor(inter.txtPnt);
 		Vector Cs = hitClr.toVector();
 		Vector intermediateResult = Cs.elPrd(La).scale(Rs).scale(G).scale(al.shape.getInverseArea());
-		
+
 		//specular
 		Vector N = inter.normal.toVector();
 		Vector L = pPrime.subtract(p).normalize();

@@ -16,8 +16,8 @@ public class MiddleSplitBox extends AxisAlignedBox {
 	public MiddleSplitBox left = null;
 	public MiddleSplitBox right = null;
 
-	public MiddleSplitBox(Point p0, Point p1, Transformation transformation, Camera cam) {
-		super(p0, p1, transformation, cam);
+	public MiddleSplitBox(Point p0, Point p1, Transformation transformation, Camera cam, double treeEps, double oEps) {
+		super(p0, p1, transformation, cam, treeEps, oEps);
 
 	}
 
@@ -118,11 +118,11 @@ public class MiddleSplitBox extends AxisAlignedBox {
 
 				}
 				this.left = new MiddleSplitBox(this.p0, pLeft,
-						this.transformation, this.cam);
+						this.transformation, this.cam, this.treeEpsilon, this.objIntersEpsilon);
 				this.left.trianglesInBox = leftList;
 
 				this.right = new MiddleSplitBox(pRight, this.p1,
-						this.transformation, this.cam);
+						this.transformation, this.cam, this.treeEpsilon, this.objIntersEpsilon);
 				this.right.trianglesInBox = rightList;
 				this.left.split(depth);
 				this.right.split(depth);

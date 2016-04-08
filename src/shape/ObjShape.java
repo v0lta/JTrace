@@ -32,6 +32,9 @@ public class ObjShape implements Shape {
 	protected int treeDepth;
 	protected Camera cam;
 	
+	public final double treeEpsilon; //triangle inclusion noise prevention. dragon  0.00001;
+	public final double objIntersEpsilon; //0.1
+	
 	/**
 	 * Create a triangle mesh from a wavefront (.obj) file.
 	 * @param path string with path to the .obj file.
@@ -43,7 +46,8 @@ public class ObjShape implements Shape {
 	 * @param camera object needed for camera position.
 	 */	
 	public ObjShape(String path, Transformation transformation, Material mat,
-					double reflectivity, int treeDepth, Camera camera){
+					double reflectivity, int treeDepth, Camera camera,
+					double treeEps, double objInterEps){
 		this.path = path;
 		this.transformation = transformation;
 		this.reflectivity = reflectivity;
@@ -51,6 +55,8 @@ public class ObjShape implements Shape {
 		this.triangleList = new ArrayList<Triangle>();
 		this.treeDepth = treeDepth;
 		this.cam = camera;
+		this.treeEpsilon = treeEps;
+		this.objIntersEpsilon = objInterEps;
 		
 		long t = System.nanoTime();
 		try {
@@ -69,7 +75,7 @@ public class ObjShape implements Shape {
 	 * Second constructor for use in children where read() is not executed,
 	 */
 	protected ObjShape(String path, String nMapPath, Transformation transformation, Material mat,
-			double reflectivity, int treeDepth, Camera camera){
+			double reflectivity, int treeDepth, Camera camera, double treeEps, double objInterEps){
 		this.path = path;
 		this.transformation = transformation;
 		this.reflectivity = reflectivity;
@@ -77,6 +83,8 @@ public class ObjShape implements Shape {
 		this.triangleList = new ArrayList<Triangle>();
 		this.treeDepth = treeDepth;
 		this.cam = camera;
+		this.treeEpsilon = treeEps;
+		this.objIntersEpsilon = objInterEps;
 	}
 	
 	@Override
@@ -289,21 +297,21 @@ public class ObjShape implements Shape {
 		//this.aab = new AxisAlignedBox(new Point(minmax.xMin - Constants.treeEpsilon,
 		//this.aab = new SortSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
 		//this.aab = new MiddleSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
-		this.aab = new SahBox(new Point(minmax.xMin - Constants.treeEpsilon,
-												minmax.yMin - Constants.treeEpsilon,
-												minmax.zMin - Constants.treeEpsilon),
-									  new Point(minmax.xMax + Constants.treeEpsilon,
-											    minmax.yMax + Constants.treeEpsilon,
-											    minmax.zMax + Constants.treeEpsilon),
-									  this.transformation, this.cam);
+		this.aab = new SahBox(new Point(minmax.xMin - this.treeEpsilon,
+												minmax.yMin - this.treeEpsilon,
+												minmax.zMin - this.treeEpsilon),
+									  new Point(minmax.xMax + this.treeEpsilon,
+											    minmax.yMax + this.treeEpsilon,
+											    minmax.zMax + this.treeEpsilon),
+									  this.transformation, this.cam, treeEpsilon, objIntersEpsilon);
 		} else {
-		this.aab = new ParallelSahBox(new Point(minmax.xMin - Constants.treeEpsilon,
-				minmax.yMin - Constants.treeEpsilon,
-				minmax.zMin - Constants.treeEpsilon),
-	    new Point(minmax.xMax + Constants.treeEpsilon,
-			    minmax.yMax + Constants.treeEpsilon,
-			    minmax.zMax + Constants.treeEpsilon),
-	    this.transformation, this.cam, this.treeDepth, this.treeDepth, null);
+		this.aab = new ParallelSahBox(new Point(minmax.xMin - this.treeEpsilon,
+				minmax.yMin - this.treeEpsilon,
+				minmax.zMin - this.treeEpsilon),
+	    new Point(minmax.xMax + this.treeEpsilon,
+			    minmax.yMax + this.treeEpsilon,
+			    minmax.zMax + this.treeEpsilon),
+	    this.transformation, this.cam, this.treeDepth, this.treeDepth, null, treeEpsilon, objIntersEpsilon);
 		}
 		
 		aab.trianglesInBox.addAll(triangleList);
@@ -349,7 +357,7 @@ public class ObjShape implements Shape {
 		Transformation testTrans = Transformation.createIdentity();
 		Material mat = null;
 		@SuppressWarnings("unused")
-		ObjShape testObj = new ObjShape("./obj/bunny.obj",testTrans,mat,1.0, 1, cam);
+		ObjShape testObj = new ObjShape("./obj/bunny.obj",testTrans,mat,1.0, 1, cam, 0.01, 0.01);
 		System.out.println("done.");
 	}
 	 

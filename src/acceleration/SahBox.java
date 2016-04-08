@@ -16,8 +16,8 @@ public class SahBox extends AxisAlignedBox  {
 	public SahBox left = null;
 	public SahBox right = null;
 
-	public SahBox(Point p0, Point p1, Transformation transformation, Camera cam) {
-		super(p0, p1, transformation, cam);
+	public SahBox(Point p0, Point p1, Transformation transformation, Camera cam, double treeEps, double objEps) {
+		super(p0, p1, transformation, cam, treeEps, objEps);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -47,7 +47,8 @@ public class SahBox extends AxisAlignedBox  {
 						
 						Point pSt = new Point(xSrt, this.p0.y, this.p0.z);
 						Point pEd = new Point(xEnd, this.p1.y, this.p1.z);
-						SahBox xBox = new SahBox(pSt,pEd,this.transformation,this.cam); 
+						SahBox xBox = new SahBox(pSt,pEd,this.transformation,this.cam,
+											this.treeEpsilon, this.objIntersEpsilon); 
 
 						for (Triangle triangle : trianglesInBox) {
 							xBox.addIfIn(triangle);
@@ -68,7 +69,8 @@ public class SahBox extends AxisAlignedBox  {
 						Point pSt = new Point(this.p0.x, ySrt, this.p0.z);
 						Point pEd = new Point(this.p1.x, yEnd, this.p1.z);
 						
-						SahBox yBox = new SahBox(pSt,pEd,this.transformation,this.cam); 
+						SahBox yBox = new SahBox(pSt,pEd,this.transformation,this.cam,
+											this.treeEpsilon, this.objIntersEpsilon); 
 
 						for (Triangle triangle : trianglesInBox) {
 							yBox.addIfIn(triangle);
@@ -87,7 +89,8 @@ public class SahBox extends AxisAlignedBox  {
 						
 						Point pSt = new Point(this.p0.x, this.p0.y, zSrt);
 						Point pEd = new Point(this.p1.x, this.p1.y, zEnd);
-						SahBox zBox= new SahBox(pSt,pEd,this.transformation,this.cam); 
+						SahBox zBox= new SahBox(pSt,pEd,this.transformation,this.cam,
+								this.treeEpsilon, this.objIntersEpsilon); 
 
 						for (Triangle triangle : trianglesInBox) {
 							zBox.addIfIn(triangle);
@@ -109,8 +112,10 @@ public class SahBox extends AxisAlignedBox  {
 				
 				for (int i = 1; i < (cuts+1); i++){
 					//create large boxes. Dimensions will change according to assigned triangles.
-					SahBox lftBox = new SahBox(this.p0,this.p1,this.transformation,this.cam);
-					SahBox rgtBox = new SahBox(this.p0,this.p1,this.transformation,this.cam);
+					SahBox lftBox = new SahBox(this.p0,this.p1,this.transformation,this.cam,
+							this.treeEpsilon, this.objIntersEpsilon);
+					SahBox rgtBox = new SahBox(this.p0,this.p1,this.transformation,this.cam, 
+							this.treeEpsilon, this.objIntersEpsilon);
 					for(AxisAlignedBox lftPartBox : boxes.subList(0, i)) {
 						lftBox.trianglesInBox.addAll(lftPartBox.trianglesInBox);
 					}
@@ -180,7 +185,8 @@ public class SahBox extends AxisAlignedBox  {
 				adjP0 = new Point(this.p0.x, this.p0.y, minZ);
 				adjP1 = new Point(this.p1.x, this.p1.y, maxZ);
 			}
-			SahBox fixedBox = new SahBox(adjP0,adjP1,this.transformation,this.cam);
+			SahBox fixedBox = new SahBox(adjP0,adjP1,this.transformation,this.cam, 
+					this.treeEpsilon, this.objIntersEpsilon);
 			fixedBox.trianglesInBox.addAll(this.trianglesInBox);
 			return fixedBox;
 		} else {
@@ -238,7 +244,7 @@ public class SahBox extends AxisAlignedBox  {
 			double leftDist = camPos.subtract(leftCenter.toVector()).lengthSquared();
 			double rightDist = camPos.subtract(rightCenter.toVector()).lengthSquared();
 			
-			if (Math.abs(leftDist - rightDist) > Constants.objIntersEpsilon) {
+			if (Math.abs(leftDist - rightDist) > this.objIntersEpsilon) {
 				if (leftDist < rightDist){
 					if (this.left.intersectBool(ray)) {
 						hits.addAll(left.intersect(ray));

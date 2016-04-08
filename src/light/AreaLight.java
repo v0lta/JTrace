@@ -71,13 +71,12 @@ public class AreaLight implements Shape  {
 		Vector nPrime = this.getNormal(pPrime).toVector();
 		double cosThetaI = np.dot(toLight);
 		double cosThetaPrime = nPrime.dot(toLight.scale(-1));
-		
 		double G = (cosThetaI * cosThetaPrime)/lengthSquared;
 		
 		nPrime = this.getNormal(pPrime).toVector();
 		double betaTest = Math.acos(toLight.dot(nPrime));
 		if (betaTest < beta){
-			//G = 0;
+			G = 0;
 		}
 		if (G < 0){
 			G = 0;

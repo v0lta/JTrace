@@ -106,7 +106,8 @@ public class Rectangle extends Plane implements LightableShape {
 		Point p = new Point(randomX,randomY,0);
 		TextPoint txtPoint = new TextPoint(p.x,p.y);
 		p = this.transformation.transform(p);
-		return new LightIntersection(txtPoint,p);
+		Normal n = this.transformation.transformInverseTranspose(this.n);
+		return new LightIntersection(txtPoint,p,n);
 	}
 	
 	/**

@@ -43,10 +43,14 @@ public class World{
 	public List<AreaLight>  alights = new ArrayList<AreaLight>();
 	public List<Shape> shapes = new ArrayList<Shape>();
 	public double ambient;
+	public int spp = 1;
 	
 	public World(int width,int height,String choice) throws IllegalArgumentException {
 		if (choice == "initialWorld")
 			initialWorld(width,height);
+		else if (choice == "sphereWorld") {
+			sphereWorld(width,height);
+		}
 		else if (choice == "planeAndSphere") {
 			planeAndSphere(width,height);
 		}
@@ -80,12 +84,45 @@ public class World{
 		else if (choice == "richter") {
 			richter(width,height);
 		}
-		else
+		else {
 			throw new IllegalArgumentException("World not found");
+		}
 	}
 	
+	public void sphereWorld(int width,int height) {
+		this.ambient = 0.002;
+	        //Set up a scene with a transformed sphere.
+			this.spp = 1;
+			//set the camera.
+			this.camera = new PerspectiveCamera(width, height,
+				new Point(-2.0, 0, -5.0), new Point(0, 0, 0), new Vector(0, 0, -1), 60);
+	        
+			PointLight pointLight1 = new PointLight(new Point(0,10,-4.5),new Color(8,8,8), 2.5, false);
+			this.plights.add(pointLight1);
+        
+	        //background plane
+			Material mPlane;
+			Specular spec = new NoSpec();
+			mPlane = new Chess(spec,new Color(40,40,40), new Color(10,10,10),0.5);
+			Transformation tPlane = Transformation.translate(0,0,5).append(Transformation.rotateX(-180));
+			Plane plane = new Plane(tPlane,mPlane,0.9);
+			this.shapes.add(plane);
+	        
+	        //sphere 1
+			Material ms1 = new Monochrome(spec,new Color(0,6,0));
+			Transformation ts1 = Transformation.translate(1.5,0,0).append(Transformation.scale(0.75, 0.75, 0.75));
+			Sphere s1 = new Sphere(ts1,ms1,0.9);
+			this.shapes.add(s1);
+			
+	        //sphere 2
+			Material ms2 = new Monochrome(spec,new Color(0,6,6));
+			Transformation ts2 = Transformation.translate(-1,0.1,0).append(Transformation.scale(0.75, 0.75, 0.75));
+			Sphere s2 = new Sphere(ts2,ms2,0.9);
+			this.shapes.add(s2);
+	}
 	
 	public void initialWorld(int width,int height) {
+		this.spp = 1;
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
 				new Point(0, 0, 0), new Point(0, 0, 1), new Vector(0, 1, 0), 90);
@@ -122,6 +159,7 @@ public class World{
 	
 	
 	public void planeAndSphere(int width,int height) {
+		this.spp = 1;
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
 				new Point(2, 2, 2), new Point(0, 0, 0), new Vector(0, 0, 1), 90);
@@ -174,6 +212,7 @@ public class World{
 	}
 
 	public void julia(int width,int height) {
+		this.spp = 2;
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
 				new Point(1, 1, 1), new Point(1, 1, 0), new Vector(1, 0, 0), 90);
@@ -205,6 +244,7 @@ public class World{
 	}
 	
 	public void bunny(int width,int height) {
+		this.spp = 2;
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
 				new Point(10, 0, 10), new Point(0, 0, 0), new Vector(0, 0, 1), 45);
@@ -223,7 +263,7 @@ public class World{
 		Transformation t1 = Transformation.IDENTITY;
 		t1 = t1.append(Transformation.translate(0, 0.5, -1)).append(
 				Transformation.rotateX(90)).append(
-				Transformation.rotateY(90)).append( //-90, 0
+				Transformation.rotateY(0)).append( //-90, 0
 				Transformation.rotateZ(0));
 		
 
@@ -231,7 +271,7 @@ public class World{
 		Material mat;
 		Specular phong = new PhongSpecular(25.0,0,1);
 		mat = new Monochrome(phong, new Color(100,100,100));
-		ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,30, this.camera);
+		ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,30, this.camera, 0.001, 2.0);
 		//ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0,30, this.camera);
 		this.shapes.add(bunny);
 		
@@ -244,10 +284,10 @@ public class World{
 		Transformation tPlane = Transformation.translate(0, 0, -5);
 		Plane plane = new Plane(tPlane,mPlane,1);
 		this.shapes.add(plane);
-			
 	}
 	
 	public void venus(int width,int height) {
+		this.spp = 2;
 		//set the camera.
 				this.camera = new PerspectiveCamera(width, height,
 						new Point(10, 0, 10), new Point(0, 0, 0), new Vector(-1, -0, 0), 90);
@@ -266,7 +306,7 @@ public class World{
 				Material mat;
 				Specular phong = new PhongSpecular(25.0,0,1);
 				mat = new Monochrome(phong, new Color(100,100,100));
-				ObjShape venus = new ObjShape("./obj/venus.obj",t1,mat,2.0,20, this.camera);
+				ObjShape venus = new ObjShape("./obj/venus.obj",t1,mat,2.0,20, this.camera, 0.001, 3.0);
 				this.shapes.add(venus);
 				
 				
@@ -278,13 +318,10 @@ public class World{
 				Transformation tPlane = Transformation.IDENTITY;
 				Plane plane = new Plane(tPlane,mPlane,1);
 				this.shapes.add(plane);
-
-		
 	}
-
-
 	
 	public void apple(int width,int height) {
+		this.spp = 2;
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
 				new Point(0.8, 0.8, 1.0), new Point(0, 0, 0), new Vector(-1, -1, 0), 90);
@@ -306,12 +343,12 @@ public class World{
 		//objMat = new Monochrome( new Color(100,100,100));
 		Specular phong = new PhongSpecular(25.0,0,1);
 		objMat = new ObjTextureFile(phong, "./obj/apple/apple_texture.jpg",1.0);
-		ObjShape apple = new ObjShape("./obj/apple/apple.obj",t1,objMat,1.0,5, this.camera);
+		ObjShape apple = new ObjShape("./obj/apple/apple.obj",t1,objMat,1.0,5, this.camera, 0.001, 2.0);
 		//this.shapes.add(apple);
 		
 		t1 = t1.append(Transformation.rotateX(90));
 		Material houseText = new ObjTextureFile(phong, "./obj/house/house_texture.jpg",1.0);
-		ObjShape house = new ObjShape("./obj/house/house.obj",t1,houseText,0.6,0, this.camera);
+		ObjShape house = new ObjShape("./obj/house/house.obj",t1,houseText,0.6,0, this.camera, 0.001, 2.0);
 		this.shapes.add(house);
 		
 		
@@ -327,6 +364,7 @@ public class World{
 	}
 	
 	public void dragon(int width,int height) {
+		this.spp = 2;
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
 				new Point(5, 0, 5), new Point(0, 0, 0), new Vector(0, 0, 1), 80);
@@ -352,9 +390,9 @@ public class World{
 		
 		
 		//ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonLowPoly.obj",t1,mat,2.0,20, this.camera);
-		ObjShape dragon = new ObjShapeWithNrmlMap("./obj/dragonLowPoly/dragonLowPoly.obj",
-				"./obj/dragonLowPoly/dragonNormalMap4k.jpg",t1,mat,2.0,20, this.camera); //png will crash.!!
-		//ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonHighPoly.obj",t1,mat,2.0,25, this.camera);
+		//ObjShape dragon = new ObjShapeWithNrmlMap("./obj/dragonLowPoly/dragonLowPoly.obj",
+		//		"./obj/dragonLowPoly/dragonNormalMap4k.jpg",t1,mat,2.0,20, this.camera, 0.001, 3.0); //png will crash.!!
+		ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonHighPoly.obj",t1,mat,2.0,25, this.camera,0.0001, 0.001);
 		this.shapes.add(dragon);
 		
 		
@@ -368,6 +406,7 @@ public class World{
 	}
 
 	public void buddha(int width,int height) {
+		this.spp = 5;
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
 				new Point(4, 4, 4), new Point(0, 0, 0), new Vector(0, 0, 1), 70);
@@ -388,12 +427,12 @@ public class World{
 				Transformation.rotateZ(200)));
 		
 		Material mat;
-		Specular phong = new PhongSpecular(25.0,0,1);
+		Specular phong = new PhongSpecular(100.0,0,1);
 		mat = new Monochrome(phong, new Color(0.5,1,0.5));
 		//mat = new ObjTextureFile("./obj/buddhaLowPoly/buddhaNormalMap4k.jpg",1.0);
 		
 		//mat = new Julia(new Complex(-0.02,0.652),800,0.5,400, 100, "parula");
-		ObjShape buddha = new ObjShape("./obj/buddhaLowPoly/buddhaLowPoly.obj",t1,mat,10.0,25, this.camera);
+		ObjShape buddha = new ObjShape("./obj/buddhaLowPoly/buddhaLowPoly.obj",t1,mat,10.0,25, this.camera, 0.001, 2.0);
 		//ObjShape buddha = new ObjShapeWithNrmlMap("./obj/buddhaLowPoly/buddhaLowPoly.obj",
 		//		"./obj/buddhaLowPoly/buddhaNormalMap4k.jpg",t1,mat,1.0,20, this.camera);
 		//ObjShape buddha = new ObjShape("./obj/buddhaLowPoly/buddhaHighPoly.obj",t1,mat,10.0,25, this.camera);
@@ -411,30 +450,36 @@ public class World{
 	}
 	
 	public void tea(int width,int height) {
+		this.spp = 5;
 		this.ambient = 0.0000;
+		
 		
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(0, 5, 4), new Point(0, 0, 2), new Vector(0, 0, 1), 90);
+				new Point(0, 10, 10), new Point(0, 0, 0), new Vector(0, 0, 1), 90);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
-		PointLight whiteLight1 = new PointLight(new Point(-2,0,4),new Color(10,10,10), 0.01,true);
+		//PointLight whiteLight1 = new PointLight(new Point(-2,0,4),new Color(10,10,10), 0.01,true);
 		//this.plights.add(whiteLight1);
-		PointLight whiteLight2 = new PointLight(new Point(2,0,4),new Color(10,10,10), 0.01,true);
+		//PointLight whiteLight2 = new PointLight(new Point(2,0,4),new Color(10,10,10), 0.01,true);
 		//this.plights.add(whiteLight2);
 		
 		//area light
 		Specular noSpec = new NoSpec();
 		Material mLight = new Monochrome(noSpec, new Color(1,1,1));
-		Transformation tLight = Transformation.translate(0, 1.0, 4.4).append(Transformation.rotateY(180));
+		Transformation tLight = Transformation.translate(0, 0, 5).append(
+				                Transformation.rotateY(-180)).append(
+				                Transformation.scale(0.5, 0.5, 0.5));
 		Rectangle shape = new Rectangle(tLight,mLight,10000);
-		AreaLight al1 = new AreaLight(shape,0.1,10,180);
+		//Sphere shape = new Sphere(tLight,mLight,10000);
+		AreaLight al1 = new AreaLight(shape,1.0,10,180);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
-		Specular phong = new PhongSpecular(25.0,0,0.01);
+		Specular phong = new PhongSpecular(100.0,0,0.01);
+		//Specular phong = new NoSpec();
 		Material sMat = new Monochrome(phong,  new Color(10,100,10));
-		Transformation sTr = Transformation.translate(0, 1.0, 2.4).append(Transformation.rotateY(-180));
+		Transformation sTr = Transformation.translate(0, 1.0, 3.4).append(Transformation.rotateY(-180));
 		Circle shape2 = new Circle(sTr,sMat,10);
 		//this.shapes.add(shape2);
 	
@@ -447,23 +492,23 @@ public class World{
 		
 		Material mat;
 		mat = new Monochrome(phong, new Color(35,107,142));
-		ObjShape tea = new ObjShape("./obj/teapot.obj",t1,mat,1.0,30, this.camera);
+		ObjShape tea = new ObjShape("./obj/teapot.obj",t1,mat,1.0,30, this.camera, 0.001, 3.5);
 		this.shapes.add(tea);
 		
-		Material mPlane1 = new Chess(phong, new Color(100,100,100), new Color(1,1,1),1);
+		Material mPlane1 = new Chess(phong, new Color(10,10,10), new Color(1,1,1),1);
 		Transformation tPlane = Transformation.translate(0, 0, 0);
 		Plane plane1 = new Plane(tPlane,mPlane1,1);
 		this.shapes.add(plane1);
 		Material mPlane2 = new Monochrome(phong, new Color(100,0,0));
-		Transformation tPlane2 = Transformation.translate(-3.0, 0, 0).append(Transformation.rotateY(90));
+		Transformation tPlane2 = Transformation.translate(-4.0, 0, 0).append(Transformation.rotateY(90));
 		Plane plane2 = new Plane(tPlane2,mPlane2,1);
 		this.shapes.add(plane2);
 		Material mPlane3 = new Monochrome(phong, new Color(0,0,100));
-		Transformation tPlane3 = Transformation.translate(3.4, 0, 0).append(Transformation.rotateY(-90));
+		Transformation tPlane3 = Transformation.translate(4.0, 0, 0).append(Transformation.rotateY(-90));
 		Plane plane3 = new Plane(tPlane3,mPlane3,1);
 		this.shapes.add(plane3);
 		Material mPlane4 = new Monochrome(phong, new Color(0,100,0));
-		Transformation tPlane4 = Transformation.translate(0, -4, 0).append(Transformation.rotateX(-90));
+		Transformation tPlane4 = Transformation.translate(0, -4.0, 0).append(Transformation.rotateX(-90));
 		Plane plane4 = new Plane(tPlane4,mPlane4,1);
 		this.shapes.add(plane4);
 		//Material mPlane5 = new Monochrome( new Color(10,10,10));
@@ -473,33 +518,34 @@ public class World{
 	}
 
 	public void sun(int width,int height) {
-		this.ambient = 0.000;
+		this.spp = 5;
+		this.ambient = 0.01;
 		
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
 				new Point(0, 4, 4), new Point(0, 0, 0), new Vector(0, 0, 1), 75);
-		PointLight whiteLight1 = new PointLight(new Point(-2.5, 4, 1.5),new Color(10,10,10), 1.5,true);
-		this.plights.add(whiteLight1);
+		//PointLight whiteLight1 = new PointLight(new Point(-2.5, 4, 1.5),new Color(10,10,10), 0.01,true);
+		//this.plights.add(whiteLight1);
 		
 		//area light
 		Specular noSpecular = new NoSpec();
 		Material mLight = new MyTextureFile(noSpecular, "./obj/cubeEarth/texture_sun.jpg");
 		//Material mLight = new MyTextureFile("./obj/mageScene/textureSunBlue.jpg");
 		Transformation tLight = Transformation.translate(-2.5, 3.5, 1.5);
-		Sphere shape = new Sphere(tLight,mLight,1.0);
-		AreaLight al1 = new AreaLight(shape,1.0,100,0);
-		//this.alights.add(al1);
+		Sphere shape = new Sphere(tLight,mLight,0.1);
+		AreaLight al1 = new AreaLight(shape,0.1,100,180);
+		this.alights.add(al1);
 		this.shapes.add(al1);
 		
 		Specular phong = new NoSpec();
 		Material mEarth = new MyTextureFile(phong, "./obj/cubeEarth/EarthWithClouds.jpg");
 		Transformation tEarth = Transformation.IDENTITY;
-		Sphere earth = new Sphere(tEarth,mEarth,1.01);
+		Sphere earth = new Sphere(tEarth,mEarth,0.5);
 		this.shapes.add(earth);
 		
 		Material mMoon = new MyTextureFile(phong, "./obj/cubeEarth/moon.jpg");
 		Transformation tMoon = Transformation.translate(-1.5, -0.5, 0.5).append(Transformation.scale(0.27, 0.27, 0.27));
-		Sphere moon = new Sphere(tMoon, mMoon, 1.5);
+		Sphere moon = new Sphere(tMoon, mMoon, 0.5);
 		this.shapes.add(moon);
 		
 		Material mCube = new ObjTextureFile(phong, "./obj/cubeEarth/borg2.jpg",3.0);
@@ -509,15 +555,15 @@ public class World{
 							   	Transformation.rotateZ(8)).append(
 							   	Transformation.rotateX(0)).append(
 							   	Transformation.scale(0.2, 0.2, 0.2));
-		Cube cube = new Cube(tCube, mCube, 1.0);
+		Cube cube = new Cube(tCube, mCube, 0.1);
 		this.shapes.add(cube);
 		
 		Transformation tCube2 = Transformation.IDENTITY.append(
 			   	Transformation.translate(-1.0, 2.0, 0.5)).append(
-			   	Transformation.rotateZ(4)).append(
-			   	Transformation.rotateX(-25)).append(
+			   	Transformation.rotateZ(8)).append(
+			   	Transformation.rotateX(0)).append(
 			   	Transformation.scale(0.25, 0.25, 0.25));
-		Cube cube2 = new Cube(tCube2, mCube, 1.0);
+		Cube cube2 = new Cube(tCube2, mCube, 0.1);
 		this.shapes.add(cube2);
 		
 		
@@ -526,9 +572,9 @@ public class World{
 		Transformation tPlane = Transformation.translate(4.2, -4, 4).append(
 								Transformation.rotateX(-45)).append(
 								Transformation.scale(10, 10, 10));
-		Rectangle plane1 = new Rectangle(tPlane,mPlane1,0.8);
-		this.shapes.add(plane1);		
-		AreaLight al2 = new AreaLight(plane1,0.0005,1,360);
+		Rectangle plane1 = new Rectangle(tPlane,mPlane1,0.1);
+		//this.shapes.add(plane1);		
+		AreaLight al2 = new AreaLight(plane1,0.015,1,180);
 		this.alights.add(al2);
 		this.shapes.add(al2);
 	}

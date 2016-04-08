@@ -18,8 +18,8 @@ public class ParallelSahBox extends SahBox {
 	final ExecutorService service;
 	
 	public ParallelSahBox(Point p0, Point p1, Transformation transformation,
-			Camera cam, int maxDepth, int depth, ExecutorService service) {
-		super(p0, p1, transformation, cam);
+			Camera cam, int maxDepth, int depth, ExecutorService service, double treeEpsilon, double objIntersEpsilon) {
+		super(p0, p1, transformation, cam, treeEpsilon, objIntersEpsilon);
 		this.maxDepth = maxDepth;
 		this.cores = Runtime.getRuntime().availableProcessors();
 		
@@ -59,7 +59,7 @@ public class ParallelSahBox extends SahBox {
 						Point pEd = new Point(xEnd, this.p1.y, this.p1.z);
 						SahBox xBox = new ParallelSahBox(pSt,pEd,this.transformation,
 														this.cam, this.maxDepth, depth -1,
-														this.service); 
+														this.service, treeEpsilon, objIntersEpsilon); 
 
 						for (Triangle triangle : trianglesInBox) {
 							xBox.addIfIn(triangle);
@@ -82,7 +82,7 @@ public class ParallelSahBox extends SahBox {
 						
 						SahBox yBox = new ParallelSahBox(pSt,pEd,this.transformation,
 								this.cam, this.maxDepth, depth -1,
-								this.service);  
+								this.service, treeEpsilon, objIntersEpsilon);  
 
 						for (Triangle triangle : trianglesInBox) {
 							yBox.addIfIn(triangle);
@@ -103,7 +103,7 @@ public class ParallelSahBox extends SahBox {
 						Point pEd = new Point(this.p1.x, this.p1.y, zEnd);
 						SahBox zBox= new ParallelSahBox(pSt,pEd,this.transformation,
 														this.cam, this.maxDepth, depth -1,
-														this.service);  
+														this.service, treeEpsilon, objIntersEpsilon);  
 
 						for (Triangle triangle : trianglesInBox) {
 							zBox.addIfIn(triangle);
@@ -126,9 +126,9 @@ public class ParallelSahBox extends SahBox {
 				for (int i = 1; i < (cuts+1); i++){
 					//create large boxes. Dimensions will change according to assigned triangles.
 					SahBox lftBox = new ParallelSahBox(this.p0,this.p1,this.transformation,this.cam,
-											   this.maxDepth, depth - 1,	this.service);
+											   this.maxDepth, depth - 1,	this.service, treeEpsilon, objIntersEpsilon);
 					SahBox rgtBox = new ParallelSahBox(this.p0,this.p1,this.transformation,this.cam,
-											   this.maxDepth, depth - 1,	this.service);
+											   this.maxDepth, depth - 1,	this.service, treeEpsilon, objIntersEpsilon);
 					for(AxisAlignedBox lftPartBox : boxes.subList(0, i)) {
 						lftBox.trianglesInBox.addAll(lftPartBox.trianglesInBox);
 					}

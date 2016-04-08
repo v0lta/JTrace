@@ -149,7 +149,8 @@ public class Sphere implements LightableShape {
 	public double getInverseArea() {
 		Point test = new Point(1,1,1);
 		test = this.transformation.transform(test);
-		double area = Math.PI*(4/3)*(test.x*test.y*test.z);
+		double area = Math.PI*(4/3)*
+					  (Math.abs(test.x)*Math.abs(test.y)*Math.abs(test.z));
 		return 1/area;
 	}
 
@@ -179,7 +180,7 @@ public class Sphere implements LightableShape {
 		double r = Math.sqrt(hP.x*hP.x + hP.y*hP.y + hP.z*hP.z);
 		
 		double theta = Math.acos(hP.z/r);
-		double phi   = Math.atan2(hP.x,hP.y); //TODO: Fallunterscheidung warum nicht y,x?
+		double phi   = Math.atan2(hP.y,hP.x);
 		Random rnd = new Random();
 		double rndTheta = -Math.PI/2 + Math.PI*rnd.nextDouble();
 		double rndPhi   = -Math.PI/2 + Math.PI*rnd.nextDouble();
@@ -194,8 +195,9 @@ public class Sphere implements LightableShape {
 		Point pPrime = new Point(randomX,randomY,randomZ);
 		TextPoint txtPnt = getUV(pPrime);
 		
+		Normal n = this.transformation.transformInverseTranspose(pPrime.toNormal());
 		pPrime = this.transformation.transform(pPrime);
-		return new LightIntersection(txtPnt, pPrime);
+		return new LightIntersection(txtPnt, pPrime, n);
 	}
 
 	@Override

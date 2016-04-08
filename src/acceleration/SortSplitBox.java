@@ -18,8 +18,8 @@ public class SortSplitBox extends AxisAlignedBox {
 	public SortSplitBox right = null;
 	
 	
-	public SortSplitBox(Point p0, Point p1, Transformation transformation, Camera cam) {
-		super(p0, p1, transformation, cam);
+	public SortSplitBox(Point p0, Point p1, Transformation transformation, Camera cam, double treeEpsilon, double objIntersEpsilon) {
+		super(p0, p1, transformation, cam, treeEpsilon, objIntersEpsilon);
 		
 	}
 	
@@ -58,8 +58,8 @@ public class SortSplitBox extends AxisAlignedBox {
 				leftList = this.trianglesInBox.subList(0, halfList);
 				rightList = this.trianglesInBox.subList(halfList, triCount);
 				
-				double xNewLeft = largestInLst(leftList,'x') + Constants.treeEpsilon;
-				double xNewRight = smallestInLst(rightList,'x') - Constants.treeEpsilon;
+				double xNewLeft = largestInLst(leftList,'x') + treeEpsilon;
+				double xNewRight = smallestInLst(rightList,'x') - treeEpsilon;
 				pLeft = new Point(xNewLeft, this.p1.y, this.p1.z);
 				pRight = new Point(xNewRight, this.p0.y, this.p0.z);
 
@@ -99,9 +99,9 @@ public class SortSplitBox extends AxisAlignedBox {
 				
 			
 			this.left = new SortSplitBox(this.p0, pLeft,
-					this.transformation, this.cam);
+					this.transformation, this.cam, treeEpsilon, objIntersEpsilon);
 			this.right = new SortSplitBox(pRight, this.p1,
-					this.transformation, this.cam);
+					this.transformation, this.cam, treeEpsilon, objIntersEpsilon);
 
 			left.trianglesInBox = leftList;
 			right.trianglesInBox = rightList;

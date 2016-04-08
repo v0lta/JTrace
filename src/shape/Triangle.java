@@ -43,11 +43,10 @@ public class Triangle implements Shape {
 			this.cn = cn;
 		} else {
 			// np.cross((self.c -self.a), (self.b - self.a))
-			this.an = c.subtract(a).cross(b.subtract(a)).toNormal();
-			//self.bn = np.cross((self.a - self.b), (self.c -self.b))
-			this.bn = a.subtract(b).cross(c.subtract(b)).toNormal();
-			//np.cross((self.a - self.c), (self.b -self.c))
-			this.cn = a.subtract(c).cross(b.subtract(c)).toNormal();			
+			this.an = b.subtract(a).cross(c.subtract(a)).scale(
+					1/(b.subtract(a).cross(c.subtract(a)).length())).toNormal();	
+			this.bn = an;
+			this.cn = an;
 		}
 		this.at = at;
 		this.bt = bt;
