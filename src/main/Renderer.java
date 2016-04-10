@@ -132,13 +132,13 @@ public class Renderer {
 		 * Initialize the scene
 		 *********************************************************************/
 		//final World world = new World(width, height, "initialWorld");
-		final World world = new World(width, height, "sphereWorld");
+		//final World world = new World(width, height, "sphereWorld");
 		//final World world = new World(width, height, "planeAndSphere");
 		//final World world = new World(width, height, "Julia");
 		//final World world = new World(width, height, "apple");
 		//final World world = new World(width, height, "bunny");		
 		//final World world = new World(width, height, "venus");
-		//final World world = new World(width, height, "dragon");
+		final World world = new World(width, height, "dragon");
 		//final World world = new World(width, height, "buddha");
 		//final World world = new World(width, height, "tea");
 		//final World world = new World(width, height, "sun");
@@ -207,9 +207,9 @@ public class Renderer {
 									} else if (Constants.compVisualization) {
 										int intersectionCount = ray.getIntersectionCounter();
 										Color pixelColor;
-										//int max = 180;
-										int max = 600;
-										//int max = 900; //dragon...
+										//int max = 200; //teapod
+										int max = 450; //dragon...
+										//int max = 900; 
 
 										ColorMap colorMap = new ColorMap(0.0, max, null,1.0, "hot");
 										pixelColor = colorMap.getCompColor(intersectionCount);
@@ -218,7 +218,7 @@ public class Renderer {
 										//double[] compRes = computeAmbientShading(visColor,intensity , 1.0);
 
 										//double greenValue = ((double) intersectionCount)/max;						
-										double whiteValue = ((double) intersectionCount)/max;
+										//double whiteValue = ((double) intersectionCount)/max;
 										//buffer.getPixel(x, y).add(whiteValue,whiteValue,whiteValue);
 										buffer.getPixel(x, y).add(pixelColor.r,pixelColor.g,pixelColor.b);
 

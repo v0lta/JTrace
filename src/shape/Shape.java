@@ -4,7 +4,6 @@ import java.util.List;
 
 import math.Ray;
 import math.Intersection;
-import math.Transformation;
 
 /**
  * Interface which should be implemented by all {@link Shape}s.

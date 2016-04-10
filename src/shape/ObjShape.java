@@ -295,8 +295,8 @@ public class ObjShape implements Shape {
 		boolean singleCore = true;
 		if (singleCore){
 		//this.aab = new AxisAlignedBox(new Point(minmax.xMin - Constants.treeEpsilon,
-		//this.aab = new SortSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
-		//this.aab = new MiddleSplitBox(new Point(minmax.xMin - Constants.treeEpsilon,
+		//this.aab = new SortSplitBox(new Point(minmax.xMin - this.treeEpsilon,
+		//this.aab = new MiddleSplitBox(new Point(minmax.xMin - this.treeEpsilon,
 		this.aab = new SahBox(new Point(minmax.xMin - this.treeEpsilon,
 												minmax.yMin - this.treeEpsilon,
 												minmax.zMin - this.treeEpsilon),
