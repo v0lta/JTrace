@@ -26,6 +26,7 @@ import camera.Camera;
 import camera.PerspectiveCamera;
 import shape.Circle;
 import shape.Cube;
+import shape.JuliaMesh;
 import shape.ObjShape;
 import shape.ObjShapeWithNrmlMap;
 import shape.Plane;
@@ -56,6 +57,9 @@ public class World{
 		}
 		else if (choice == "Julia") {
 			julia(width,height);
+		}
+		else if (choice == "Julia3d") {
+			julia3d(width,height);
 		}
 		else if (choice == "bunny") {
 			bunny(width,height);
@@ -226,13 +230,14 @@ public class World{
 		
 		
 		Material mPlane;
-		//mPlane = new Chess(new Color(100,100,100), new Color(1,1,1),1);
 		//cr = -0.076, ci = 0.651, N = 200, bound = 1, lim = 100
-		//mPlane = new Julia(new Complex(-0.07,0.652),800,1,400, 10);
+		//mPlane = new Julia(new Complex(-0.07,0.652),800,1,400, 10, "parula");
+		mPlane = new Julia(new Complex(-0.1,0.651),300,1,400, 10, "jet");
+		
 		//mPlane = new Julia(new Complex(-0.02,0.652),800,1,400, 10, "parula");
 		
 		//lightning = new Julia(new Complex(-0.02,0.8),800,1,400, 10);
-		mPlane = new Julia(new Complex(-0.02,0.8),800,1,400, 10, "parula");
+		//mPlane = new Julia(new Complex(-0.02,0.8),800,1,400, 10, "parula");
 		
 		//mPlane = new Monochrome(new Color(100,100,100));
 		
@@ -242,6 +247,30 @@ public class World{
 		this.shapes.add(plane);
 		
 	}
+
+	public void julia3d(int width,int height) {
+		this.spp = 1;
+		//set the camera.
+		this.camera = new PerspectiveCamera(width, height,
+				new Point(1.35, -0.85, 0.8), new Point(-0.25, 0.0, -0.55), new Vector(0, 0, 1), 50);
+		//this.camera = new PerspectiveCamera(width, height,
+		//		new Point(1, 1, 2), new Point(0, 0.0, 0), new Vector(0, 0, 1), 90);
+		
+		
+		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
+		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.00,false);
+		this.plights.add(whiteLight);
+		this.ambient = 1.0;
+		
+		//setup the objects in the scene.
+		Transformation trans = Transformation.scale(1.2, 1.2, 1.2);
+		
+		JuliaMesh juliaMesh = new JuliaMesh(new Complex(-0.1,0.651),80,2,400, 100, "jet",1.0,
+									trans, camera, 0.01, 100);
+		this.shapes.add(juliaMesh);
+		
+	}
+	
 	
 	public void bunny(int width,int height) {
 		this.spp = 5;
@@ -275,6 +304,8 @@ public class World{
 		ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0,30, this.camera, 0.001, 3.6);
 		this.shapes.add(bunny);
 		
+		//No acceleration structure.
+		//this.shapes.addAll(bunny.triangleList);
 		
 		Material mPlane;
 		//mPlane = new Chess(new Color(100,100,100), new Color(1,1,1),1);
@@ -321,10 +352,10 @@ public class World{
 	}
 	
 	public void apple(int width,int height) {
-		this.spp = 2;
+		this.spp = 10;
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(0.8, 0.8, 1.0), new Point(0, 0, 0), new Vector(-1, -1, 0), 90);
+				new Point(0.8, 0.8, 1.0), new Point(0, 0, 0), new Vector(-1, -1, 0), 70);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		PointLight whiteLight = new PointLight(new Point(10,10,10),new Color(100.0,100.0,100.0), 0.1,false);
@@ -341,15 +372,15 @@ public class World{
 		Material objMat;
 		//objMat = new Julia(new Complex(-0.076,0.652),600,1,400,2.5);
 		//objMat = new Monochrome( new Color(100,100,100));
-		Specular phong = new PhongSpecular(25.0,0,1);
+		Specular phong = new PhongSpecular(250.0,0,0.005);
 		objMat = new ObjTextureFile(phong, "./obj/apple/apple_texture.jpg",1.0);
 		ObjShape apple = new ObjShape("./obj/apple/apple.obj",t1,objMat,1.0,5, this.camera, 0.001, 2.0);
-		//this.shapes.add(apple);
+		this.shapes.add(apple);
 		
 		t1 = t1.append(Transformation.rotateX(90));
 		Material houseText = new ObjTextureFile(phong, "./obj/house/house_texture.jpg",1.0);
 		ObjShape house = new ObjShape("./obj/house/house.obj",t1,houseText,0.6,0, this.camera, 0.001, 2.0);
-		this.shapes.add(house);
+		//this.shapes.add(house);
 		
 		
 		Material mPlane;

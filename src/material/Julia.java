@@ -6,16 +6,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import shape.Triangle;
 import math.Color;
+import math.Normal;
+import math.Point;
 import math.TextPoint;
+import math.Transformation;
 import math.Vector;
 
 public class Julia implements Material {
 	public final double[][] set;
-	private final int N;
-	private final double bound;
+	protected final int N;
+	protected final double bound;
 	
-	private ColorMap colorMap = null;
+	protected ColorMap colorMap = null;
 	
 	/**
 	 * Creates a Julia-set covered material
@@ -116,7 +120,7 @@ public class Julia implements Material {
 	 return julia;
 	}
 	
-	private List<Complex> realSpace(double minArg, double maxArg, int N) {
+	protected List<Complex> realSpace(double minArg, double maxArg, int N) {
 		List<Complex> list = new ArrayList<Complex>();
 		double dx;
 	    
@@ -128,7 +132,7 @@ public class Julia implements Material {
 	    return list;	    
 	}
 
-	private List<Complex> imagSpace(double minArg, double maxArg, int N) {
+	protected List<Complex> imagSpace(double minArg, double maxArg, int N) {
 		List<Complex> list = new ArrayList<Complex>();
 		double dy;
 	    
@@ -176,5 +180,6 @@ public class Julia implements Material {
 		return 1.0;
 	}
 	
+
 
 }

@@ -50,9 +50,7 @@ public class SahBox extends AxisAlignedBox  {
 						SahBox xBox = new SahBox(pSt,pEd,this.transformation,this.cam,
 											this.treeEpsilon, this.objIntersEpsilon); 
 
-						for (Triangle triangle : trianglesInBox) {
-							xBox.addIfIn(triangle);
-						}
+						xBox.checkAndAdd(depth, trianglesInBox);
 						xBox = xBox.adjustBounds(axis);
 						boxes.add(xBox);					
 					}
@@ -72,9 +70,7 @@ public class SahBox extends AxisAlignedBox  {
 						SahBox yBox = new SahBox(pSt,pEd,this.transformation,this.cam,
 											this.treeEpsilon, this.objIntersEpsilon); 
 
-						for (Triangle triangle : trianglesInBox) {
-							yBox.addIfIn(triangle);
-						}
+						yBox.checkAndAdd(depth, trianglesInBox);
 						yBox = yBox.adjustBounds(axis);
 						boxes.add(yBox);					
 					}
@@ -92,9 +88,7 @@ public class SahBox extends AxisAlignedBox  {
 						SahBox zBox= new SahBox(pSt,pEd,this.transformation,this.cam,
 								this.treeEpsilon, this.objIntersEpsilon); 
 
-						for (Triangle triangle : trianglesInBox) {
-							zBox.addIfIn(triangle);
-						}
+						zBox.checkAndAdd(depth, trianglesInBox);
 						zBox = zBox.adjustBounds(axis);
 						boxes.add(zBox);					
 					}
@@ -107,7 +101,7 @@ public class SahBox extends AxisAlignedBox  {
 				//double sTop = this.getSurface(axis);
 				double nTop = this.trianglesInBox.size();
 				double cost = vTop * nTop;
-				//double cost = sTop * nTop;
+				//double cost = nTop;
 				//double cost = Double.POSITIVE_INFINITY;
 				
 				for (int i = 1; i < (cuts+1); i++){
@@ -132,7 +126,7 @@ public class SahBox extends AxisAlignedBox  {
 					double vRgt = rgtBox.getVolume();
 					//double sRgt = rgtBox.getSurface(axis);
 					double crntCost = nLft * vLft + nRgt * vRgt;
-					//double crntCost = nLft * sLft + nRgt * sRgt;
+					//double crntCost = nLft * sLft/sTop + nRgt * sRgt/sTop;
 					if (crntCost < cost) {
 						cost = crntCost;
 						lftBoxBest = lftBox;
@@ -323,6 +317,12 @@ public class SahBox extends AxisAlignedBox  {
 			}
 		}		
 		return hits;
+	}
+	
+	public void checkAndAdd(int depth, List<Triangle> triList){
+		for (Triangle triangle : triList) {
+			this.addIfIn(triangle);
+		}
 	}
 
 }
