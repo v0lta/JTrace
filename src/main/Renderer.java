@@ -134,8 +134,8 @@ public class Renderer {
 		//final World world = new World(width, height, "initialWorld");
 		//final World world = new World(width, height, "sphereWorld");
 		//final World world = new World(width, height, "planeAndSphere");
-		//final World world = new World(width, height, "Julia");
-		final World world = new World(width, height, "Julia3d");
+		final World world = new World(width, height, "Julia");
+		//final World world = new World(width, height, "Julia3d");
 		//final World world = new World(width, height, "apple");
 		//final World world = new World(width, height, "bunny");		
 		//final World world = new World(width, height, "venus");
@@ -210,7 +210,7 @@ public class Renderer {
 										Color pixelColor;
 										//int max = 200; //teapod
 										//int max = 450; //dragon...
-										int max = 900; 
+										int max = 1200; 
 
 										ColorMap colorMap = new ColorMap(0.0, max, null,1.0, "hot");
 										pixelColor = colorMap.getCompColor(intersectionCount);
@@ -219,9 +219,9 @@ public class Renderer {
 										//double[] compRes = computeAmbientShading(visColor,intensity , 1.0);
 
 										//double greenValue = ((double) intersectionCount)/max;						
-										double whiteValue = ((double) intersectionCount)/max;
-										buffer.getPixel(x, y).add(whiteValue,whiteValue,whiteValue);
-										//buffer.getPixel(x, y).add(pixelColor.r,pixelColor.g,pixelColor.b);
+										//double whiteValue = ((double) intersectionCount)/max;
+										//buffer.getPixel(x, y).add(whiteValue,whiteValue,whiteValue);
+										buffer.getPixel(x, y).add(pixelColor.r,pixelColor.g,pixelColor.b);
 
 
 									} else {

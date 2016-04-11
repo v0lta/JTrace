@@ -232,7 +232,7 @@ public class World{
 		Material mPlane;
 		//cr = -0.076, ci = 0.651, N = 200, bound = 1, lim = 100
 		//mPlane = new Julia(new Complex(-0.07,0.652),800,1,400, 10, "parula");
-		mPlane = new Julia(new Complex(-0.1,0.651),300,1,400, 10, "jet");
+		mPlane = new Julia(new Complex(-0.1,0.651),800,1,400, 10, "jet");
 		
 		//mPlane = new Julia(new Complex(-0.02,0.652),800,1,400, 10, "parula");
 		
@@ -265,7 +265,8 @@ public class World{
 		//setup the objects in the scene.
 		Transformation trans = Transformation.scale(1.2, 1.2, 1.2);
 		
-		JuliaMesh juliaMesh = new JuliaMesh(new Complex(-0.1,0.651),80,2,400, 100, "jet",1.0,
+																	//800
+		JuliaMesh juliaMesh = new JuliaMesh(new Complex(-0.1,0.651),800,2,400, 100, "jet",1.0,
 									trans, camera, 0.01, 100);
 		this.shapes.add(juliaMesh);
 		

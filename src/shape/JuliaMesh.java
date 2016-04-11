@@ -51,16 +51,12 @@ public class JuliaMesh extends Julia implements Shape {
 		for (int i = 0; i <(N-2); i ++){
 			for (int j = 0; j < (N-2); j ++){
 				Point p00 = new Point(gridX.get(i).re,gridY.get(j).re,1/set[i][j]);
-				//Point p00 = new Point(gridX.get(i).re,gridY.get(j).re,0);
 				TextPoint tp00 = new TextPoint(i,j);
 				Point p10 = new Point(gridX.get(i+1).re,gridY.get(j).re,1/set[i+1][j]);
-				//Point p10 = new Point(gridX.get(i+1).re,gridY.get(j).re,0);
 				TextPoint tp10 = new TextPoint(i+1,j);
 				Point p01 = new Point(gridX.get(i).re,gridY.get(j+1).re,1/set[i][j+1]);
-				//Point p01 = new Point(gridX.get(i).re,gridY.get(j+1).re,0);
 				TextPoint tp01 = new TextPoint(i,j+1);
 				Point p11 = new Point(gridX.get(i+1).re,gridY.get(j+1).re,1/set[i+1][j+1]);
-				//Point p11 = new Point(gridX.get(i+1).re,gridY.get(j+1).re,0);
 				TextPoint tp11 = new TextPoint(i+1,j+1);
 
 
