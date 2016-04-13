@@ -34,7 +34,7 @@ import material.ColorMap;
 /**
  * Entry point of your renderer.
  * 
- * @author Niels Billen
+ * @author Niels Billen and moritz wolter
  * @version 1.0
  */
 public class Renderer {
@@ -134,7 +134,7 @@ public class Renderer {
 		//final World world = new World(width, height, "initialWorld");
 		//final World world = new World(width, height, "sphereWorld");
 		//final World world = new World(width, height, "planeAndSphere");
-		final World world = new World(width, height, "Julia");
+		//final World world = new World(width, height, "Julia");
 		//final World world = new World(width, height, "Julia3d");
 		//final World world = new World(width, height, "apple");
 		//final World world = new World(width, height, "bunny");		
@@ -143,7 +143,7 @@ public class Renderer {
 		//final World world = new World(width, height, "buddha");
 		//final World world = new World(width, height, "tea");
 		//final World world = new World(width, height, "sun");
-		//final World world = new World(width, height, "richter");
+		final World world = new World(width, height, "richter");
 		//final World world = new World(width, height, "force");
 		
 
@@ -274,18 +274,14 @@ public class Renderer {
 										// --------------------- handle area lights.------------------------------------------------
 										Vector p = closestInt.point.toVector();
 										for(AreaLight al : world.alights){
-
 											if (al.shape.inShape(p.toPoint())) {
 												// the intersection is on the point light.
 												double [] lghtRes = computeAmbientShading(closestInt,closestInt.reflectivity,al.intensity);
 												buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);
 											} else {
-
 												Vector lghtVct = new Vector(0.0,0.0,0.0);
-												for (int i = 0; i < al.sampleNo; i++) {
-													//create random number generator with seed for reproducibility.
-													LightIntersection lightInt = al.getpPrime(p.toPoint());
-													
+												List<LightIntersection> lightInts = al.getpPrime(closestInt);
+												for (LightIntersection lightInt : lightInts) {
 													Vector NPrime = lightInt.nPrime.toVector();
 													Vector L = p.subtract(lightInt.pPrime.toVector()).normalize();
 									
@@ -313,7 +309,6 @@ public class Renderer {
 																lghtVct = lghtVct.add(computeAlShading(closestInt,al,p,lightInt, world.camera ));
 															}
 														}
-													
 													Color lghtClr = lghtVct.scale(1.0/al.sampleNo).toColor();
 													buffer.getPixel(x, y).add(lghtClr.r, lghtClr.g, lghtClr.b,1.0);
 													} 

@@ -1,5 +1,6 @@
 package light;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import shape.LightableShape;
@@ -21,7 +22,7 @@ public class AreaLight implements Shape  {
 	public final double beta;
 	
 	/**
-	 * Instantiate an area light of form shape.
+	 * Instantiate an area light with a shape.
 	 * @param shape the geometric shape of the new light.
 	 * @param intensity the brightness of the new light.
 	 * @param sampleNo the monte-carlo integration samples.
@@ -75,9 +76,9 @@ public class AreaLight implements Shape  {
 		
 		nPrime = this.getNormal(pPrime).toVector();
 		double betaTest = Math.acos(toLight.dot(nPrime));
-		if (betaTest < beta){
-			G = 0;
-		}
+		//if (betaTest < beta){
+		//	G = 0;
+		//}
 		if (G < 0){
 			G = 0;
 		}
@@ -85,9 +86,15 @@ public class AreaLight implements Shape  {
 		return G;
 	}
 	
-	public LightIntersection getpPrime(Point hitPoint){
-		LightIntersection pPrime = this.shape.getRandomPoint(hitPoint);
-		return pPrime;
+	public List<LightIntersection> getpPrime(Intersection inter){
+		Point hitPoint = inter.point;
+		List<LightIntersection> lightSamples = new ArrayList<LightIntersection>();
+		for (int i = 0; i < this.sampleNo; i++) {
+			//create random number generator with seed for reproducibility.
+			LightIntersection pPrime = this.shape.getRandomPoint(hitPoint);
+			lightSamples.add(pPrime);
+		}
+		return lightSamples;
 	}
 
 	@Override

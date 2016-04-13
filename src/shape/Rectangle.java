@@ -98,17 +98,7 @@ public class Rectangle extends Plane implements LightableShape {
 		return this.transformation;		
 	}
 
-	@Override
-	public LightIntersection getRandomPoint(Point hitPoint) {
-		Random r = new Random();
-		double randomX = -1.0 + 2.0 * r.nextDouble();
-		double randomY = -1.0 + 2.0  * r.nextDouble();		
-		Point p = new Point(randomX,randomY,0);
-		TextPoint txtPoint = new TextPoint(p.x,p.y);
-		p = this.transformation.transform(p);
-		Normal n = this.transformation.transformInverseTranspose(this.n);
-		return new LightIntersection(txtPoint,p,n);
-	}
+
 	
 	/**
 	 * Learn if a transformed hit point is on the surface.
@@ -134,6 +124,57 @@ public class Rectangle extends Plane implements LightableShape {
 		//the z coordinate is zero and can be neglected.
 		TextPoint txtPoint = new TextPoint(pPrime.x,pPrime.y);
 		return txtPoint;
+	}
+	
+	
+	@Override
+	public LightIntersection getRandomPoint(Point hitPoint) {
+		Random r = new Random();
+		double randomX = -1.0 + 2.0 * r.nextDouble();
+		double randomY = -1.0 + 2.0  * r.nextDouble();		
+		Point p = new Point(randomX,randomY,0);
+		TextPoint txtPoint = new TextPoint(p.x,p.y);
+		p = this.transformation.transform(p);
+		Normal n = this.transformation.transformInverseTranspose(this.n);
+		return new LightIntersection(txtPoint,p,n);
+	}
+	
+	
+	@Override
+	public Point getCenter(){
+		return this.transformation.transform(new Point(0,0,0));
+	}
+
+	@Override
+	public List<LightableShape> subdivide(int subdivisions) {
+		List<LightableShape> subShapes = new ArrayList<LightableShape>();
+		//generate transformation matrices
+		double frac = 1.0/(subdivisions+1);
+		Transformation scale = Transformation.scale(frac, frac, frac);
+		Transformation toCenterScale = Transformation.IDENTITY;
+		double xStart;
+		double xEnd;
+		double yStart;
+		double yEnd;
+		double centroidX;
+		double centroidY;
+		//double step = ((double) subdivisions)/(subdivisions + 1.0);
+		double step = 2.0/(subdivisions + 1);
+		for (int i = 0; i < (subdivisions + 1); i++){
+			xStart = -1 + i*step;
+			xEnd = -1 + (i+1)*step;
+			centroidX = (xStart + xEnd)/2;
+			for (int j = 0; j < (subdivisions + 1); j++){
+				yStart = -1 + j*step;
+				yEnd = -1 + (j+1)*step;
+				centroidY = (yStart + yEnd)/2;
+				//toCenterScale = scale.append(Transformation.translate(centroidX, centroidY, 0));
+				toCenterScale = Transformation.translate(centroidX, centroidY, 0).append(scale);
+				Rectangle subRect = new Rectangle(toCenterScale, this.mat, this.reflectivity);
+				subShapes.add(subRect);
+			}
+		}
+		return subShapes;
 	}
 	
 

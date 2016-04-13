@@ -5,6 +5,7 @@ import java.util.List;
 
 import light.AreaLight;
 import light.PointLight;
+import light.PriorSampleLight;
 import material.Chess;
 import material.ColorMap;
 import material.Complex;
@@ -94,7 +95,7 @@ public class World{
 	}
 	
 	public void sphereWorld(int width,int height) {
-		this.ambient = 0.002;
+		//this.ambient = 0.002;
 	        //Set up a scene with a transformed sphere.
 			this.spp = 1;
 			//set the camera.
@@ -163,21 +164,23 @@ public class World{
 	
 	
 	public void planeAndSphere(int width,int height) {
-		this.spp = 1;
+		this.spp = 50;
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(2, 2, 2), new Point(0, 0, 0), new Vector(0, 0, 1), 90);
+				new Point(2, 0, 2), new Point(0, 0, 0), new Vector(0, 0, 1), 90);
 		
 		
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.01,true);
-		this.plights.add(whiteLight);
+		//this.plights.add(whiteLight);
 		PointLight blueLight = new PointLight(new Point(8,8,10),new Color(10,10,100), 0.5,true);
 		//this.plights.add(blueLight);
 		PointLight redLight = new PointLight(new Point(8,-8,10),new Color(100,10,10), 0.5,true);
 		//this.plights.add(redLight);
 		
-		this.ambient = 0.000;
+		//this.ambient = 0.000;
+		this.ambient = 0.002;
+		
 		
 		//setup the objects in the scene.
 		Transformation t1 = Transformation.translate(0.0, 0.0, 0.0).append(
@@ -190,7 +193,7 @@ public class World{
 		Material globeTexture = new ObjTextureFile(spec,"./obj/txt/EarthHighRes.jpg",1.0);
 		//Material globeTexture = new ObjTextureFile("./obj/txt/SphereGrid.jpg",1.0);
 		Sphere globe = new Sphere(t1,globeTexture,1.0);
-		this.shapes.add(globe);
+		//this.shapes.add(globe);
 		
 		//Transformation t2 = Transformation.translate(0, 0, 0.0);
 		//Material sphereText = new Monochrome(new Color(100.0,100.0,100.0));
@@ -630,7 +633,8 @@ public class World{
 		Transformation tRichterLight = Transformation.translate(0, 8.0, 1.0).append(Transformation.rotateX(90));
 		//Circle shape = new Circle(tRichterLight,mRichter,1);
 		Rectangle shape = new Rectangle(tRichterLight,mRichter,1);
-		AreaLight al1 = new AreaLight(shape,1.0,10,10);
+		//AreaLight al1 = new AreaLight(shape,1.0,50,10);
+		PriorSampleLight al1 = new PriorSampleLight(shape,1.0,10,10,20);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		

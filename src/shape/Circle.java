@@ -135,4 +135,15 @@ public class Circle extends Plane implements LightableShape {
 		return txtPoint;
 	}
 	
+	@Override
+	public Point getCenter(){
+		return this.transformation.transform(new Point(0,0,0));
+	}
+
+	@Override
+	public List<LightableShape> subdivide(int subdivisions) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

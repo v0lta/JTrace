@@ -213,5 +213,16 @@ public class Sphere implements LightableShape {
 		}
 	}
 	
+	@Override
+	public Point getCenter(){
+		return this.transformation.transform(new Point(0,0,0));
+	}
+
+	@Override
+	public List<LightableShape> subdivide(int subdivisions) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	
 }
