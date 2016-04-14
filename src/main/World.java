@@ -507,7 +507,7 @@ public class World{
 				                Transformation.scale(0.5, 0.5, 0.5));
 		Rectangle shape = new Rectangle(tLight,mLight,10000);
 		//Sphere shape = new Sphere(tLight,mLight,10000);
-		AreaLight al1 = new AreaLight(shape,1.0,10,180);
+		AreaLight al1 = new AreaLight(shape,1.0,10);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
@@ -568,7 +568,7 @@ public class World{
 		//Material mLight = new MyTextureFile("./obj/mageScene/textureSunBlue.jpg");
 		Transformation tLight = Transformation.translate(-2.5, 3.5, 1.5);
 		Sphere shape = new Sphere(tLight,mLight,0.1);
-		AreaLight al1 = new AreaLight(shape,0.1,100,180);
+		AreaLight al1 = new AreaLight(shape,0.1,100);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
@@ -609,7 +609,7 @@ public class World{
 								Transformation.scale(10, 10, 10));
 		Rectangle plane1 = new Rectangle(tPlane,mPlane1,0.1);
 		//this.shapes.add(plane1);		
-		AreaLight al2 = new AreaLight(plane1,0.015,1,180);
+		AreaLight al2 = new AreaLight(plane1,0.015,1);
 		this.alights.add(al2);
 		this.shapes.add(al2);
 	}
@@ -632,18 +632,18 @@ public class World{
 		Material mRichter = new RandomChess(noSpec, colorMap, 0.1,20);
 		Transformation tRichterLight = Transformation.translate(0, 8.0, 1.0).append(Transformation.rotateX(90));
 		//Circle shape = new Circle(tRichterLight,mRichter,1);
-		Rectangle shape = new Rectangle(tRichterLight,mRichter,1);
-		//AreaLight al1 = new AreaLight(shape,1.0,50,10);
-		PriorSampleLight al1 = new PriorSampleLight(shape,1.0,10,10,20);
+		Rectangle shape = new Rectangle(tRichterLight,mRichter,0.01);
+		//AreaLight al1 = new AreaLight(shape,10.0,500);
+		PriorSampleLight al1 = new PriorSampleLight(shape,10.0,100,10);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
 		//Material mPlane1 = new Chess(new Color(100,100,100), new Color(1,1,1),1);
 		//Specular spec = new PhongSpecular(25.0,0,1);
-		Specular spec = new CookTorranceSpecular(0.117,0.0137,0.1);
+		Specular spec = new CookTorranceSpecular(0.117,0.0137,0.0);
 		Material gery = new Monochrome(spec, new Color(10,10,10));
 		Transformation tPlane = Transformation.translate(0, 0, 0);
-		Plane plane1 = new Plane(tPlane,gery,100);
+		Plane plane1 = new Plane(tPlane,gery,1);
 		this.shapes.add(plane1);
 		
 	}
@@ -667,7 +667,7 @@ public class World{
 		Material mRedLight = new Monochrome(npSpec, new Color(100,10,10));
 		Transformation tRedLight = Transformation.translate(2, 8.0, 2.0).append(Transformation.rotateX(90));
 		Rectangle shape = new Rectangle(tRedLight,mRedLight,1);
-		AreaLight al1 = new AreaLight(shape,0.1,10,120);
+		AreaLight al1 = new AreaLight(shape,0.1,10);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
@@ -675,7 +675,7 @@ public class World{
 		Material mGreenLight = new Monochrome(npSpec, new Color(10,100,10));
 		Transformation tGreenLight = Transformation.translate(-2, 8.0, 2.0).append(Transformation.rotateX(90));
 		Circle shape2 = new Circle(tGreenLight,mGreenLight,1);
-		AreaLight al2 = new AreaLight(shape2,0.1,10,120);
+		AreaLight al2 = new AreaLight(shape2,0.1,10);
 		this.alights.add(al2);
 		this.shapes.add(al2);
 		

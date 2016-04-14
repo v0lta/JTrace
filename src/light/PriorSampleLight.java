@@ -3,11 +3,13 @@ package light;
 import java.util.ArrayList;
 import java.util.List;
 
+import camera.Camera;
 import math.Intersection;
 import math.Normal;
 import math.Point;
 import math.Ray;
 import math.TextPoint;
+import math.Vector;
 import shape.LightableShape;
 import shape.Rectangle;
 import shape.Shape;
@@ -26,48 +28,62 @@ public class PriorSampleLight extends AreaLight {
 	 * @param subdivisions the number of parts the light will be split into.
 	 */
 	public PriorSampleLight(LightableShape shape, double intensity,
-			int sampleNo, double beta, int subdivisions) {
-		super(shape, intensity, sampleNo, beta);
+			int sampleNo, int subdivisions) {
+		super(shape, intensity, sampleNo);
 		this.subdivisions = subdivisions;
 		subLights = shape.subdivide(subdivisions);
 		if (subLights == null){
 			System.err.println("shape type not supported.");
 		}
+		if (sampleNo  < subdivisions){
+			System.err.println("Number of samples must be greater then nuber of subdivisions.");
+		}
 	}
 	
 	@Override
-	public List<LightIntersection> getpPrime(Intersection inter){
-		List<LightIntersection> lightSamples = new ArrayList<LightIntersection>();
+	public List<EvalLightInt> getpPrime(Intersection inter, Camera cam){
+		List<EvalLightInt> lightSamples = new ArrayList<EvalLightInt>();
 		
-		Point hitPoint = inter.point;
+		Point p = inter.point;
+		Vector N = inter.normal.toVector();
+		Vector V = cam.getOrigin().subtract(inter.point).normalize();
 		//compute the g factor for all the sub light sources.
-		double[] gArray = new double[subLights.size()];
-		double gTot = 0;
+		double[] funArray = new double[subLights.size()];
+		double funTot = 0;
 		for (int i = 0; i < subLights.size(); i++){
 			LightableShape current = subLights.get(i);
-			Point pPrime = this.shape.getTransformation().transform(current.getCenter());
-			gArray[i] = this.G(inter, pPrime);
-			gTot = gTot + gArray[i];
+			LightIntersection subSample = transformLightInt(current.getRandomPoint(p));
+			Point pPrime = subSample.pPrime;
+			double G = this.G(inter, pPrime);
+			Vector L = pPrime.subtract(p).normalize();
+			double spec = inter.mat.getSpecular(N, L, V);
 			
+			funArray[i] = G*spec;
+			funTot = funTot + funArray[i];
+			lightSamples.add(new EvalLightInt(subSample.txtPnt, pPrime, subSample.nPrime, G, spec));
 		}
 		//compute and generate the samples for each subsource.
 		for (int i = 0; i < subLights.size(); i++){
 			LightableShape current = subLights.get(i); 
-			double scale = gArray[i]/gTot;
-			int n = (int) Math.round(this.sampleNo * scale);
+			double scale = funArray[i]/funTot;
+			int remainingSamples = this.sampleNo - subdivisions;
+			int n = (int) Math.round((remainingSamples) * scale);
 			
 			//if (n != 0){
 			//	System.out.println(n);
 			//}
-			
-			//TODO: remove.
-			//n = 10;
+
 			for (int m = 0; m < n; m++){
-				LightIntersection pWorldSpace = transformLightInt(current.getRandomPoint(hitPoint));
-				lightSamples.add(pWorldSpace);
+				LightIntersection pWorldSpace = transformLightInt(current.getRandomPoint(p));
+				//Evaluate 
+				Point pPrime = pWorldSpace.pPrime;
+				double G = this.G(inter, pPrime);
+				Vector L = pPrime.subtract(p).normalize();
+				double spec = inter.mat.getSpecular(N, L, V);
+				EvalLightInt evlInt = new EvalLightInt(pWorldSpace,G,spec);
+				lightSamples.add(evlInt);
 			}
 		}
-		//System.out.println(lightSamples.size());
 		return lightSamples;
 	}
 	
@@ -76,13 +92,11 @@ public class PriorSampleLight extends AreaLight {
 		Point pPrime = this.shape.getTransformation().transform(lightInt.pPrime);
 		Normal nPrime = this.shape.getTransformation().transformInverseTranspose(lightInt.nPrime);
 		return new LightIntersection(txtPnt,pPrime,nPrime);
-		
 	}
 	
 	
 	@Override
 	public List<Intersection> intersect(Ray ray) {
-		
 		Ray rayInv = this.shape.getTransformation().transformInverse(ray);
 		List<Intersection> inters = new ArrayList<Intersection>();
 		for (LightableShape subShape: this.subLights) {
@@ -102,6 +116,4 @@ public class PriorSampleLight extends AreaLight {
         Normal hitNormal = this.shape.getTransformation().transformInverseTranspose( inter.normal);
         return new Intersection( hitPoint, planeIntersection.txtPnt, hitNormal, inter.mat, inter.reflectivity);
 	}
-	
-
 }

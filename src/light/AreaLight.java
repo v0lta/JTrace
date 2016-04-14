@@ -3,6 +3,7 @@ package light;
 import java.util.ArrayList;
 import java.util.List;
 
+import camera.Camera;
 import shape.LightableShape;
 import shape.Shape;
 import material.Material;
@@ -19,7 +20,6 @@ public class AreaLight implements Shape  {
 	public final Material mat;
 	public final double intensity;
 	public final int sampleNo;
-	public final double beta;
 	
 	/**
 	 * Instantiate an area light with a shape.
@@ -29,12 +29,11 @@ public class AreaLight implements Shape  {
 	 * @param beta the allowed angle of incoming angles with the light normal.
 	 */
 
-	public AreaLight(LightableShape shape, double intensity, int sampleNo, double beta) {
+	public AreaLight(LightableShape shape, double intensity, int sampleNo) {
 		this.shape = shape;
 		this.mat = shape.getMaterial();
 		this.intensity = intensity;
 		this.sampleNo = sampleNo;
-		this.beta = (180 - beta) * (Math.PI/180);
 	}
 	
 	public double pdf(){
@@ -75,24 +74,27 @@ public class AreaLight implements Shape  {
 		double G = (cosThetaI * cosThetaPrime)/lengthSquared;
 		
 		nPrime = this.getNormal(pPrime).toVector();
-		double betaTest = Math.acos(toLight.dot(nPrime));
-		//if (betaTest < beta){
-		//	G = 0;
-		//}
 		if (G < 0){
 			G = 0;
 		}
-		
 		return G;
 	}
 	
-	public List<LightIntersection> getpPrime(Intersection inter){
-		Point hitPoint = inter.point;
-		List<LightIntersection> lightSamples = new ArrayList<LightIntersection>();
+	public List<EvalLightInt> getpPrime(Intersection inter, Camera cam){
+		Point p = inter.point;
+		Vector N = inter.normal.toVector();
+		Vector V = cam.getOrigin().subtract(inter.point).normalize();
+		
+		List<EvalLightInt> lightSamples = new ArrayList<EvalLightInt>();
 		for (int i = 0; i < this.sampleNo; i++) {
 			//create random number generator with seed for reproducibility.
-			LightIntersection pPrime = this.shape.getRandomPoint(hitPoint);
-			lightSamples.add(pPrime);
+			LightIntersection lghtInt = this.shape.getRandomPoint(p);
+			Point pPrime = lghtInt.pPrime;
+			double G = this.G(inter, pPrime);
+			Vector L = pPrime.subtract(p).normalize();
+			double spec = inter.mat.getSpecular(N, L, V);
+			EvalLightInt evlInt = new EvalLightInt(lghtInt,G,spec);
+			lightSamples.add(evlInt);
 		}
 		return lightSamples;
 	}
