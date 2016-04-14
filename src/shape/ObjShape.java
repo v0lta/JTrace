@@ -8,10 +8,8 @@ import java.util.List;
 
 import camera.Camera;
 import acceleration.AxisAlignedBox;
-import acceleration.MiddleSplitBox;
 import acceleration.ParallelSahBox;
 import acceleration.SahBox;
-import acceleration.SortSplitBox;
 import material.Material;
 import math.Constants;
 import math.Intersection;
@@ -24,7 +22,6 @@ import math.Transformation;
 public class ObjShape implements Shape {
 	public final String path;
 	public final Transformation transformation;
-	public final double reflectivity;
 	public final Material mat;
 	public final List<Triangle> triangleList;
 	protected AxisAlignedBox aab;
@@ -46,11 +43,10 @@ public class ObjShape implements Shape {
 	 * @param camera object needed for camera position.
 	 */	
 	public ObjShape(String path, Transformation transformation, Material mat,
-					double reflectivity, int treeDepth, Camera camera,
+					int treeDepth, Camera camera,
 					double treeEps, double objInterEps){
 		this.path = path;
 		this.transformation = transformation;
-		this.reflectivity = reflectivity;
 		this.mat = mat;
 		this.triangleList = new ArrayList<Triangle>();
 		this.treeDepth = treeDepth;
@@ -75,10 +71,9 @@ public class ObjShape implements Shape {
 	 * Second constructor for use in children where read() is not executed,
 	 */
 	protected ObjShape(String path, String nMapPath, Transformation transformation, Material mat,
-			double reflectivity, int treeDepth, Camera camera, double treeEps, double objInterEps){
+			int treeDepth, Camera camera, double treeEps, double objInterEps){
 		this.path = path;
 		this.transformation = transformation;
-		this.reflectivity = reflectivity;
 		this.mat = mat;
 		this.triangleList = new ArrayList<Triangle>();
 		this.treeDepth = treeDepth;
@@ -270,7 +265,7 @@ public class ObjShape implements Shape {
 				//(Point a, Point b, Point c,
 				//Normal an, Normal bn, Normal cn, Color color,
 				//double reflectivity, Transformation transformation)
-				Triangle triangle = new Triangle(a,b,c,an,bn,cn,at,bt,ct,this.mat,this.reflectivity,this.transformation);
+				Triangle triangle = new Triangle(a,b,c,an,bn,cn,at,bt,ct,this.mat,this.transformation);
 				this.triangleList.add(triangle);
 				
 			}
@@ -357,7 +352,7 @@ public class ObjShape implements Shape {
 		Transformation testTrans = Transformation.createIdentity();
 		Material mat = null;
 		@SuppressWarnings("unused")
-		ObjShape testObj = new ObjShape("./obj/bunny.obj",testTrans,mat,1.0, 1, cam, 0.01, 0.01);
+		ObjShape testObj = new ObjShape("./obj/bunny.obj",testTrans,mat, 1, cam, 0.01, 0.01);
 		System.out.println("done.");
 	}
 	 

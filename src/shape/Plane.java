@@ -21,13 +21,10 @@ public class Plane implements Shape {
 	public final Normal n = new Normal(0,0,1); //normal n describing the plane's orientation.
 	public final Transformation transformation;
 	public final Material mat; //the material describes the plane's coloring.
-	public final double reflectivity; //determines how well the plane reflects light.
-
 	
-    public Plane(Transformation transformation, Material mat,double reflectivity) {
+    public Plane(Transformation transformation, Material mat) {
     	this.transformation = transformation;
         this.mat = mat;
-        this.reflectivity = reflectivity;        
     }
 
     
@@ -64,8 +61,7 @@ public class Plane implements Shape {
                 Normal hitNormal = this.transformation.transformInverseTranspose( this.n);
                 TextPoint txtPoint = new TextPoint(pointVec.x,pointVec.y); //the z coordinate of the unit plane is always zero.
                 Material hitMat = mat;
-                
-                hits.add(new Intersection( hitPoint, txtPoint, hitNormal, hitMat,reflectivity));
+                hits.add(new Intersection( hitPoint, txtPoint, hitNormal, hitMat));
                 return hits;
             }
         }

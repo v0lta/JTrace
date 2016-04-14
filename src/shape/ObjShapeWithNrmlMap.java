@@ -22,8 +22,8 @@ public class ObjShapeWithNrmlMap extends ObjShape {
 	ObjTextureFile nMapFile;
 	
 	public ObjShapeWithNrmlMap(String path,String nMapPath, Transformation transformation,
-			Material mat, double reflectivity, int treeDepth, Camera camera, double treeEps, double objInterEps) {
-		super(path, nMapPath, transformation, mat, reflectivity, treeDepth,
+			Material mat, int treeDepth, Camera camera, double treeEps, double objInterEps) {
+		super(path, nMapPath, transformation, mat, treeDepth,
 			camera, treeEps, objInterEps);
 		Specular noSpec = new NoSpec();
 		Diffuse noDiff = new NoDiff();
@@ -197,7 +197,7 @@ public class ObjShapeWithNrmlMap extends ObjShape {
 				//Triangle triangle = new Triangle(a,b,c,an,bn,cn,at,bt,ct,this.mat,this.reflectivity,this.transformation);
 				//TriangleWithNrmlMap triNrmlMap = new TriangleWithNrmlMap(this.nMapFile,triangle);
 				TriangleWithNrmlMap triNrmlMap = new TriangleWithNrmlMap(this.nMapFile, a,b,c,an,bn,cn,at,bt,ct,
-													this.mat,this.reflectivity,this.transformation);
+													this.mat,this.transformation);
 				this.triangleList.add(triNrmlMap);
 				
 			}

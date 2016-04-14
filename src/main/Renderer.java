@@ -198,7 +198,7 @@ public class Renderer {
 									Intersection closestInt = intersections.get(index);
 
 									//add a color contribution to the pixel based in the closest intersection.
-									double[] ambRes = computeAmbientShading(closestInt, world.ambient, closestInt.reflectivity);
+									double[] ambRes = computeAmbientShading(closestInt, world.ambient, closestInt.mat.getDiffuseRho());
 
 
 									if (Constants.normalVisualization) {
@@ -277,7 +277,7 @@ public class Renderer {
 										for(AreaLight al : world.alights){
 											if (al.shape.inShape(p.toPoint())) {
 												// the intersection is on the point light.
-												double [] lghtRes = computeAmbientShading(closestInt,closestInt.reflectivity,al.intensity);
+												double [] lghtRes = computeAmbientShading(closestInt,closestInt.mat.getDiffuseRho(),al.intensity);
 												buffer.getPixel(x, y).add(lghtRes[0], lghtRes[1], lghtRes[2],1.0);
 											} else {
 												Vector lghtVct = new Vector(0.0,0.0,0.0);
@@ -378,18 +378,20 @@ public class Renderer {
 	}
 
 	private static double[] computeShading(Intersection inter,Vector toLight,PointLight light, double dot, Camera cam) {
+		Vector N = inter.normal.toVector();
+		Vector L = light.l(inter.point);
+		Vector V = cam.getOrigin().subtract(inter.point).normalize();
+		
 		Vector lightRes;
 		Color hitClr = inter.mat.getColor(inter.txtPnt);
 		Vector Cs = hitClr.toVector();
 		Vector Lp = light.L();
-		double Rs = inter.reflectivity;
+		double Rs = inter.mat.getDiffuse(N, L);
 		double d = toLight.lengthSquared();		
 		lightRes = Cs.elPrd(Lp).scale(dot).scale(Rs/Math.PI).scale(1/d);
 
 		//specular
-		Vector N = inter.normal.toVector();
-		Vector L = light.l(inter.point);
-		Vector V = cam.getOrigin().subtract(inter.point).normalize();
+
 		double spec = inter.mat.getSpecular(N, L, V);
 		lightRes = lightRes.add(Lp.scale(Rs*spec));
 		return lightRes.toArray();
@@ -398,17 +400,18 @@ public class Renderer {
 	private static Vector computeAlShading(Intersection inter, AreaLight al, LightIntersection lightInt, Camera cam ){
 		Vector p = inter.point.toVector();
 		Vector pPrime = lightInt.pPrime.toVector();
+		Vector N = inter.normal.toVector();
+		Vector L = pPrime.subtract(p).normalize();
+		Vector V = cam.getOrigin().subtract(inter.point).normalize();
+		
 		double G = al.G(inter, pPrime.toPoint());
 		Vector La = al.L(pPrime.toPoint());
-		double Rs = inter.reflectivity;
+		double Rs = inter.mat.getDiffuse(N, L);
 		Color hitClr = inter.mat.getColor(inter.txtPnt);
 		Vector Cs = hitClr.toVector();
 		Vector intermediateResult = Cs.elPrd(La).scale(Rs);
 
 		//specular
-		Vector N = inter.normal.toVector();
-		Vector L = pPrime.subtract(p).normalize();
-		Vector V = cam.getOrigin().subtract(inter.point).normalize();
 		double spec = inter.mat.getSpecular(N, L, V);
 		Vector Lp = al.mat.getColor(lightInt.txtPnt).toVector();
 		intermediateResult = intermediateResult.add(Cs.elPrd(Lp).scale(spec));
@@ -422,12 +425,11 @@ public class Renderer {
 		Vector pPrime = lightInt.pPrime.toVector();
 		double G = lightInt.G;
 		Vector La = al.L(pPrime.toPoint());
-		double Rs = inter.reflectivity;
 		Color hitClr = inter.mat.getColor(inter.txtPnt);
-		
 		Vector Cs = hitClr.toVector();
+		//diffuse
+		double Rs = lightInt.diff;
 		Vector intermediateResult = Cs.elPrd(La).scale(Rs);
-
 		//specular
 		double spec = lightInt.spec;
 		Vector Lp = al.mat.getColor(lightInt.txtPnt).toVector();

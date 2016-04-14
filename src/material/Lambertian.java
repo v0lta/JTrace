@@ -15,4 +15,9 @@ public class Lambertian implements Diffuse {
 		return rhod/Math.PI*dot;
 	}
 
+	@Override
+	public double getRho() {
+		return rhod/Math.PI;
+	}
+
 }

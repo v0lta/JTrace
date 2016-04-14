@@ -13,13 +13,11 @@ import math.Transformation;
 public class Cube implements Shape {
 	public final Point center = new Point(0,0,0);
 	public final Transformation transformation;
-	public final double reflectivity;
 	public final Material mat;
 	public final List<Rectangle> rects;
 	
-	public Cube(Transformation transformation, Material mat, double reflectivity){
+	public Cube(Transformation transformation, Material mat){
 		this.transformation = transformation;
-		this.reflectivity = reflectivity;
 		this.rects = new ArrayList<Rectangle>();
 		this.mat = mat;
 		this.setUp();
@@ -27,31 +25,30 @@ public class Cube implements Shape {
 	
 	private void setUp(){
 		Material mat = this.mat;
-		double reflectivity = this.reflectivity;
 		
 		Transformation trafox1 = Transformation.IDENTITY.append(
 				Transformation.translate(1, 0, 0)).append(
 				Transformation.rotateY(-90));
-		Rectangle x1 = new Rectangle(trafox1, mat, reflectivity);
+		Rectangle x1 = new Rectangle(trafox1, mat);
 		Transformation trafoxm1 = Transformation.IDENTITY.append(
 				Transformation.translate(-1, 0, 0)).append(
 				Transformation.rotateY(90));
-		Rectangle xm1 = new Rectangle(trafoxm1, mat, reflectivity);
+		Rectangle xm1 = new Rectangle(trafoxm1, mat);
 		Transformation trafoy1 = Transformation.IDENTITY.append(
 				Transformation.translate(0, 1, 0)).append(
 				Transformation.rotateX(-90));
-		Rectangle y1  = new Rectangle(trafoy1, mat, reflectivity);
+		Rectangle y1  = new Rectangle(trafoy1, mat);
 		Transformation trafoym1 = Transformation.IDENTITY.append(
 				Transformation.translate(0, -1, 0)).append(
 				Transformation.rotateX(90));
-		Rectangle ym1 = new Rectangle(trafoym1, mat, reflectivity);
+		Rectangle ym1 = new Rectangle(trafoym1, mat);
 		Transformation trafoz1 = Transformation.IDENTITY.append(
 				Transformation.translate(0, 0, 1));
-		Rectangle z1  = new Rectangle(trafoz1, mat, reflectivity);
+		Rectangle z1  = new Rectangle(trafoz1, mat);
 		Transformation trafozm1 = Transformation.IDENTITY.append(
 				Transformation.translate(0, 0, -1)).append(
 				Transformation.rotateY(180));
-		Rectangle zm1 = new Rectangle(trafozm1, mat, reflectivity);
+		Rectangle zm1 = new Rectangle(trafozm1, mat);
 		
 		this.rects.add(x1);
 		this.rects.add(xm1);
@@ -79,7 +76,7 @@ public class Cube implements Shape {
 	private Intersection TransformIntersection(Intersection inter) {
         Point hitPoint = this.transformation.transform( inter.point );
         Normal hitNormal = this.transformation.transformInverseTranspose( inter.normal);
-        return new Intersection( hitPoint, inter.txtPnt, hitNormal, inter.mat, inter.reflectivity);
+        return new Intersection( hitPoint, inter.txtPnt, hitNormal, inter.mat);
 	}
 
 }

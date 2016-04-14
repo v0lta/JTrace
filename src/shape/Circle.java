@@ -19,9 +19,8 @@ public class Circle extends Plane implements LightableShape {
 	public final double radius = 1;
 	public final double inverseArea;
 	
-	public Circle(Transformation transformation, Material mat,
-			double reflectivity) {
-		super(transformation, mat, reflectivity);
+	public Circle(Transformation transformation, Material mat) {
+		super(transformation, mat);
 		this.inverseArea = 1.0/(Math.PI * radius * radius);
 	}
 	
@@ -61,7 +60,7 @@ public class Circle extends Plane implements LightableShape {
                     Normal hitNormal = this.transformation.transformInverseTranspose( this.n);
                     TextPoint txtPoint = new TextPoint(pointVec.x,pointVec.y); //the z coordinate of the unit plane is always zero.
                     Material hitMat = this.mat;
-                    hits.add(new Intersection( hitPoint, txtPoint, hitNormal, hitMat, reflectivity));
+                    hits.add(new Intersection( hitPoint, txtPoint, hitNormal, hitMat));
                     return hits;
                 } else {
                 	return hits;

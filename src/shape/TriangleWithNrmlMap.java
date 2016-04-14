@@ -20,14 +20,14 @@ public class TriangleWithNrmlMap extends Triangle {
 
 	public TriangleWithNrmlMap(ObjTextureFile nMapFile,Point a, Point b, Point c, Normal an, Normal bn,
 			Normal cn, TextPoint at, TextPoint bt, TextPoint ct, Material mat,
-			double reflectivity, Transformation transformation) {
-		super(a, b, c, an, bn, cn, at, bt, ct, mat, reflectivity, transformation);
+			Transformation transformation) {
+		super(a, b, c, an, bn, cn, at, bt, ct, mat, transformation);
 		this.nMapFile = nMapFile;
 	}
 	
 	public TriangleWithNrmlMap(ObjTextureFile nMapFile,Triangle tri) {
 		super(tri.a, tri.b, tri.c, tri.an, tri.bn, tri.cn, tri.at, tri.bt,
-			  tri.ct, tri.mat, tri.reflectivity, tri.transformation);
+			  tri.ct, tri.mat, tri.transformation);
 		this.nMapFile = nMapFile;
 	}
 
@@ -97,7 +97,7 @@ public class TriangleWithNrmlMap extends Triangle {
         hitNormal = new Normal(-1.0 + 2*(nrmlClr.r/255), -1.0 + 2*(nrmlClr.g/255), -1.0 + 2*(nrmlClr.b/255));
         hitNormal = this.transformation.transformInverseTranspose( hitNormal);
         
-        hits.add(new Intersection(hitPoint, hitTxt, hitNormal, this.mat, this.reflectivity));
+        hits.add(new Intersection(hitPoint, hitTxt, hitNormal, this.mat));
         return hits;
 	}
 	

@@ -35,4 +35,9 @@ public class Monochrome implements Material {
 		return this.diff.getDiffuse(N, L);
 	}
 
+	@Override
+	public double getDiffuseRho() {
+		return this.diff.getRho();
+	}
+
 }

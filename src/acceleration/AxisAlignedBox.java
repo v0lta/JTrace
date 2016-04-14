@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import camera.Camera;
+import material.Lambertian;
 import material.Monochrome;
 import material.NoSpec;
 import math.Color;
@@ -307,7 +308,7 @@ public class AxisAlignedBox implements Shape {
 			normal = normal.toVector().normalize().toNormal();
 
 			intList.add(new Intersection(hitPoint.toPoint(),new TextPoint(0,0), normal,
-					    new Monochrome(new NoSpec(),new Color(100, 10, 10)), 10));
+					    new Monochrome(new NoSpec(), new Lambertian(1.0),new Color(100, 10, 10))));
 		}
 
 		// if (intersectBool(ray)){

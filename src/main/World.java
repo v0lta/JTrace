@@ -10,7 +10,9 @@ import material.Chess;
 import material.ColorMap;
 import material.Complex;
 import material.CookTorranceSpecular;
+import material.Diffuse;
 import material.Julia;
+import material.Lambertian;
 import material.Material;
 import material.Monochrome;
 import material.MyTextureFile;
@@ -83,9 +85,9 @@ public class World{
 		else if (choice == "sun") {
 			sun(width,height);
 		}
-		else if (choice == "force") {
-			force(width,height);
-		}
+		//else if (choice == "force") {
+		//	force(width,height);
+		//}
 		else if (choice == "richter") {
 			richter(width,height);
 		}
@@ -108,21 +110,22 @@ public class World{
 	        //background plane
 			Material mPlane;
 			Specular spec = new NoSpec();
-			mPlane = new Chess(spec,new Color(40,40,40), new Color(10,10,10),0.5);
+			Diffuse lamb = new Lambertian(1.0);
+			mPlane = new Chess(spec, lamb, new Color(40,40,40), new Color(10,10,10),0.5);
 			Transformation tPlane = Transformation.translate(0,0,5).append(Transformation.rotateX(-180));
-			Plane plane = new Plane(tPlane,mPlane,0.9);
+			Plane plane = new Plane(tPlane,mPlane);
 			this.shapes.add(plane);
 	        
 	        //sphere 1
-			Material ms1 = new Monochrome(spec,new Color(0,6,0));
+			Material ms1 = new Monochrome(spec,lamb, new Color(0,6,0));
 			Transformation ts1 = Transformation.translate(1.5,0,0).append(Transformation.scale(0.75, 0.75, 0.75));
-			Sphere s1 = new Sphere(ts1,ms1,0.9);
+			Sphere s1 = new Sphere(ts1,ms1);
 			this.shapes.add(s1);
 			
 	        //sphere 2
-			Material ms2 = new Monochrome(spec,new Color(0,6,6));
+			Material ms2 = new Monochrome(spec, lamb, new Color(0,6,6));
 			Transformation ts2 = Transformation.translate(-1,0.1,0).append(Transformation.scale(0.75, 0.75, 0.75));
-			Sphere s2 = new Sphere(ts2,ms2,0.9);
+			Sphere s2 = new Sphere(ts2,ms2);
 			this.shapes.add(s2);
 	}
 	
@@ -154,12 +157,13 @@ public class World{
 		Transformation t5 = Transformation.translate(-4, 4, 12).append(
 				Transformation.scale(4, 4, 4));
 		
-		Specular phong = new PhongSpecular(25.0,0,1);
-		this.shapes.add(new Sphere(t1,new Monochrome(phong,new Color(1.0,1.0,1.0)),1.));
-		this.shapes.add(new Sphere(t2,new Monochrome(phong,new Color(1.0,1.0,1.0)),1.));
-		this.shapes.add(new Sphere(t3,new Monochrome(phong,new Color(1.0,1.0,1.0)),1.));
-		this.shapes.add(new Sphere(t4,new Monochrome(phong,new Color(1.0,1.0,1.0)),1.));
-		this.shapes.add(new Sphere(t5,new Monochrome(phong,new Color(1.0,1.0,1.0)),1.));
+		Specular phong = new PhongSpecular(25.0,0,0.5);
+		Diffuse lamb = new Lambertian(0.5);
+		this.shapes.add(new Sphere(t1,new Monochrome(phong, lamb, new Color(1.0,1.0,1.0))));
+		this.shapes.add(new Sphere(t2,new Monochrome(phong, lamb, new Color(1.0,1.0,1.0))));
+		this.shapes.add(new Sphere(t3,new Monochrome(phong, lamb, new Color(1.0,1.0,1.0))));
+		this.shapes.add(new Sphere(t4,new Monochrome(phong, lamb, new Color(1.0,1.0,1.0))));
+		this.shapes.add(new Sphere(t5,new Monochrome(phong, lamb, new Color(1.0,1.0,1.0))));
 	}
 	
 	
@@ -188,11 +192,12 @@ public class World{
 							Transformation.rotateY(0)).append(
 							Transformation.rotateZ(180));
 		Specular spec = new PhongSpecular(200,0,0.1);
+		Diffuse lamb = new Lambertian(0.9);
 		//Specular spec = new CookTorranceSpecular(0.1,0.1,1);
 		//Material globeTexture = new ObjTextureFile("./obj/txt/EarthMap.jpg",1.0);
-		Material globeTexture = new ObjTextureFile(spec,"./obj/txt/EarthHighRes.jpg",1.0);
+		Material globeTexture = new ObjTextureFile(spec, lamb,"./obj/txt/EarthHighRes.jpg",1.0);
 		//Material globeTexture = new ObjTextureFile("./obj/txt/SphereGrid.jpg",1.0);
-		Sphere globe = new Sphere(t1,globeTexture,1.0);
+		Sphere globe = new Sphere(t1,globeTexture);
 		//this.shapes.add(globe);
 		
 		//Transformation t2 = Transformation.translate(0, 0, 0.0);
@@ -206,14 +211,14 @@ public class World{
 		//this.shapes.add(table);
 		
 		Material mPlane;
-		mPlane = new Chess(spec,new Color(100,100,100), new Color(1,1,1),1);
+		mPlane = new Chess(spec,lamb, new Color(100,100,100), new Color(1,1,1),1);
 		//cr = -0.076, ci = 0.651, N = 200, bound = 1, lim = 100
 		//mat = new Julia(new Complex(-0.076,0.652),200,1,100, 10);
 		//mPlane = new Monochrome(new Color(100,100,100));
 		
 		//(Point a,Normal n, Material m,double reflectivity)
 		Transformation tPlane = Transformation.translate(1,1,-2);
-		Plane plane = new Plane(tPlane,mPlane,0.5);
+		Plane plane = new Plane(tPlane,mPlane);
 		this.shapes.add(plane);
 		
 	}
@@ -246,7 +251,7 @@ public class World{
 		
 		//(Point a,Normal n, Material m,double reflectivity)
 		Transformation tPlane = Transformation.IDENTITY;
-		Plane plane = new Plane(tPlane,mPlane,1);
+		Plane plane = new Plane(tPlane,mPlane);
 		this.shapes.add(plane);
 		
 	}
@@ -303,9 +308,10 @@ public class World{
 		
 		Material mat;
 		Specular phong = new PhongSpecular(25.0,0,1);
-		mat = new Monochrome(phong, new Color(100,100,100));
+		Diffuse lamb = new Lambertian(3.6);
+		mat = new Monochrome(phong, lamb,  new Color(100,100,100));
 		//ObjShape bunny = new ObjShape("./obj/bunny.obj",t1,mat,2.0,30, this.camera, 0.001, 2.0);
-		ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,2.0,30, this.camera, 0.001, 3.6);
+		ObjShape bunny = new ObjShape("./obj/teapot.obj",t1,mat,30, this.camera, 0.001, 3.6);
 		this.shapes.add(bunny);
 		
 		//No acceleration structure.
@@ -313,11 +319,11 @@ public class World{
 		
 		Material mPlane;
 		//mPlane = new Chess(new Color(100,100,100), new Color(1,1,1),1);
-		mPlane = new Monochrome(phong,new Color(100,100,100));
+		mPlane = new Monochrome(phong, lamb, new Color(100,100,100));
 		
 		//(Point a,Normal n, Material m,double reflectivity)
 		Transformation tPlane = Transformation.translate(0, 0, -0);
-		Plane plane = new Plane(tPlane,mPlane,1);
+		Plane plane = new Plane(tPlane,mPlane);
 		this.shapes.add(plane);
 	}
 	
@@ -340,18 +346,19 @@ public class World{
 				
 				Material mat;
 				Specular phong = new PhongSpecular(25.0,0,1);
-				mat = new Monochrome(phong, new Color(100,100,100));
-				ObjShape venus = new ObjShape("./obj/venus.obj",t1,mat,2.0,20, this.camera, 0.001, 3.0);
+				Diffuse lamb = new Lambertian(2.0);
+				mat = new Monochrome(phong,lamb, new Color(100,100,100));
+				ObjShape venus = new ObjShape("./obj/venus.obj",t1,mat,20, this.camera, 0.001, 3.0);
 				this.shapes.add(venus);
 				
 				
 				Material mPlane;
 				//mPlane = new Chess(new Color(100,100,100), new Color(1,1,1),1);
-				mPlane = new Monochrome(phong, new Color(100,100,100));
+				mPlane = new Monochrome(phong,lamb, new Color(100,100,100));
 				
 				//(Point a,Normal n, Material m,double reflectivity)
 				Transformation tPlane = Transformation.IDENTITY;
-				Plane plane = new Plane(tPlane,mPlane,1);
+				Plane plane = new Plane(tPlane,mPlane);
 				this.shapes.add(plane);
 	}
 	
@@ -377,24 +384,25 @@ public class World{
 		//objMat = new Julia(new Complex(-0.076,0.652),600,1,400,2.5);
 		//objMat = new Monochrome( new Color(100,100,100));
 		Specular phong = new PhongSpecular(250.0,0,0.005);
-		objMat = new ObjTextureFile(phong, "./obj/apple/apple_texture.jpg",1.0);
-		ObjShape apple = new ObjShape("./obj/apple/apple.obj",t1,objMat,1.0,5, this.camera, 0.001, 2.0);
+		Diffuse lamb = new Lambertian(1.0);
+		objMat = new ObjTextureFile(phong, lamb, "./obj/apple/apple_texture.jpg",1.0);
+		ObjShape apple = new ObjShape("./obj/apple/apple.obj",t1,objMat,5, this.camera, 0.001, 2.0);
 		this.shapes.add(apple);
 		
 		t1 = t1.append(Transformation.rotateX(90));
-		Material houseText = new ObjTextureFile(phong, "./obj/house/house_texture.jpg",1.0);
-		ObjShape house = new ObjShape("./obj/house/house.obj",t1,houseText,0.6,0, this.camera, 0.001, 2.0);
+		Material houseText = new ObjTextureFile(phong, lamb, "./obj/house/house_texture.jpg",1.0);
+		ObjShape house = new ObjShape("./obj/house/house.obj",t1,houseText,0, this.camera, 0.001, 2.0);
 		//this.shapes.add(house);
 		
 		
 		Material mPlane;
 		//mPlane = new Monochrome(new Color(100,100,100));
 		//mPlane = new TextureFile("./obj/apple/apple_texture.jpg",1.0);
-		mPlane = new Chess(phong, new Color(100,100,100), new Color(1,1,1),1);
+		mPlane = new Chess(phong,lamb, new Color(100,100,100), new Color(1,1,1),1);
 		
 		//(Point a,Normal n, Material m,double reflectivity)
 		Transformation tPlane = Transformation.translate(0, 0, -5);
-		Plane plane = new Plane(tPlane,mPlane,10);
+		Plane plane = new Plane(tPlane,mPlane);
 		this.shapes.add(plane);		
 	}
 	
@@ -420,23 +428,24 @@ public class World{
 		
 		Material mat;
 		Specular phong = new PhongSpecular(25.0,0,1);
-		mat = new Monochrome(phong, new Color(50,100,50));
+		Diffuse lamb = new Lambertian(2.0);
+		mat = new Monochrome(phong, lamb, new Color(50,100,50));
 		//mat = new ObjTextureFile("./obj/dragonLowPoly/dragonNormalMap4k.jpg",3.0);
 		
 		
 		//ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonLowPoly.obj",t1,mat,2.0,20, this.camera);
 		//ObjShape dragon = new ObjShapeWithNrmlMap("./obj/dragonLowPoly/dragonLowPoly.obj",
 		//		"./obj/dragonLowPoly/dragonNormalMap4k.jpg",t1,mat,2.0,20, this.camera, 0.001, 3.0); //png will crash.!!
-		ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonHighPoly.obj",t1,mat,2.0,25, this.camera,0.0001, 0.001);
+		ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonHighPoly.obj",t1,mat,25, this.camera,0.0001, 0.001);
 		this.shapes.add(dragon);
 		
 		
 		Material mPlane;
-		mPlane = new Monochrome(phong, new Color(100,100,100));
+		mPlane = new Monochrome(phong,lamb, new Color(100,100,100));
 		
 		//(Point a,Normal n, Material m,double reflectivity)
 		Transformation tPlane = Transformation.translate(0, 0, -0.5);
-		Plane plane = new Plane(tPlane,mPlane,1);
+		Plane plane = new Plane(tPlane,mPlane);
 		this.shapes.add(plane);
 	}
 
@@ -463,11 +472,12 @@ public class World{
 		
 		Material mat;
 		Specular phong = new PhongSpecular(100.0,0,1);
-		mat = new Monochrome(phong, new Color(0.5,1,0.5));
+		Diffuse lamb = new Lambertian(10.0);
+		mat = new Monochrome(phong,lamb, new Color(0.5,1,0.5));
 		//mat = new ObjTextureFile("./obj/buddhaLowPoly/buddhaNormalMap4k.jpg",1.0);
 		
 		//mat = new Julia(new Complex(-0.02,0.652),800,0.5,400, 100, "parula");
-		ObjShape buddha = new ObjShape("./obj/buddhaLowPoly/buddhaLowPoly.obj",t1,mat,10.0,25, this.camera, 0.001, 2.0);
+		ObjShape buddha = new ObjShape("./obj/buddhaLowPoly/buddhaLowPoly.obj",t1,mat,25, this.camera, 0.001, 2.0);
 		//ObjShape buddha = new ObjShapeWithNrmlMap("./obj/buddhaLowPoly/buddhaLowPoly.obj",
 		//		"./obj/buddhaLowPoly/buddhaNormalMap4k.jpg",t1,mat,1.0,20, this.camera);
 		//ObjShape buddha = new ObjShape("./obj/buddhaLowPoly/buddhaHighPoly.obj",t1,mat,10.0,25, this.camera);
@@ -475,12 +485,13 @@ public class World{
 		
 		
 		Material mPlane;
-		mPlane = new Monochrome(phong, new Color(100,100,100));
+		Diffuse lamb2 = new Lambertian(0.1);
+		mPlane = new Monochrome(phong,lamb2, new Color(100,100,100));
 		
 		//(Point a,Normal n, Material m,double reflectivity)
 		Transformation tPlane = Transformation.IDENTITY;
 		tPlane = tPlane.append(Transformation.translate(0, 0, -5));
-		Plane plane = new Plane(tPlane,mPlane,0.1);
+		Plane plane = new Plane(tPlane,mPlane);
 		this.shapes.add(plane);
 	}
 	
@@ -501,23 +512,19 @@ public class World{
 		
 		//area light
 		Specular noSpec = new NoSpec();
-		Material mLight = new Monochrome(noSpec, new Color(1,1,1));
+		Diffuse lamb = new Lambertian(10000);
+		Material mLight = new Monochrome(noSpec, lamb, new Color(1,1,1));
 		Transformation tLight = Transformation.translate(0, 0, 5).append(
 				                Transformation.rotateY(-180)).append(
 				                Transformation.scale(0.5, 0.5, 0.5));
-		Rectangle shape = new Rectangle(tLight,mLight,10000);
+		Rectangle shape = new Rectangle(tLight,mLight);
 		//Sphere shape = new Sphere(tLight,mLight,10000);
 		AreaLight al1 = new AreaLight(shape,1.0,10);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
 		Specular phong = new PhongSpecular(100.0,0,0.01);
-		//Specular phong = new NoSpec();
-		Material sMat = new Monochrome(phong,  new Color(10,100,10));
-		Transformation sTr = Transformation.translate(0, 1.0, 3.4).append(Transformation.rotateY(-180));
-		Circle shape2 = new Circle(sTr,sMat,10);
-		//this.shapes.add(shape2);
-	
+		
 		//setup the objects in the scene.
 		Transformation t1 = Transformation.IDENTITY;
 		t1 = t1.append(Transformation.translate(0, -0.5, 1.0)).append(
@@ -526,25 +533,26 @@ public class World{
 				Transformation.rotateZ(0)));
 		
 		Material mat;
-		mat = new Monochrome(phong, new Color(35,107,142));
-		ObjShape tea = new ObjShape("./obj/teapot.obj",t1,mat,1.0,30, this.camera, 0.001, 3.5);
+	    Diffuse lamb2 = new Lambertian(1.0);
+		mat = new Monochrome(phong, lamb2, new Color(35,107,142));
+		ObjShape tea = new ObjShape("./obj/teapot.obj",t1,mat,30, this.camera, 0.001, 3.5);
 		this.shapes.add(tea);
 		
-		Material mPlane1 = new Chess(phong, new Color(10,10,10), new Color(1,1,1),1);
+		Material mPlane1 = new Chess(phong,lamb2,  new Color(10,10,10), new Color(1,1,1),1);
 		Transformation tPlane = Transformation.translate(0, 0, 0);
-		Plane plane1 = new Plane(tPlane,mPlane1,1);
+		Plane plane1 = new Plane(tPlane,mPlane1);
 		this.shapes.add(plane1);
-		Material mPlane2 = new Monochrome(phong, new Color(100,0,0));
+		Material mPlane2 = new Monochrome(phong,lamb2, new Color(100,0,0));
 		Transformation tPlane2 = Transformation.translate(-4.0, 0, 0).append(Transformation.rotateY(90));
-		Plane plane2 = new Plane(tPlane2,mPlane2,1);
+		Plane plane2 = new Plane(tPlane2,mPlane2);
 		this.shapes.add(plane2);
-		Material mPlane3 = new Monochrome(phong, new Color(0,0,100));
+		Material mPlane3 = new Monochrome(phong, lamb2, new Color(0,0,100));
 		Transformation tPlane3 = Transformation.translate(4.0, 0, 0).append(Transformation.rotateY(-90));
-		Plane plane3 = new Plane(tPlane3,mPlane3,1);
+		Plane plane3 = new Plane(tPlane3,mPlane3);
 		this.shapes.add(plane3);
-		Material mPlane4 = new Monochrome(phong, new Color(0,100,0));
+		Material mPlane4 = new Monochrome(phong, lamb2, new Color(0,100,0));
 		Transformation tPlane4 = Transformation.translate(0, -4.0, 0).append(Transformation.rotateX(-90));
-		Plane plane4 = new Plane(tPlane4,mPlane4,1);
+		Plane plane4 = new Plane(tPlane4,mPlane4);
 		this.shapes.add(plane4);
 		//Material mPlane5 = new Monochrome( new Color(10,10,10));
 		//Transformation tPlane5 = Transformation.translate(0, 0, 5.5).append(Transformation.rotateY(180));
@@ -564,33 +572,37 @@ public class World{
 		
 		//area light
 		Specular noSpecular = new NoSpec();
-		Material mLight = new MyTextureFile(noSpecular, "./obj/cubeEarth/texture_sun.jpg");
+		Diffuse sumLamb = new Lambertian(0.1);
+		Material mLight = new MyTextureFile(noSpecular, sumLamb, "./obj/cubeEarth/texture_sun.jpg");
 		//Material mLight = new MyTextureFile("./obj/mageScene/textureSunBlue.jpg");
 		Transformation tLight = Transformation.translate(-2.5, 3.5, 1.5);
-		Sphere shape = new Sphere(tLight,mLight,0.1);
+		Sphere shape = new Sphere(tLight,mLight);
 		AreaLight al1 = new AreaLight(shape,0.1,100);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
 		Specular phong = new NoSpec();
-		Material mEarth = new MyTextureFile(phong, "./obj/cubeEarth/EarthWithClouds.jpg");
+		Diffuse earthLamb = new Lambertian(0.5);
+		Material mEarth = new MyTextureFile(phong, earthLamb, "./obj/cubeEarth/EarthWithClouds.jpg");
 		Transformation tEarth = Transformation.IDENTITY;
-		Sphere earth = new Sphere(tEarth,mEarth,0.5);
+		Sphere earth = new Sphere(tEarth,mEarth);
 		this.shapes.add(earth);
 		
-		Material mMoon = new MyTextureFile(phong, "./obj/cubeEarth/moon.jpg");
+		Diffuse moonLamb = new Lambertian(0.6);
+		Material mMoon = new MyTextureFile(phong, moonLamb, "./obj/cubeEarth/moon.jpg");
 		Transformation tMoon = Transformation.translate(-1.5, -0.5, 0.5).append(Transformation.scale(0.27, 0.27, 0.27));
-		Sphere moon = new Sphere(tMoon, mMoon, 0.5);
+		Sphere moon = new Sphere(tMoon, mMoon);
 		this.shapes.add(moon);
 		
-		Material mCube = new ObjTextureFile(phong, "./obj/cubeEarth/borg2.jpg",3.0);
+		Diffuse cubeLamb = new Lambertian(0.1);
+		Material mCube = new ObjTextureFile(phong, cubeLamb, "./obj/cubeEarth/borg2.jpg",3.0);
 		//Material mCube = new Monochrome(new Color(100,0,0));
 		Transformation tCube = Transformation.IDENTITY.append(
 							   	Transformation.translate(-1.5, 1.5, 1)).append(
 							   	Transformation.rotateZ(8)).append(
 							   	Transformation.rotateX(0)).append(
 							   	Transformation.scale(0.2, 0.2, 0.2));
-		Cube cube = new Cube(tCube, mCube, 0.1);
+		Cube cube = new Cube(tCube, mCube);
 		this.shapes.add(cube);
 		
 		Transformation tCube2 = Transformation.IDENTITY.append(
@@ -598,16 +610,16 @@ public class World{
 			   	Transformation.rotateZ(8)).append(
 			   	Transformation.rotateX(0)).append(
 			   	Transformation.scale(0.25, 0.25, 0.25));
-		Cube cube2 = new Cube(tCube2, mCube, 0.1);
+		Cube cube2 = new Cube(tCube2, mCube);
 		this.shapes.add(cube2);
 		
 		
 		//Material mPlane1 = new Chess(new Color(100,100,100), new Color(1,1,1),1);
-		Material mPlane1 = new ObjTextureFile(phong, "./obj/cubeEarth/space.jpg",1.0);
+		Material mPlane1 = new ObjTextureFile(phong,cubeLamb, "./obj/cubeEarth/space.jpg",1.0);
 		Transformation tPlane = Transformation.translate(4.2, -4, 4).append(
 								Transformation.rotateX(-45)).append(
 								Transformation.scale(10, 10, 10));
-		Rectangle plane1 = new Rectangle(tPlane,mPlane1,0.1);
+		Rectangle plane1 = new Rectangle(tPlane,mPlane1);
 		//this.shapes.add(plane1);		
 		AreaLight al2 = new AreaLight(plane1,0.015,1);
 		this.alights.add(al2);
@@ -628,30 +640,32 @@ public class World{
 		
 		//area light	
 		Specular noSpec = new NoSpec();
+		Diffuse lampLamb = new Lambertian(0.01);
 		ColorMap colorMap = new ColorMap(0.0, 1.0, null,1.0, "parula");
-		Material mRichter = new RandomChess(noSpec, colorMap, 0.1,20);
+		Material mRichter = new RandomChess(noSpec, lampLamb, colorMap, 0.1,20);
 		Transformation tRichterLight = Transformation.translate(0, 8.0, 1.0).append(Transformation.rotateX(90));
 		//Circle shape = new Circle(tRichterLight,mRichter,1);
-		Rectangle shape = new Rectangle(tRichterLight,mRichter,0.01);
-		AreaLight al1 = new AreaLight(shape,10.0,10);
-		//PriorSampleLight al1 = new PriorSampleLight(shape,10.0,10,2);
+		Rectangle shape = new Rectangle(tRichterLight,mRichter);
+		//AreaLight al1 = new AreaLight(shape,10.0,100);
+		PriorSampleLight al1 = new PriorSampleLight(shape,10.0,500,10);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
 		//Material mPlane1 = new Chess(new Color(100,100,100), new Color(1,1,1),1);
-		//Specular spec = new PhongSpecular(25.0,0,1);
+		Specular spec = new PhongSpecular(25.0,0,1);
 		//Specular spec = new CookTorranceSpecular(0.59,0.0137,1.0);
-		Specular spec = new CookTorranceSpecular(0.59,0.0076,1.0);
+		//Specular spec = new CookTorranceSpecular(0.59,0.0076,0.5);
 		//Specular spec = new CookTorranceSpecular(0.0366,0.276,1.0); //0.0366 0.276
-		Material gery = new Monochrome(spec, new Color(10,10,10));
+		Diffuse lamb = new Lambertian(0.5);
+		Material gery = new Monochrome(spec, lamb, new Color(10,10,10));
 		Transformation tPlane = Transformation.translate(0, 0, 0);
-		Plane plane1 = new Plane(tPlane,gery,1);
+		Plane plane1 = new Plane(tPlane,gery);
 		this.shapes.add(plane1);
 		
 	}
 	
 	
-	
+/*	
 	public void force(int width,int height) {
 		this.ambient = 0.0001;
 		
@@ -689,6 +703,6 @@ public class World{
 		this.shapes.add(plane1);
 		
 	}
-	
+*/	
 	
 }

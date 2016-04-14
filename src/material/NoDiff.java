@@ -9,4 +9,9 @@ public class NoDiff implements Diffuse {
 		return 0.0;
 	}
 
+	@Override
+	public double getRho() {
+		return 0;
+	}
+
 }

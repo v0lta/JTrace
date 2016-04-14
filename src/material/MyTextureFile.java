@@ -81,6 +81,12 @@ public class MyTextureFile implements Material {
 	public double getDiffuse(Vector N, Vector L) {
 		return this.diff.getDiffuse(N, L);
 	}
+
+
+	@Override
+	public double getDiffuseRho() {
+		return this.diff.getRho();
+	}
 	
 	
 }

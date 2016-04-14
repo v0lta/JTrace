@@ -11,8 +11,7 @@ import math.Ray;
 import math.TextPoint;
 import math.Vector;
 import shape.LightableShape;
-import shape.Rectangle;
-import shape.Shape;
+
 
 public class PriorSampleLight extends AreaLight {
 	public final int subdivisions;
@@ -57,12 +56,14 @@ public class PriorSampleLight extends AreaLight {
 			double G = this.G(inter, pPrime);
 			Vector L = pPrime.subtract(p).normalize();
 			double spec = inter.mat.getSpecular(N, L, V);
+			double diff = inter.mat.getDiffuse(N, L);
 			
-			funArray[i] = p.subtract(pPrime).length();
-			//funArray[i] = G + G*spec;
+			//funArray[i] = p.subtract(pPrime).length();
+			funArray[i] = G*(spec + diff);
 			//funArray[i] = spec;
 			funTot = funTot + funArray[i];
-			lightSamples.add(new EvalLightInt(subSample.txtPnt, pPrime, subSample.nPrime, G, spec));
+			lightSamples.add(new EvalLightInt(subSample.txtPnt, pPrime, subSample.nPrime,
+							G, spec, diff));
 		}
 		int remainingSamples = this.sampleNo - lightSamples.size();
 		//compute and generate the samples for each subsource.
@@ -78,7 +79,8 @@ public class PriorSampleLight extends AreaLight {
 				double G = this.G(inter, pPrime);
 				Vector L = pPrime.subtract(p).normalize();
 				double spec = inter.mat.getSpecular(N, L, V);
-				EvalLightInt evlInt = new EvalLightInt(pWorldSpace,G,spec);
+				double diff = inter.mat.getDiffuse(N, L);
+				EvalLightInt evlInt = new EvalLightInt(pWorldSpace,G,spec, diff);
 				lightSamples.add(evlInt);
 			}
 		}
@@ -113,6 +115,6 @@ public class PriorSampleLight extends AreaLight {
 		Intersection planeIntersection = this.shape.intersect(ray).get(0);
         Point hitPoint = this.shape.getTransformation().transform( inter.point );
         Normal hitNormal = this.shape.getTransformation().transformInverseTranspose( inter.normal);
-        return new Intersection( hitPoint, planeIntersection.txtPnt, hitNormal, inter.mat, inter.reflectivity);
+        return new Intersection( hitPoint, planeIntersection.txtPnt, hitNormal, inter.mat);
 	}
 }

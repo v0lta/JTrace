@@ -23,4 +23,5 @@ public interface Material {
 	public Color getColor(Vector hitPoint );
 	public double getSpecular(Vector N, Vector L, Vector V);
 	public double getDiffuse(Vector N, Vector L);
+	public double getDiffuseRho();
 }

@@ -27,9 +27,8 @@ public class Rectangle extends Plane implements LightableShape {
 	 * @param width width of the rectangle
 	 */
 	
-	public Rectangle(Transformation transformation, Material mat,
-			double reflectivity) {
-		super(transformation, mat, reflectivity);
+	public Rectangle(Transformation transformation, Material mat) {
+		super(transformation, mat);
 		this.inverseArea = 1.0/(2*2);
 	}
 	
@@ -69,7 +68,7 @@ public class Rectangle extends Plane implements LightableShape {
                     TextPoint txtPoint = new TextPoint(pointVec.x,pointVec.y); //the z coordinate of the unit plane is always zero.
                     Material hitMat = mat;
                     
-                    hits.add(new Intersection( hitPoint, txtPoint, hitNormal, hitMat,reflectivity));
+                    hits.add(new Intersection( hitPoint, txtPoint, hitNormal, hitMat));
                     return hits;
                 } else {
                 	return hits;
@@ -174,7 +173,7 @@ public class Rectangle extends Plane implements LightableShape {
 				centroidY = (yStart + yEnd)/2;
 				//toCenterScale = scale.append(Transformation.translate(centroidX, centroidY, 0));
 				toCenterScale = Transformation.translate(centroidX, centroidY, 0).append(scale);
-				Rectangle subRect = new Rectangle(toCenterScale, this.mat, this.reflectivity);
+				Rectangle subRect = new Rectangle(toCenterScale, this.mat);
 				subShapes.add(subRect);
 			}
 		}

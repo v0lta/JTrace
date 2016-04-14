@@ -25,14 +25,13 @@ public class Triangle implements Shape {
 	public final TextPoint bt;
 	public final TextPoint ct;
 	public final Material mat;
-	public final double reflectivity;
 	public final Transformation transformation;
 
 	
 	public Triangle (Point a, Point b, Point c,
 			Normal an, Normal bn, Normal cn,
 			TextPoint at, TextPoint bt, TextPoint ct, Material mat,
-			double reflectivity, Transformation transformation) {
+			Transformation transformation) {
 		
 		this.a = a;
 		this.b = b;
@@ -53,7 +52,6 @@ public class Triangle implements Shape {
 		this.bt = bt;
 		this.ct = ct;
 		this.mat = mat;
-		this.reflectivity = reflectivity;
 		this.transformation = transformation;		
 	}
 	
@@ -204,7 +202,7 @@ public class Triangle implements Shape {
         hitNormal = this.transformation.transformInverseTranspose( hitNormVec.toNormal());
         
         hitTxt = at.scale(1 - beta - gamma).add(bt.scale(beta)).add(ct.scale(gamma));
-        hits.add(new Intersection(hitPoint, hitTxt, hitNormal, this.mat,this.reflectivity));
+        hits.add(new Intersection(hitPoint, hitTxt, hitNormal, this.mat));
         return hits;
 	}
 

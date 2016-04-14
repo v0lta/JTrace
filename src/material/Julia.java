@@ -6,12 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import shape.Triangle;
 import math.Color;
-import math.Normal;
-import math.Point;
 import math.TextPoint;
-import math.Transformation;
 import math.Vector;
 
 public class Julia implements Material {
@@ -183,6 +179,11 @@ public class Julia implements Material {
 	
 	@Override
 	public double getDiffuse(Vector N, Vector L) {
+		return 1.0;
+	}
+
+	@Override
+	public double getDiffuseRho() {
 		return 1.0;
 	}
 	

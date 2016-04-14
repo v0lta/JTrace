@@ -4,4 +4,5 @@ import math.Vector;
 
 public interface Diffuse {
 	public double getDiffuse(Vector N, Vector L);
+	public double getRho();
 }

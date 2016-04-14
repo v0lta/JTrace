@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import camera.Camera;
-import acceleration.MiddleSplitBox;
 import acceleration.SahBox;
 import material.Complex;
 import material.Julia;
@@ -69,11 +68,11 @@ public class JuliaMesh extends Julia implements Shape {
 				Triangle t1 = new Triangle(p00, p10, p11,
 						null, null, null,
 						tp00, tp10, tp11,
-						mat,ref, trans);
+						mat, trans);
 				Triangle t2 = new Triangle(p00, p11, p01,
 						null, null, null,
 						tp00, tp11, tp01,
-						mat,ref, trans);
+						mat, trans);
 				mesh.add(t1);
 				mesh.add(t2);
 			}

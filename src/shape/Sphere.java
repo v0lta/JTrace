@@ -26,7 +26,6 @@ import math.Intersection;
 public class Sphere implements LightableShape {
 	public final Transformation transformation;
 	public final Material material;
-	public final double reflectivity;
 
 	/**
 	 * Creates a new unit {@link Sphere} at the origin, transformed by the given
@@ -41,11 +40,10 @@ public class Sphere implements LightableShape {
 	 * @throws NullPointerException
 	 *             when the transformation is null.
 	 */
-	public Sphere(Transformation transformation, Material material, double reflectivity) {
+	public Sphere(Transformation transformation, Material material) {
 
 		this.transformation = transformation;
 		this.material = material;
-		this.reflectivity = reflectivity;
 	}
 
 	/*
@@ -100,13 +98,13 @@ public class Sphere implements LightableShape {
 				hitPoint = o.add(transformed.direction.scale(t0));
 				hitPntT = this.transformation.transform(hitPoint.toPoint());
 				hitNmlT = this.transformation.transformInverseTranspose(hitPoint.toNormal());
-				hits.add(new Intersection(hitPntT,getUV(hitPoint.toPoint()),hitNmlT,this.material,this.reflectivity));
+				hits.add(new Intersection(hitPntT,getUV(hitPoint.toPoint()),hitNmlT,this.material));
 				return hits;
 			} else {
 				hitPoint = o.add(transformed.direction.scale(t1));
 				hitPntT = this.transformation.transform(hitPoint.toPoint());
 				hitNmlT = this.transformation.transformInverseTranspose(hitPoint.toNormal());
-				hits.add(new Intersection(hitPntT,getUV(hitPoint.toPoint()),hitNmlT,this.material,this.reflectivity));
+				hits.add(new Intersection(hitPntT,getUV(hitPoint.toPoint()),hitNmlT,this.material));
 				return hits;
 			}
 		} else {

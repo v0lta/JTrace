@@ -7,13 +7,11 @@ public class Intersection {
 	public final TextPoint txtPnt;
 	public final Normal normal;
 	public final Material mat;
-	public final double reflectivity;
 	
-	public Intersection(Point point, TextPoint txtPnt, Normal normal, Material mat, double ref) {
+	public Intersection(Point point, TextPoint txtPnt, Normal normal, Material mat) {
 		this.point = point;
 		this.txtPnt = txtPnt;
 		this.normal = normal;
 		this.mat = mat;
-		this.reflectivity = ref;
 	}
 }
