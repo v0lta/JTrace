@@ -620,11 +620,11 @@ public class World{
 		
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(-1, 0, 2), new Point(0, 5, 2), new Vector(0, 0, 1), 80);
+				new Point(0, 0, 2), new Point(0, 5, 2), new Vector(0, 0, 1), 60);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
-		//PointLight whiteLight1 = new PointLight(new Point(-2,0,4),new Color(10,10,10), 0.01,true);
-		//this.plights.add(whiteLight1);
+		PointLight whiteLight1 = new PointLight(new Point(0,4,5),new Color(10,10,10), 0.001,true);
+		this.plights.add(whiteLight1);
 		
 		//area light	
 		Specular noSpec = new NoSpec();
@@ -633,14 +633,16 @@ public class World{
 		Transformation tRichterLight = Transformation.translate(0, 8.0, 1.0).append(Transformation.rotateX(90));
 		//Circle shape = new Circle(tRichterLight,mRichter,1);
 		Rectangle shape = new Rectangle(tRichterLight,mRichter,0.01);
-		//AreaLight al1 = new AreaLight(shape,10.0,500);
-		PriorSampleLight al1 = new PriorSampleLight(shape,10.0,100,10);
+		AreaLight al1 = new AreaLight(shape,10.0,10);
+		//PriorSampleLight al1 = new PriorSampleLight(shape,10.0,10,2);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
 		//Material mPlane1 = new Chess(new Color(100,100,100), new Color(1,1,1),1);
 		//Specular spec = new PhongSpecular(25.0,0,1);
-		Specular spec = new CookTorranceSpecular(0.117,0.0137,0.0);
+		//Specular spec = new CookTorranceSpecular(0.59,0.0137,1.0);
+		Specular spec = new CookTorranceSpecular(0.59,0.0076,1.0);
+		//Specular spec = new CookTorranceSpecular(0.0366,0.276,1.0); //0.0366 0.276
 		Material gery = new Monochrome(spec, new Color(10,10,10));
 		Transformation tPlane = Transformation.translate(0, 0, 0);
 		Plane plane1 = new Plane(tPlane,gery,1);

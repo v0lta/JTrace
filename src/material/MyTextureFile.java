@@ -17,6 +17,7 @@ public class MyTextureFile implements Material {
 	private int width;
 	public final String path;
 	public final Specular spec;
+	public final Diffuse diff;
 	
 	/**
 	 * Create a texture file, to make an image file available as texture. 
@@ -25,10 +26,11 @@ public class MyTextureFile implements Material {
 	 * @param path the path to the image.
 	 * @param specular part of the desired brdf.
 	 */
-	public MyTextureFile(Specular spec, String path){
+	public MyTextureFile(Specular spec, Diffuse diff, String path){
 		this.path = path;
 		this.read();
 		this.spec = spec;
+		this.diff = diff;
 	}
 	
 	
@@ -73,5 +75,13 @@ public class MyTextureFile implements Material {
 	public double getSpecular(Vector N, Vector L, Vector V) {
 		return this.spec.getSpecular(N, L, V);
 	}
+
+
+	@Override
+	public double getDiffuse(Vector N, Vector L) {
+		return this.diff.getDiffuse(N, L);
+	}
+	
+	
 }
 	

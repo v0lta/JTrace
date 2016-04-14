@@ -6,14 +6,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import shape.ObjShape.Extremes;
-import acceleration.ParallelSahBox;
-import acceleration.SahBox;
+import material.Diffuse;
 import material.Material;
+import material.NoDiff;
 import material.NoSpec;
 import material.ObjTextureFile;
 import material.Specular;
-import math.Constants;
 import math.Normal;
 import math.Point;
 import math.TextPoint;
@@ -28,7 +26,8 @@ public class ObjShapeWithNrmlMap extends ObjShape {
 		super(path, nMapPath, transformation, mat, reflectivity, treeDepth,
 			camera, treeEps, objInterEps);
 		Specular noSpec = new NoSpec();
-		this.nMapFile = new ObjTextureFile(noSpec,nMapPath, 1.0);
+		Diffuse noDiff = new NoDiff();
+		this.nMapFile = new ObjTextureFile(noSpec, noDiff, nMapPath, 1.0);
 		
 		long t = System.nanoTime();
 		try {

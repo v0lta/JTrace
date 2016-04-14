@@ -58,20 +58,18 @@ public class PriorSampleLight extends AreaLight {
 			Vector L = pPrime.subtract(p).normalize();
 			double spec = inter.mat.getSpecular(N, L, V);
 			
-			funArray[i] = G*spec;
+			funArray[i] = p.subtract(pPrime).length();
+			//funArray[i] = G + G*spec;
+			//funArray[i] = spec;
 			funTot = funTot + funArray[i];
 			lightSamples.add(new EvalLightInt(subSample.txtPnt, pPrime, subSample.nPrime, G, spec));
 		}
+		int remainingSamples = this.sampleNo - lightSamples.size();
 		//compute and generate the samples for each subsource.
 		for (int i = 0; i < subLights.size(); i++){
 			LightableShape current = subLights.get(i); 
 			double scale = funArray[i]/funTot;
-			int remainingSamples = this.sampleNo - subdivisions;
 			int n = (int) Math.round((remainingSamples) * scale);
-			
-			//if (n != 0){
-			//	System.out.println(n);
-			//}
 
 			for (int m = 0; m < n; m++){
 				LightIntersection pWorldSpace = transformLightInt(current.getRandomPoint(p));
@@ -84,19 +82,20 @@ public class PriorSampleLight extends AreaLight {
 				lightSamples.add(evlInt);
 			}
 		}
+		//System.out.println(lightSamples.size());
 		return lightSamples;
 	}
 	
 	private LightIntersection transformLightInt(LightIntersection lightInt){
-		TextPoint txtPnt = lightInt.txtPnt;
 		Point pPrime = this.shape.getTransformation().transform(lightInt.pPrime);
 		Normal nPrime = this.shape.getTransformation().transformInverseTranspose(lightInt.nPrime);
+		TextPoint txtPnt = this.shape.getUV(pPrime);
 		return new LightIntersection(txtPnt,pPrime,nPrime);
 	}
 	
 	
-	@Override
-	public List<Intersection> intersect(Ray ray) {
+	//@Override
+	public List<Intersection> intersect2(Ray ray) {
 		Ray rayInv = this.shape.getTransformation().transformInverse(ray);
 		List<Intersection> inters = new ArrayList<Intersection>();
 		for (LightableShape subShape: this.subLights) {

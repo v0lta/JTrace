@@ -22,14 +22,13 @@ public class CookTorranceSpecular implements Specular {
 		Vector sum = V.add(L);
 		Vector H = sum.normalize();
 		
-		double dot = H.dot(N);
+		double dot = H.dot(N); //alpha
 		double delta = Math.acos(dot);
 		double c = V.dot(H);
 		double g = getg(n,c);
 		double G = getG(N,H,L,V);
 		double D = getD(m,delta);
 		double fresnel = fresnel(c,g);
-		fresnel = 1;
 		
 		return rhos/Math.PI * (D*G)/(N.dot(L)*N.dot(V))*fresnel;
 	}

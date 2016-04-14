@@ -9,16 +9,19 @@ public class Chess implements Material{
 	public final Color color2;
 	public final double s;
 	public final Specular spec;
+	public final Diffuse diff;
 	
 	/**
 	 * Creates material, which looks like a chess board.
 	 * @param spec the specular part of the brdf.
+	 * @param diff the diffuse part of the brdf.
 	 * @param color1 first rectangle color
 	 * @param color2 second rectangle color
 	 * @param s 	the rectangle size.
 	 */	
-	public Chess(Specular spec, Color color1, Color color2, double s) {
+	public Chess(Specular spec, Diffuse diffuse, Color color1, Color color2, double s) {
 		this.spec = spec;
+		this.diff = diffuse;
 		this.color1 = color1;
 		this.color2 = color2;
 		this.s = s;
@@ -56,6 +59,11 @@ public class Chess implements Material{
 	@Override
 	public double getSpecular(Vector N, Vector L, Vector V) {
 		return this.spec.getSpecular(N, L, V);
+	}
+
+	@Override
+	public double getDiffuse(Vector N, Vector L) {
+		return this.diff.getDiffuse(N, L);
 	}
 
 }

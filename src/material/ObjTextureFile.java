@@ -18,6 +18,7 @@ public class ObjTextureFile implements Material {
 	public final String path;
 	public final double size;
 	public final Specular spec;
+	public final Diffuse diff;
 	
 	
 	/**
@@ -27,11 +28,12 @@ public class ObjTextureFile implements Material {
 	 * @param spec specular part of the brdf.
 	 */
 	
-	public ObjTextureFile(Specular spec, String path, double size){
+	public ObjTextureFile(Specular spec, Diffuse diff, String path, double size){
 		this.path = path;
 		this.read();
 		this.size = size;
 		this.spec = spec;
+		this.diff = diff;
 	}
 	
 	
@@ -90,7 +92,8 @@ public class ObjTextureFile implements Material {
 	public static void main(String[] arguments){
 		//ObjTextureFile test = new ObjTextureFile("./obj/apple/apple_texture.jpg",1.0);
 		Specular noSpec = new NoSpec();
-		ObjTextureFile test = new ObjTextureFile(noSpec,"./obj/dragonLowPoly/dragonNormalMap4k.jpg",1.0);
+		Lambertian lamb = new Lambertian(0.5);
+		ObjTextureFile test = new ObjTextureFile(noSpec, lamb,"./obj/dragonLowPoly/dragonNormalMap4k.jpg",1.0);
 		test.read();
 		TextPoint testPnt = new TextPoint(0.5,0.5);
 		Color testColor = test.getColor(testPnt);
@@ -102,6 +105,11 @@ public class ObjTextureFile implements Material {
 	@Override
 	public double getSpecular(Vector N, Vector L, Vector V) {
 		return this.spec.getSpecular(N, L, V);
+	}
+	
+	@Override
+	public double getDiffuse(Vector N, Vector L) {
+		return this.diff.getDiffuse(N, L);
 	}
 	
 

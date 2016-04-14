@@ -176,9 +176,16 @@ public class Julia implements Material {
 		
 	}
 	
-	public double getSpecular(Vector N, Vector L, Vector V){
+	@Override
+	public double getSpecular(Vector N, Vector L, Vector V) {
 		return 1.0;
 	}
+	
+	@Override
+	public double getDiffuse(Vector N, Vector L) {
+		return 1.0;
+	}
+	
 	
 
 

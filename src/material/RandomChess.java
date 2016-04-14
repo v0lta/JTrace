@@ -11,13 +11,15 @@ public class RandomChess implements Material {
 	public final int colorNo;
 	public final double s;
 	public final Specular spec;
+	public final Diffuse diff;
 	
-	public RandomChess(Specular spec, ColorMap colors, double s, int colorNo) {
+	public RandomChess(Specular spec, Diffuse diff, ColorMap colors, double s, int colorNo) {
 		this.map = colors;
 		this.colorNo = colorNo;
 		this.s = s;
 		this.map.shuffleColors();
 		this.spec = spec;
+		this.diff = diff;
 	}
 
 	@Override
@@ -64,6 +66,11 @@ public class RandomChess implements Material {
 	@Override
 	public double getSpecular(Vector N, Vector L, Vector V) {
 		return this.spec.getSpecular(N, L, V);
+	}
+
+	@Override
+	public double getDiffuse(Vector N, Vector L) {
+		return this.diff.getDiffuse(N, L);
 	}
 
 

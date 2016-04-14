@@ -117,6 +117,10 @@ public class Rectangle extends Plane implements LightableShape {
 		}
 	}
 
+	
+	/**
+	 * Get UV coordinates from point in world space.
+	 */
 	@Override
 	public TextPoint getUV(Point pPrime) {
 		//transform the point onto the z plane.
