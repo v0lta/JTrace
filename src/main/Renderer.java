@@ -436,6 +436,7 @@ public class Renderer {
 		intermediateResult = intermediateResult.add(Cs.elPrd(Lp).scale(spec));
 		intermediateResult = intermediateResult.scale(G).scale(al.shape.getInverseArea()).scale(1.0/ ((double) al.sampleNo));
 		return intermediateResult;
+		//return (new Vector(1,1,1).scale(spec));
 
 	}
 }

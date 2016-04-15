@@ -19,6 +19,7 @@ public class CookTorranceSpecular implements Specular {
 	
 	@Override
 	public double getSpecular(Vector N, Vector L, Vector V){
+		
 		Vector sum = V.add(L);
 		Vector H = sum.normalize();
 		
@@ -28,12 +29,16 @@ public class CookTorranceSpecular implements Specular {
 		double g = getg(n,c);
 		double G = getG(N,H,L,V);
 		double D = getD(m,delta);
-		double fresnel = fresnel(c,g);
+		//double D = getD(0.1,delta);
+		double fresnel = fresnelPaper(c,g);
+		//double fresnel = fresnelBook(N,V,n);
 		
 		return rhos/Math.PI * (D*G)/(N.dot(L)*N.dot(V))*fresnel;
+		//return rhos/Math.PI * (D*G)*fresnel;
+		//return frac;
 	}
 	
-	private double fresnel(double c,double g){
+	private double fresnelPaper(double c,double g){
 		double frac1 = ((g - c)*(g - c))/(2 * (g + c)*(g + c));
 		
 		double frac2Num = c*(g + c) - 1;
@@ -41,6 +46,18 @@ public class CookTorranceSpecular implements Specular {
 		
 		return frac1 + (1 + (frac2Num * frac2Num)/(frac2Dem * frac2Dem ));
 	}
+	
+	private double fresnelBook(Vector N, Vector V, double eta){
+		double cosThetaI = N.dot(V);
+		double cosThetaT = Math.sqrt(1 - 1/(eta*eta) * (1 / cosThetaI*cosThetaI));
+		
+		double rPrl = (eta*cosThetaI - cosThetaT) / (eta*cosThetaI + cosThetaT);
+		double rOrth = (cosThetaI - eta*cosThetaT) / (cosThetaI + eta*cosThetaT);
+		
+		double kr = 0.5*(rPrl*rPrl + rOrth*rOrth);
+		return kr;
+	}
+	
 	
 	private double getg(double n, double c){
 		return Math.sqrt(n*n + c*c - 1);

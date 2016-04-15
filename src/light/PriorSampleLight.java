@@ -59,19 +59,24 @@ public class PriorSampleLight extends AreaLight {
 			double diff = inter.mat.getDiffuse(N, L);
 			
 			//funArray[i] = p.subtract(pPrime).length();
-			funArray[i] = G*(spec + diff);
-			//funArray[i] = spec;
+			//funArray[i] = G*(spec + diff);
+			funArray[i] = spec;
+			//funArray[i] = G;
 			funTot = funTot + funArray[i];
-			lightSamples.add(new EvalLightInt(subSample.txtPnt, pPrime, subSample.nPrime,
-							G, spec, diff));
+			//lightSamples.add(new EvalLightInt(subSample.txtPnt, pPrime, subSample.nPrime,
+			//				G, spec, diff));
 		}
 		int remainingSamples = this.sampleNo - lightSamples.size();
+		if (remainingSamples < 0) {
+			System.err.println("remaining samples negative.");
+			System.err.println(remainingSamples);
+		}
 		//compute and generate the samples for each subsource.
 		for (int i = 0; i < subLights.size(); i++){
 			LightableShape current = subLights.get(i); 
 			double scale = funArray[i]/funTot;
 			int n = (int) Math.round((remainingSamples) * scale);
-
+			
 			for (int m = 0; m < n; m++){
 				LightIntersection pWorldSpace = transformLightInt(current.getRandomPoint(p));
 				//Evaluate 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import light.AreaLight;
+import light.GlossyRefLight;
 import light.PointLight;
 import light.PriorSampleLight;
 import material.Chess;
@@ -502,7 +503,7 @@ public class World{
 		
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(0, 10, 10), new Point(0, 0, 0), new Vector(0, 0, 1), 90);
+				new Point(0, 10, 10), new Point(0, 0, 0), new Vector(0, 0, 1), 45);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		//PointLight whiteLight1 = new PointLight(new Point(-2,0,4),new Color(10,10,10), 0.01,true);
@@ -519,7 +520,7 @@ public class World{
 				                Transformation.scale(0.5, 0.5, 0.5));
 		Rectangle shape = new Rectangle(tLight,mLight);
 		//Sphere shape = new Sphere(tLight,mLight,10000);
-		AreaLight al1 = new AreaLight(shape,1.0,10);
+		AreaLight al1 = new AreaLight(shape,100.0,10);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
@@ -562,7 +563,7 @@ public class World{
 
 	public void sun(int width,int height) {
 		this.spp = 5;
-		this.ambient = 0.01;
+		this.ambient = 0.00001;
 		
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
@@ -572,12 +573,12 @@ public class World{
 		
 		//area light
 		Specular noSpecular = new NoSpec();
-		Diffuse sumLamb = new Lambertian(0.1);
+		Diffuse sumLamb = new Lambertian(0.0005);
 		Material mLight = new MyTextureFile(noSpecular, sumLamb, "./obj/cubeEarth/texture_sun.jpg");
 		//Material mLight = new MyTextureFile("./obj/mageScene/textureSunBlue.jpg");
 		Transformation tLight = Transformation.translate(-2.5, 3.5, 1.5);
 		Sphere shape = new Sphere(tLight,mLight);
-		AreaLight al1 = new AreaLight(shape,0.1,100);
+		AreaLight al1 = new AreaLight(shape,100.0,100);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
@@ -621,47 +622,62 @@ public class World{
 								Transformation.scale(10, 10, 10));
 		Rectangle plane1 = new Rectangle(tPlane,mPlane1);
 		//this.shapes.add(plane1);		
-		AreaLight al2 = new AreaLight(plane1,0.015,1);
+		AreaLight al2 = new AreaLight(plane1,1.0,1);
 		this.alights.add(al2);
 		this.shapes.add(al2);
 	}
 	
 	
 	public void richter(int width,int height) {
+		this.spp = 4;
 		this.ambient = 0.0000;
 		
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(0, 0, 2), new Point(0, 5, 2), new Vector(0, 0, 1), 60);
+				new Point(0, 1, 2), new Point(0, 5, 2), new Vector(0, 0, 1), 60);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
-		PointLight whiteLight1 = new PointLight(new Point(0,4,5),new Color(10,10,10), 0.001,true);
-		this.plights.add(whiteLight1);
+		//PointLight whiteLight1 = new PointLight(new Point(0,-2,4),new Color(10,10,10), 2.0,false);
+		//this.plights.add(whiteLight1);
 		
 		//area light	
 		Specular noSpec = new NoSpec();
-		Diffuse lampLamb = new Lambertian(0.01);
-		ColorMap colorMap = new ColorMap(0.0, 1.0, null,1.0, "parula");
+		Diffuse lampLamb = new Lambertian(0.075);
+		ColorMap colorMap = new ColorMap(0.0, 1.0, null, 1.0, "parula");
 		Material mRichter = new RandomChess(noSpec, lampLamb, colorMap, 0.1,20);
 		Transformation tRichterLight = Transformation.translate(0, 8.0, 1.0).append(Transformation.rotateX(90));
 		//Circle shape = new Circle(tRichterLight,mRichter,1);
 		Rectangle shape = new Rectangle(tRichterLight,mRichter);
-		//AreaLight al1 = new AreaLight(shape,10.0,100);
-		PriorSampleLight al1 = new PriorSampleLight(shape,10.0,500,10);
+		//AreaLight al1 = new AreaLight(shape,10.0,50);
+		PriorSampleLight al1 = new PriorSampleLight(shape,100.0,50,5);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
 		//Material mPlane1 = new Chess(new Color(100,100,100), new Color(1,1,1),1);
-		Specular spec = new PhongSpecular(25.0,0,1);
-		//Specular spec = new CookTorranceSpecular(0.59,0.0137,1.0);
-		//Specular spec = new CookTorranceSpecular(0.59,0.0076,0.5);
-		//Specular spec = new CookTorranceSpecular(0.0366,0.276,1.0); //0.0366 0.276
-		Diffuse lamb = new Lambertian(0.5);
+		//Specular spec = new PhongSpecular(1.0,0,1.0);
+		//Specular spec = new CookTorranceSpecular(0.015,0.01,0.5);
+		//Specular spec = new CookTorranceSpecular(0.025,0.076,1.0);
+		Specular spec = new CookTorranceSpecular(0.0366,0.276,1.0); //0.0366 0.276
+		Diffuse lamb = new Lambertian(1.0);
 		Material gery = new Monochrome(spec, lamb, new Color(10,10,10));
 		Transformation tPlane = Transformation.translate(0, 0, 0);
 		Plane plane1 = new Plane(tPlane,gery);
 		this.shapes.add(plane1);
 		
+		/*
+		Diffuse lambBlue = new Lambertian(0.25);
+		Material blue = new Monochrome(noSpec, lambBlue, new Color(1,1,10));
+		Transformation tPlane2 = Transformation.translate(0, 8.001, 0).append(
+												Transformation.rotateX(90));
+		Plane plane2 = new Plane(tPlane2,blue);
+		//this.shapes.add(plane2);
+		Diffuse lambGreen = new Lambertian(5);
+		Material green = new Monochrome(noSpec, lambGreen, new Color(1,10,1));
+		Transformation tPlane3 = Transformation.translate(-2, 0, 0).append(
+												Transformation.rotateY(90));
+		Plane plane3 = new Plane(tPlane3,green);
+		this.shapes.add(plane3);
+		*/
 	}
 	
 	
