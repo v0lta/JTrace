@@ -49,7 +49,7 @@ public class Renderer {
 		int width = 600;
 		int height = 600;
 		double sensitivity = 1.0;
-		double gamma = 1.5;
+		double gamma = 3.0;
 		boolean gui = true;
 
 
@@ -137,6 +137,8 @@ public class Renderer {
 		//final World world = new World(width, height, "planeAndSphere");
 		//final World world = new World(width, height, "Julia");
 		//final World world = new World(width, height, "Julia3d");
+		//final World world = new World(width, height, "Julia2");
+		//final World world = new World(width, height, "Julia3d2");
 		//final World world = new World(width, height, "apple");
 		//final World world = new World(width, height, "bunny");		
 		//final World world = new World(width, height, "venus");
@@ -145,7 +147,6 @@ public class Renderer {
 		//final World world = new World(width, height, "tea");
 		//final World world = new World(width, height, "sun");
 		final World world = new World(width, height, "richter");
-		//final World world = new World(width, height, "force");
 		
 
 		/**********************************************************************

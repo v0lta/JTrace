@@ -79,7 +79,9 @@ public class ColorMap {
 	}
 	
 	public void shuffleColors() {
-		long seed = System.nanoTime();
+		//get rid of this to make the colors different every time.
+		long seed = 10;		
+		//long seed = System.nanoTime();
 		Collections.shuffle(this.colors, new Random(seed));
 		Collections.shuffle(this.colors, new Random(seed));
 	}

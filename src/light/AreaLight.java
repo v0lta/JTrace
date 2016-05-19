@@ -26,7 +26,6 @@ public class AreaLight implements Shape  {
 	 * @param shape the geometric shape of the new light.
 	 * @param intensity the brightness of the new light.
 	 * @param sampleNo the monte-carlo integration samples.
-	 * @param beta the allowed angle of incoming angles with the light normal.
 	 */
 
 	public AreaLight(LightableShape shape, double intensity, int sampleNo) {

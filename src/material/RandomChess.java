@@ -13,7 +13,8 @@ public class RandomChess implements Material {
 	public final Specular spec;
 	public final Diffuse diff;
 	
-	public RandomChess(Specular spec, Diffuse diff, ColorMap colors, double s, int colorNo) {
+	public RandomChess(Specular spec, Diffuse diff, ColorMap colors,
+						double s, int colorNo) {
 		this.map = colors;
 		this.colorNo = colorNo;
 		this.s = s;

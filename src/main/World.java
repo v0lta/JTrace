@@ -62,8 +62,14 @@ public class World{
 		else if (choice == "Julia") {
 			julia(width,height);
 		}
+		else if (choice == "Julia2") {
+			julia2(width,height);
+		}
 		else if (choice == "Julia3d") {
 			julia3d(width,height);
+		}
+		else if (choice == "Julia3d2") {
+			julia3d2(width,height);
 		}
 		else if (choice == "bunny") {
 			bunny(width,height);
@@ -86,9 +92,6 @@ public class World{
 		else if (choice == "sun") {
 			sun(width,height);
 		}
-		//else if (choice == "force") {
-		//	force(width,height);
-		//}
 		else if (choice == "richter") {
 			richter(width,height);
 		}
@@ -257,6 +260,56 @@ public class World{
 		
 	}
 
+	public void julia2(int width,int height) {
+		this.spp = 2;
+		//set the camera.
+		this.camera = new PerspectiveCamera(width, height,
+				new Point(1, 1, 1), new Point(1, 1, 0), new Vector(1, 0, 0), 90);
+
+		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
+		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.00,false);
+		this.plights.add(whiteLight);
+		this.ambient = 1.0;
+		
+		//setup the objects in the scene.
+		Material mPlane;
+		//cr = -0.076, ci = 0.651, N = 200, bound = 1, lim = 100
+		//mPlane = new Julia(new Complex(-0.07,0.652),800,1,400, 10, "parula");
+		//mPlane = new Julia(new Complex(-0.8,0.156),800,1,100, 10, "jet");
+		mPlane = new Julia(new Complex(-0.8,0.175),800,1,100, 10, "jet");
+		
+		Transformation tPlane = Transformation.IDENTITY;
+		Plane plane = new Plane(tPlane,mPlane);
+		this.shapes.add(plane);
+		
+	}
+	
+	public void julia3d2(int width,int height) {
+		this.spp = 2;
+		//set the camera.
+		this.camera = new PerspectiveCamera(width, height,
+				new Point(0, 1, 1.2), new Point(0.0, 0.0, -0.14), new Vector(0, 0, 1), 70);
+		
+		
+		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
+		PointLight whiteLight = new PointLight(new Point(0,0,10),new Color(100,100,100), 0.00,false);
+		this.plights.add(whiteLight);
+		this.ambient = 1.0;
+		
+		//setup the objects in the scene.
+		Transformation trans = Transformation.scale(1.2, 1.2, 1.2);
+		
+																	//800
+		//JuliaMesh juliaMesh = new JuliaMesh(new Complex(-0.8,0.156),800,2,400, 100, "jet",1.0,
+		//							trans, camera, 0.01, 100);
+		JuliaMesh juliaMesh = new JuliaMesh(new Complex(-0.8,0.175),800,2,400, 100, "jet",1.0,
+				trans, camera, 0.01, 100);
+		this.shapes.add(juliaMesh);
+		
+	}
+
+	
+	
 	public void julia3d(int width,int height) {
 		this.spp = 1;
 		//set the camera.
@@ -436,7 +489,7 @@ public class World{
 		
 		//ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonLowPoly.obj",t1,mat,2.0,20, this.camera);
 		//ObjShape dragon = new ObjShapeWithNrmlMap("./obj/dragonLowPoly/dragonLowPoly.obj",
-		//		"./obj/dragonLowPoly/dragonNormalMap4k.jpg",t1,mat,2.0,20, this.camera, 0.001, 3.0); //png will crash.!!
+		//		"./obj/dragonLowPoly/dragonNormalMap4k.jpg",t1,mat,20, this.camera, 0.001, 3.0); //png will crash.!!
 		ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonHighPoly.obj",t1,mat,25, this.camera,0.0001, 0.001);
 		this.shapes.add(dragon);
 		
@@ -498,12 +551,12 @@ public class World{
 	
 	public void tea(int width,int height) {
 		this.spp = 5;
-		this.ambient = 0.0000;
+		this.ambient = 0.00001;
 		
 		
 		//set the camera.
 		this.camera = new PerspectiveCamera(width, height,
-				new Point(0, 10, 10), new Point(0, 0, 0), new Vector(0, 0, 1), 45);
+				new Point(0, 6, 4), new Point(0, 0, 2), new Vector(0, 0, 1), 68);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		//PointLight whiteLight1 = new PointLight(new Point(-2,0,4),new Color(10,10,10), 0.01,true);
@@ -515,12 +568,12 @@ public class World{
 		Specular noSpec = new NoSpec();
 		Diffuse lamb = new Lambertian(10000);
 		Material mLight = new Monochrome(noSpec, lamb, new Color(1,1,1));
-		Transformation tLight = Transformation.translate(0, 0, 5).append(
+		Transformation tLight = Transformation.translate(0, 1, 5).append(
 				                Transformation.rotateY(-180)).append(
 				                Transformation.scale(0.5, 0.5, 0.5));
 		Rectangle shape = new Rectangle(tLight,mLight);
 		//Sphere shape = new Sphere(tLight,mLight,10000);
-		AreaLight al1 = new AreaLight(shape,100.0,10);
+		AreaLight al1 = new AreaLight(shape,100.0,100);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
@@ -536,10 +589,10 @@ public class World{
 		Material mat;
 	    Diffuse lamb2 = new Lambertian(1.0);
 		mat = new Monochrome(phong, lamb2, new Color(35,107,142));
-		ObjShape tea = new ObjShape("./obj/teapot.obj",t1,mat,30, this.camera, 0.001, 3.5);
+		ObjShape tea = new ObjShape("./obj/teapot.obj",t1,mat,30, this.camera, 0.001, 4.5);
 		this.shapes.add(tea);
 		
-		Material mPlane1 = new Chess(phong,lamb2,  new Color(10,10,10), new Color(1,1,1),1);
+		Material mPlane1 = new Chess(phong,lamb2,  new Color(100,100,100), new Color(1,1,1),1);
 		Transformation tPlane = Transformation.translate(0, 0, 0);
 		Plane plane1 = new Plane(tPlane,mPlane1);
 		this.shapes.add(plane1);
@@ -639,28 +692,47 @@ public class World{
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
 		//PointLight whiteLight1 = new PointLight(new Point(0,-2,4),new Color(10,10,10), 2.0,false);
 		//this.plights.add(whiteLight1);
-		
-		//area light	
-		Specular noSpec = new NoSpec();
-		Diffuse lampLamb = new Lambertian(0.075);
+
 		ColorMap colorMap = new ColorMap(0.0, 1.0, null, 1.0, "parula");
-		Material mRichter = new RandomChess(noSpec, lampLamb, colorMap, 0.1,20);
-		Transformation tRichterLight = Transformation.translate(0, 8.0, 1.0).append(Transformation.rotateX(90));
-		//Circle shape = new Circle(tRichterLight,mRichter,1);
+		Material mRichter;
+		Transformation tRichterLight;
+		Specular spec;
+		
+		Diffuse lampLamb = new Lambertian(0.00025);
+			
+		
+		Specular noSpec = new NoSpec();
+		double rhoDiff = 5.0;
+		double rhoSpec = 0.5;
+		Diffuse lamb = new Lambertian(rhoDiff);
+		boolean phong = false;
+		if (phong) {
+			//Phong
+			lampLamb = new Lambertian(1*rhoDiff);
+			spec = new PhongSpecular(2000.0,0,rhoSpec);
+			//spec = new PhongSpecular(1000.0,0,rhoSpec);
+			//spec = new PhongSpecular(500.0,0,rhoSpec);
+			//spec = new PhongSpecular(100.0,0,rhoSpec);
+		} else {
+			//Cook-Torrance	
+			lampLamb = new Lambertian(0.008*rhoDiff);
+			//spec = new NoSpec();
+			spec = new CookTorranceSpecular(0.03,0.01,rhoSpec);
+			//spec = new CookTorranceSpecular(0.025,0.076,rhoSpec);
+			//spec = new CookTorranceSpecular(0.0366,0.276,rhoSpec); //0.0366 0.276
+			//spec = new CookTorranceSpecular(0.015,0.01,rhoSpec);
+		}
+		//area light
+		mRichter = new RandomChess(noSpec, lampLamb, colorMap, 1.0,20);
+		tRichterLight = Transformation.translate(0, 8.0, 1.0).append(Transformation.rotateX(90));
 		Rectangle shape = new Rectangle(tRichterLight,mRichter);
-		//AreaLight al1 = new AreaLight(shape,10.0,50);
-		PriorSampleLight al1 = new PriorSampleLight(shape,100.0,50,5);
+		AreaLight al1 = new AreaLight(shape,30.0,100);
+		//PriorSampleLight al1 = new PriorSampleLight(shape,6000.0,50,5);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
-		//Material mPlane1 = new Chess(new Color(100,100,100), new Color(1,1,1),1);
-		//Specular spec = new PhongSpecular(1.0,0,1.0);
-		//Specular spec = new CookTorranceSpecular(0.015,0.01,0.5);
-		//Specular spec = new CookTorranceSpecular(0.025,0.076,1.0);
-		Specular spec = new CookTorranceSpecular(0.0366,0.276,1.0); //0.0366 0.276
-		Diffuse lamb = new Lambertian(1.0);
 		Material gery = new Monochrome(spec, lamb, new Color(10,10,10));
-		Transformation tPlane = Transformation.translate(0, 0, 0);
+		Transformation tPlane = Transformation.IDENTITY;
 		Plane plane1 = new Plane(tPlane,gery);
 		this.shapes.add(plane1);
 		
@@ -679,46 +751,6 @@ public class World{
 		this.shapes.add(plane3);
 		*/
 	}
-	
-	
-/*	
-	public void force(int width,int height) {
-		this.ambient = 0.0001;
-		
-		//set the camera.
-		this.camera = new PerspectiveCamera(width, height,
-		//		new Point(0, 0, 2), new Point(0, 5, 2), new Vector(0, 0, 1), 80);
-				new Point(0, 0, 2), new Point(0, 2, 2), new Vector(0, 0, 1), 80);
-		
-		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
-		//PointLight whiteLight1 = new PointLight(new Point(-2,0,4),new Color(10,10,10), 0.01,true);
-		//this.plights.add(whiteLight1);
-		
-		//area light
-		Specular npSpec = new NoSpec();
-		Material mRedLight = new Monochrome(npSpec, new Color(100,10,10));
-		Transformation tRedLight = Transformation.translate(2, 8.0, 2.0).append(Transformation.rotateX(90));
-		Rectangle shape = new Rectangle(tRedLight,mRedLight,1);
-		AreaLight al1 = new AreaLight(shape,0.1,10);
-		this.alights.add(al1);
-		this.shapes.add(al1);
-		
-		
-		Material mGreenLight = new Monochrome(npSpec, new Color(10,100,10));
-		Transformation tGreenLight = Transformation.translate(-2, 8.0, 2.0).append(Transformation.rotateX(90));
-		Circle shape2 = new Circle(tGreenLight,mGreenLight,1);
-		AreaLight al2 = new AreaLight(shape2,0.1,10);
-		this.alights.add(al2);
-		this.shapes.add(al2);
-		
-		//Material mPlane1 = new Chess(new Color(100,100,100), new Color(1,1,1),1);
-		Specular phong = new PhongSpecular(25.0,0,0.001);
-		Material mPlane1 = new Monochrome(phong, new Color(10,10,10));
-		Transformation tPlane = Transformation.translate(0, 0, 0);
-		Plane plane1 = new Plane(tPlane,mPlane1,1);
-		this.shapes.add(plane1);
-		
-	}
-*/	
+
 	
 }
