@@ -50,7 +50,7 @@ public class Renderer {
 		int height = 600;
 		double sensitivity = 1.0;
 		double gamma = 3.0;
-		boolean gui = true;
+		boolean gui = false;
 
 
 		/**********************************************************************
