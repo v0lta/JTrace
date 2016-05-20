@@ -731,7 +731,7 @@ public class World{
 		tRichterLight = Transformation.translate(0, 8.0, 1.0).append(Transformation.rotateX(90));
 		Rectangle shape = new Rectangle(tRichterLight,mRichter);
 		//AreaLight al1 = new AreaLight(shape,20.0,sampleNo);
-		PriorSampleLight al1 = new PriorSampleLight(shape,20.0,sampleNo,1);
+		PriorSampleLight al1 = new PriorSampleLight(shape,20.0,sampleNo,10);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
@@ -870,7 +870,7 @@ public class World{
 		Rectangle shape = new Rectangle(tRichterLight,mRichter);
 		//AreaLight al1 = new AreaLight(shape,20.0,sampleNo);
 		PriorSampleLight al1 = new PriorSampleLight(shape,20.0,sampleNo,10);
-		this.shapes.addAll(al1.getSubLightShapes());
+		this.shapes.addAll(al1.subLights);
 		//this.shapes.add(shape);
 		
 		Material gery = new Monochrome(spec, lamb, new Color(1,1,1));

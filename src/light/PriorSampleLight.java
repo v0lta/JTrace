@@ -5,15 +5,10 @@ import java.util.List;
 
 import camera.Camera;
 import math.Intersection;
-import math.Normal;
 import math.Point;
 import math.Ray;
-import math.TextPoint;
-import math.Transformation;
 import math.Vector;
 import shape.LightableShape;
-import shape.Rectangle;
-import shape.Shape;
 
 
 public class PriorSampleLight extends AreaLight {
@@ -53,7 +48,7 @@ public class PriorSampleLight extends AreaLight {
 		double funTot = 0;
 		for (int i = 0; i < subLights.size(); i++){
 			LightableShape current = subLights.get(i);
-			LightIntersection subSample = transformLightInt(current.getRandomPoint(p));
+			LightIntersection subSample = current.getRandomPoint(p);
 			Point pPrime = subSample.pPrime;
 			double G = this.G(inter, pPrime);
 			Vector L = pPrime.subtract(p).normalize();
@@ -92,7 +87,7 @@ public class PriorSampleLight extends AreaLight {
 			int n = (int) Math.round((remainingSamples) * scale);
 			
 			for (int m = 0; m < n; m++){
-				LightIntersection pWorldSpace = transformLightInt(current.getRandomPoint(p));
+				LightIntersection pWorldSpace = current.getRandomPoint(p);
 				//Evaluate 
 				Point pPrime = pWorldSpace.pPrime;
 				double G = this.G(inter, pPrime);
@@ -108,14 +103,6 @@ public class PriorSampleLight extends AreaLight {
 		return lightSamples;
 	}
 	
-	private LightIntersection transformLightInt(LightIntersection lightInt){
-		Point pPrime = this.shape.getTransformation().transform(lightInt.pPrime);
-		Normal nPrime = this.shape.getTransformation().transformInverseTranspose(lightInt.nPrime);
-		TextPoint txtPnt = this.shape.getUV(pPrime);
-		return new LightIntersection(txtPnt,pPrime,nPrime);
-	}
-	
-	
 	//@Override
 	public List<Intersection> intersect2(Ray ray) {
 		Ray rayInv = this.shape.getTransformation().transformInverse(ray);
@@ -123,30 +110,11 @@ public class PriorSampleLight extends AreaLight {
 		for (LightableShape subShape: this.subLights) {
 			inters.addAll(subShape.intersect(rayInv));
 		}
-		//Transform intersections
-		List<Intersection> intersTransformed = new ArrayList<Intersection>();
-		for (Intersection inter: inters) {
-			intersTransformed.add(TransformIntersection(inter, ray));
-		}
-		return intersTransformed;
-	}
-	
-	private Intersection TransformIntersection(Intersection inter, Ray ray) {
-		Intersection planeIntersection = this.shape.intersect(ray).get(0);
-        Point hitPoint = this.shape.getTransformation().transform( inter.point );
-        Normal hitNormal = this.shape.getTransformation().transformInverseTranspose( inter.normal);
-        return new Intersection( hitPoint, planeIntersection.txtPnt, hitNormal, inter.mat);
+		return inters;
 	}
 	
 	public List<LightableShape> getSubLightShapes(){
-		List<LightableShape> alParts = new ArrayList<LightableShape>();
-		//for (LightableShape shape : this.subLights){
-		for (int i = 0; i < this.subLights.size(); i = i + 1 ){
-			LightableShape alShape = this.subLights.get(i);
-			Transformation newTrans = this.shape.getTransformation().append(alShape.getTransformation());	
-			alParts.add(new Rectangle(newTrans, this.mat));
-		}
-		return alParts;
+		return this.subLights;
 	}
 	
 }
