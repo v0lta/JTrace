@@ -9,8 +9,11 @@ import math.Normal;
 import math.Point;
 import math.Ray;
 import math.TextPoint;
+import math.Transformation;
 import math.Vector;
 import shape.LightableShape;
+import shape.Rectangle;
+import shape.Shape;
 
 
 public class PriorSampleLight extends AreaLight {
@@ -33,8 +36,8 @@ public class PriorSampleLight extends AreaLight {
 		if (subLights == null){
 			System.err.println("shape type not supported.");
 		}
-		if (sampleNo  < subdivisions){
-			System.err.println("Number of samples must be greater then nuber of subdivisions.");
+		if (sampleNo  < ((subdivisions + 1)*(subdivisions + 1))){
+			System.err.println("Number of samples must be greater than (number of subdivisions + 1)^2.");
 		}
 	}
 	
@@ -58,7 +61,8 @@ public class PriorSampleLight extends AreaLight {
 			double diff = inter.mat.getDiffuse(N, L);
 			
 			//funArray[i] = p.subtract(pPrime).length();
-			funArray[i] = G*(spec + diff);
+			//funArray[i] = G*(spec + diff);
+			funArray[i] = G*(diff + spec);
 			//funArray[i] = spec;
 			//funArray[i] = G;
 			funTot = funTot + funArray[i];
@@ -71,9 +75,20 @@ public class PriorSampleLight extends AreaLight {
 			System.err.println(remainingSamples);
 		}
 		//compute and generate the samples for each subsource.
+		
+		//debug....
+
+		//System.out.println(subLights.size());
+		//System.out.println(remainingSamples);
+		
+		double test = 1.0/funTot;
+		if (Double.isInfinite(test)) {
+			return lightSamples;
+		} else {		
 		for (int i = 0; i < subLights.size(); i++){
 			LightableShape current = subLights.get(i); 
 			double scale = funArray[i]/funTot;
+			
 			int n = (int) Math.round((remainingSamples) * scale);
 			
 			for (int m = 0; m < n; m++){
@@ -87,6 +102,7 @@ public class PriorSampleLight extends AreaLight {
 				EvalLightInt evlInt = new EvalLightInt(pWorldSpace,G,spec, diff);
 				lightSamples.add(evlInt);
 			}
+		}
 		}
 		//System.out.println(lightSamples.size());
 		return lightSamples;
@@ -121,4 +137,16 @@ public class PriorSampleLight extends AreaLight {
         Normal hitNormal = this.shape.getTransformation().transformInverseTranspose( inter.normal);
         return new Intersection( hitPoint, planeIntersection.txtPnt, hitNormal, inter.mat);
 	}
+	
+	public List<LightableShape> getSubLightShapes(){
+		List<LightableShape> alParts = new ArrayList<LightableShape>();
+		//for (LightableShape shape : this.subLights){
+		for (int i = 0; i < this.subLights.size(); i = i + 1 ){
+			LightableShape alShape = this.subLights.get(i);
+			Transformation newTrans = this.shape.getTransformation().append(alShape.getTransformation());	
+			alParts.add(new Rectangle(newTrans, this.mat));
+		}
+		return alParts;
+	}
+	
 }

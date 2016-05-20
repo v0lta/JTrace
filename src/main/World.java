@@ -95,6 +95,12 @@ public class World{
 		else if (choice == "richter") {
 			richter(width,height,sampleNo);
 		}
+		else if (choice == "richterExtended") {
+			richterExtended(width,height,sampleNo);
+		}
+		else if (choice == "debug") {
+			debug(width,height,sampleNo);
+		}
 		else {
 			throw new IllegalArgumentException("World not found");
 		}
@@ -725,7 +731,7 @@ public class World{
 		tRichterLight = Transformation.translate(0, 8.0, 1.0).append(Transformation.rotateX(90));
 		Rectangle shape = new Rectangle(tRichterLight,mRichter);
 		//AreaLight al1 = new AreaLight(shape,20.0,sampleNo);
-		PriorSampleLight al1 = new PriorSampleLight(shape,20.0,sampleNo,5);
+		PriorSampleLight al1 = new PriorSampleLight(shape,20.0,sampleNo,1);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
@@ -748,5 +754,129 @@ public class World{
 		Plane plane3 = new Plane(tPlane3,green);
 		this.shapes.add(plane3);
 		*/
-	}	
+	}
+	
+	
+	public void richterExtended(int width,int height, int sampleNo) {
+		this.spp = 5;
+		this.ambient = 0.0000;
+		
+		//set the camera.
+		this.camera = new PerspectiveCamera(width, height,
+				new Point(0, 1, 2), new Point(0, 5, 2), new Vector(0, 0, 1), 60);
+
+		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
+		PointLight whiteLight1 = new PointLight(new Point(0,-2,4),new Color(10,10,10), 0.5,false);
+		this.plights.add(whiteLight1);
+
+		ColorMap colorMap = new ColorMap(0.0, 1.0, null, 1.0, "parula");
+		Material mRichter;
+		Transformation tRichterLight;
+		Specular spec;
+		
+		//Diffuse lampLamb = new Lambertian(0.00025);
+		Specular noSpec = new NoSpec();
+		double rhoDiff = 0.25;
+		double rhoSpec = 0.75;
+		Diffuse lamb = new Lambertian(rhoDiff);
+		boolean phong = false;
+		if (phong) {
+			//Phong
+			spec = new PhongSpecular(2000.0,0,rhoSpec);
+			//spec = new PhongSpecular(1000.0,0,rhoSpec);
+			//spec = new PhongSpecular(500.0,0,rhoSpec);
+			//spec = new PhongSpecular(100.0,0,rhoSpec);
+		} else {
+			//Cook-Torrance	
+			//spec = new NoSpec();
+			//spec = new CookTorranceSpecular(0.03,0.01,rhoSpec);
+			spec = new CookTorranceSpecular(0.025,0.076,rhoSpec);
+			//spec = new CookTorranceSpecular(0.0366,0.276,rhoSpec); //0.0366 0.276
+			//spec = new CookTorranceSpecular(0.015,0.01,rhoSpec);
+		}
+		//area light
+		mRichter = new RandomChess(noSpec, lamb, colorMap, 1.0,20);
+		tRichterLight = Transformation.translate(0, 8.0, 1.25).append(
+						Transformation.rotateX(90)).append(
+						Transformation.scale(1.25, 1.0, 1.25));
+		Rectangle shape = new Rectangle(tRichterLight,mRichter);
+		//AreaLight al1 = new AreaLight(shape,20.0,sampleNo);
+		PriorSampleLight al1 = new PriorSampleLight(shape,20.0,sampleNo,10);
+		this.alights.add(al1);
+		this.shapes.add(al1);
+		
+		Material gery = new Monochrome(spec, lamb, new Color(1,1,1));
+		Transformation tPlane = Transformation.IDENTITY;
+		Plane plane1 = new Plane(tPlane,gery);
+		this.shapes.add(plane1);
+		
+
+		Diffuse lambBlue = new Lambertian(0.25);
+		Material blue = new Monochrome(noSpec, lambBlue, new Color(1,1,10));
+		Transformation tPlane2 = Transformation.translate(0, 8.001, 0).append(
+												Transformation.rotateX(90));
+		Plane plane2 = new Plane(tPlane2,blue);
+		this.shapes.add(plane2);
+		
+		Diffuse lambGreen = new Lambertian(5);
+		Material green = new Monochrome(noSpec, lambGreen, new Color(1,10,1));
+		Transformation tPlane3 = Transformation.translate(-2, 0, 0).append(
+												Transformation.rotateY(90));
+		Plane plane3 = new Plane(tPlane3,green);
+		this.shapes.add(plane3);
+		
+		Transformation tCube = Transformation.translate(0.5, 5.5, 0.25).append(
+							   Transformation.scale(0.25, 0.25, 0.25)).append(
+							   Transformation.rotateZ(45));
+		Material mCube = new Monochrome(spec, lamb, new Color(1,10,10));
+		Cube cube = new Cube(tCube, mCube);
+		this.shapes.add(cube);
+		
+		Transformation tSphere = Transformation.translate(-0.5, 5.5, 0.25).append(Transformation.scale(0.25, 0.25, 0.25));
+		Material mSphere = new Monochrome(spec, lamb, new Color(10,10,10));
+		Sphere sphere = new Sphere(tSphere, mSphere);
+		this.shapes.add(sphere);
+
+	}
+	
+	
+	
+	public void debug(int width,int height, int sampleNo) {
+		this.spp = 5;
+		this.ambient = 0.0001;
+		
+		//set the camera.
+		this.camera = new PerspectiveCamera(width, height,
+				new Point(0, 1, 2), new Point(0, 5, 2), new Vector(0, 0, 1), 60);
+
+		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
+		PointLight whiteLight1 = new PointLight(new Point(0,-2,4),new Color(10,10,10), 10.5,false);
+		this.plights.add(whiteLight1);
+
+		ColorMap colorMap = new ColorMap(0.0, 1.0, null, 1.0, "parula");
+		Material mRichter;
+		Transformation tRichterLight;
+		Specular spec = new NoSpec();
+		
+		//Diffuse lampLamb = new Lambertian(0.00025);
+		Specular noSpec = new NoSpec();
+		double rhoDiff = 0.25;
+		double rhoSpec = 0.75;
+		Diffuse lamb = new Lambertian(rhoDiff);
+		mRichter = new Monochrome(noSpec,lamb, new Color(100,100,100));
+		tRichterLight = Transformation.translate(0, 8.0, 1.25).append(
+						Transformation.rotateX(90)).append(
+						Transformation.scale(1.25, 1.0, 1.25));
+		Rectangle shape = new Rectangle(tRichterLight,mRichter);
+		//AreaLight al1 = new AreaLight(shape,20.0,sampleNo);
+		PriorSampleLight al1 = new PriorSampleLight(shape,20.0,sampleNo,10);
+		this.shapes.addAll(al1.getSubLightShapes());
+		//this.shapes.add(shape);
+		
+		Material gery = new Monochrome(spec, lamb, new Color(1,1,1));
+		Transformation tPlane = Transformation.IDENTITY;
+		Plane plane1 = new Plane(tPlane,gery);
+		this.shapes.add(plane1);
+	}
+	
 }

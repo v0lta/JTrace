@@ -45,12 +45,12 @@ public class Renderer {
 	 *            command line arguments.
 	 */
 	public static void main(String[] arguments) {
-		int width = 200;
-		int height = 200;
+		int width = 300;
+		int height = 300;
 		double sensitivity = 1.0;
 		double gamma = 3.0;
 		boolean gui = true;
-		int sampleNo = 10;
+		int sampleNo = 500;
 
 
 		/**********************************************************************
@@ -150,7 +150,8 @@ public class Renderer {
 		//final World world = new World(width, height, "tea", sampleNo);
 		//final World world = new World(width, height, "sun", sampleNo);
 		final World world = new World(width, height, "richter", sampleNo);
-
+		//final World world = new World(width, height, "richterExtended", sampleNo);
+		//final World world = new World(width, height, "debug", sampleNo);
 
 		/**********************************************************************
 		 * Multi-threaded rendering of the scene
