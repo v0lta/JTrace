@@ -59,8 +59,8 @@ public class PriorSampleLight extends AreaLight {
 			double diff = inter.mat.getDiffuse(N, L);
 			
 			//funArray[i] = p.subtract(pPrime).length();
-			//funArray[i] = G*(spec + diff);
-			funArray[i] = spec;
+			funArray[i] = (spec + diff);
+			//funArray[i] = spec;
 			//funArray[i] = G;
 			funTot = funTot + funArray[i];
 			//lightSamples.add(new EvalLightInt(subSample.txtPnt, pPrime, subSample.nPrime,

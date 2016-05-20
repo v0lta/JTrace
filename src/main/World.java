@@ -702,36 +702,34 @@ public class World{
 			
 		
 		Specular noSpec = new NoSpec();
-		double rhoDiff = 5.0;
+		double rhoDiff = 0.5;
 		double rhoSpec = 0.5;
 		Diffuse lamb = new Lambertian(rhoDiff);
 		boolean phong = false;
 		if (phong) {
 			//Phong
-			lampLamb = new Lambertian(1*rhoDiff);
 			spec = new PhongSpecular(2000.0,0,rhoSpec);
 			//spec = new PhongSpecular(1000.0,0,rhoSpec);
 			//spec = new PhongSpecular(500.0,0,rhoSpec);
 			//spec = new PhongSpecular(100.0,0,rhoSpec);
 		} else {
 			//Cook-Torrance	
-			lampLamb = new Lambertian(0.008*rhoDiff);
 			//spec = new NoSpec();
-			spec = new CookTorranceSpecular(0.03,0.01,rhoSpec);
+			//spec = new CookTorranceSpecular(0.03,0.01,rhoSpec);
 			//spec = new CookTorranceSpecular(0.025,0.076,rhoSpec);
-			//spec = new CookTorranceSpecular(0.0366,0.276,rhoSpec); //0.0366 0.276
+			spec = new CookTorranceSpecular(0.0366,0.276,rhoSpec); //0.0366 0.276
 			//spec = new CookTorranceSpecular(0.015,0.01,rhoSpec);
 		}
 		//area light
-		mRichter = new RandomChess(noSpec, lampLamb, colorMap, 1.0,20);
+		mRichter = new RandomChess(noSpec, lamb, colorMap, 1.0,20);
 		tRichterLight = Transformation.translate(0, 8.0, 1.0).append(Transformation.rotateX(90));
 		Rectangle shape = new Rectangle(tRichterLight,mRichter);
-		AreaLight al1 = new AreaLight(shape,30.0,100);
-		//PriorSampleLight al1 = new PriorSampleLight(shape,6000.0,50,5);
+		//AreaLight al1 = new AreaLight(shape,10.0,100);
+		PriorSampleLight al1 = new PriorSampleLight(shape,10.0,50,5);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
-		Material gery = new Monochrome(spec, lamb, new Color(10,10,10));
+		Material gery = new Monochrome(spec, lamb, new Color(1,1,1));
 		Transformation tPlane = Transformation.IDENTITY;
 		Plane plane1 = new Plane(tPlane,gery);
 		this.shapes.add(plane1);

@@ -26,7 +26,6 @@ import math.Ray;
 import math.Vector;
 import light.AreaLight;
 import light.EvalLightInt;
-import light.LightIntersection;
 import light.PointLight;
 import sampling.Sample;
 import shape.Shape;
@@ -49,8 +48,8 @@ public class Renderer {
 		int width = 600;
 		int height = 600;
 		double sensitivity = 1.0;
-		double gamma = 3.0;
-		boolean gui = false;
+		double gamma = 2.0;
+		boolean gui = true;
 
 
 		/**********************************************************************
@@ -147,7 +146,7 @@ public class Renderer {
 		//final World world = new World(width, height, "tea");
 		//final World world = new World(width, height, "sun");
 		final World world = new World(width, height, "richter");
-		
+
 
 		/**********************************************************************
 		 * Multi-threaded rendering of the scene
@@ -286,13 +285,13 @@ public class Renderer {
 												for (EvalLightInt lightInt : lightInts) {
 													Vector NPrime = lightInt.nPrime.toVector();
 													Vector L = p.subtract(lightInt.pPrime.toVector()).normalize();
-									
+
 													if (NPrime.dot(L) > 0){
 														Ray shadowRay = new Ray(p.toPoint(), lightInt.pPrime.toVector());
 														shadowInters = testforIntsections(world.shapes,shadowRay); 
 														if (shadowInters.isEmpty()) {
 															//its not in the shadow.
-															//compute distance to light source
+															//compute distance to light source.
 															lghtVct = lghtVct.add(computeAlShading(closestInt,al,lightInt, world.camera ));
 														} else {
 															boolean inShadow = false; 
@@ -311,10 +310,10 @@ public class Renderer {
 																lghtVct = lghtVct.add(computeAlShading(closestInt,al,lightInt, world.camera ));
 															}
 														}
-													Color lghtClr = lghtVct.scale(1.0/al.sampleNo).toColor();
-													buffer.getPixel(x, y).add(lghtClr.r, lghtClr.g, lghtClr.b,1.0);
 													} 
-												} 
+												}
+												Color lghtClr = lghtVct.scale(1.0/al.sampleNo).toColor();
+												buffer.getPixel(x, y).add(lghtClr.r, lghtClr.g, lghtClr.b,1.0);
 											}
 										}
 									} 
@@ -382,7 +381,7 @@ public class Renderer {
 		Vector N = inter.normal.toVector();
 		Vector L = light.l(inter.point);
 		Vector V = cam.getOrigin().subtract(inter.point).normalize();
-		
+
 		Vector lightRes;
 		Color hitClr = inter.mat.getColor(inter.txtPnt);
 		Vector Cs = hitClr.toVector();
@@ -392,37 +391,12 @@ public class Renderer {
 		lightRes = Cs.elPrd(Lp).scale(dot).scale(Rs/Math.PI).scale(1/d);
 
 		//specular
-
 		double spec = inter.mat.getSpecular(N, L, V);
 		lightRes = lightRes.add(Lp.scale(Rs*spec));
 		return lightRes.toArray();
 	}
 
-	private static Vector computeAlShading(Intersection inter, AreaLight al, LightIntersection lightInt, Camera cam ){
-		Vector p = inter.point.toVector();
-		Vector pPrime = lightInt.pPrime.toVector();
-		Vector N = inter.normal.toVector();
-		Vector L = pPrime.subtract(p).normalize();
-		Vector V = cam.getOrigin().subtract(inter.point).normalize();
-		
-		double G = al.G(inter, pPrime.toPoint());
-		Vector La = al.L(pPrime.toPoint());
-		double Rs = inter.mat.getDiffuse(N, L);
-		Color hitClr = inter.mat.getColor(inter.txtPnt);
-		Vector Cs = hitClr.toVector();
-		Vector intermediateResult = Cs.elPrd(La).scale(Rs);
-
-		//specular
-		double spec = inter.mat.getSpecular(N, L, V);
-		Vector Lp = al.mat.getColor(lightInt.txtPnt).toVector();
-		intermediateResult = intermediateResult.add(Cs.elPrd(Lp).scale(spec));
-		intermediateResult = intermediateResult.scale(G).scale(al.shape.getInverseArea()).scale(1.0/ ((double) al.sampleNo));
-		return intermediateResult;
-
-	}
-	
 	private static Vector computeAlShading(Intersection inter, AreaLight al, EvalLightInt lightInt, Camera cam ){
-		Vector p = inter.point.toVector();
 		Vector pPrime = lightInt.pPrime.toVector();
 		double G = lightInt.G;
 		Vector La = al.L(pPrime.toPoint());
@@ -435,7 +409,7 @@ public class Renderer {
 		double spec = lightInt.spec;
 		Vector Lp = al.mat.getColor(lightInt.txtPnt).toVector();
 		intermediateResult = intermediateResult.add(Cs.elPrd(Lp).scale(spec));
-		intermediateResult = intermediateResult.scale(G).scale(al.shape.getInverseArea()).scale(1.0/ ((double) al.sampleNo));
+		intermediateResult = intermediateResult.scale(G).scale(al.shape.getInverseArea());
 		return intermediateResult;
 		//return (new Vector(1,1,1).scale(spec));
 
