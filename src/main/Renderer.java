@@ -45,11 +45,12 @@ public class Renderer {
 	 *            command line arguments.
 	 */
 	public static void main(String[] arguments) {
-		int width = 600;
-		int height = 600;
+		int width = 200;
+		int height = 200;
 		double sensitivity = 1.0;
-		double gamma = 2.0;
+		double gamma = 3.0;
 		boolean gui = true;
+		int sampleNo = 10;
 
 
 		/**********************************************************************
@@ -69,6 +70,8 @@ public class Renderer {
 						sensitivity = Double.parseDouble(arguments[++i]);
 					else if (arguments[i].equals("-gamma"))
 						gamma = Double.parseDouble(arguments[++i]);
+					else if (arguments[i].equals("-samples"))
+						sampleNo = Integer.parseInt(arguments[++i]);
 					else if (arguments[i].equals("-help")) {
 						System.out
 						.println("usage: "
@@ -76,7 +79,8 @@ public class Renderer {
 								+ "[-height  <integer> height of the image] "
 								+ "[-sensitivity  <double> scaling factor for the radiance] "
 								+ "[-gamma  <double> gamma correction factor] "
-								+ "[-gui  <boolean> whether to start a graphical user interface]");
+								+ "[-gui  <boolean> whether to start a graphical user interface]"
+								+ "[-samples  <interger> number of sampels for the area light computation]");
 						return;
 					} else {
 						System.err.format("unknown flag \"%s\" encountered!\n",
@@ -131,21 +135,21 @@ public class Renderer {
 		/**********************************************************************
 		 * Initialize the scene
 		 *********************************************************************/
-		//final World world = new World(width, height, "initialWorld");
-		//final World world = new World(width, height, "sphereWorld");
-		//final World world = new World(width, height, "planeAndSphere");
-		//final World world = new World(width, height, "Julia");
-		//final World world = new World(width, height, "Julia3d");
-		//final World world = new World(width, height, "Julia2");
-		//final World world = new World(width, height, "Julia3d2");
-		//final World world = new World(width, height, "apple");
-		//final World world = new World(width, height, "bunny");		
-		//final World world = new World(width, height, "venus");
-		//final World world = new World(width, height, "dragon");
-		//final World world = new World(width, height, "buddha");
-		//final World world = new World(width, height, "tea");
-		//final World world = new World(width, height, "sun");
-		final World world = new World(width, height, "richter");
+		//final World world = new World(width, height, "initialWorld", sampleNo);
+		//final World world = new World(width, height, "sphereWorld", sampleNo);
+		//final World world = new World(width, height, "planeAndSphere", sampleNo);
+		//final World world = new World(width, height, "Julia", sampleNo);
+		//final World world = new World(width, height, "Julia3d", sampleNo);
+		//final World world = new World(width, height, "Julia2", sampleNo);
+		//final World world = new World(width, height, "Julia3d2", sampleNo);
+		//final World world = new World(width, height, "apple", sampleNo);
+		//final World world = new World(width, height, "bunny", sampleNo);		
+		//final World world = new World(width, height, "venus", sampleNo);
+		//final World world = new World(width, height, "dragon", sampleNo);
+		//final World world = new World(width, height, "buddha", sampleNo);
+		//final World world = new World(width, height, "tea", sampleNo);
+		//final World world = new World(width, height, "sun", sampleNo);
+		final World world = new World(width, height, "richter", sampleNo);
 
 
 		/**********************************************************************
@@ -312,8 +316,12 @@ public class Renderer {
 														}
 													} 
 												}
-												Color lghtClr = lghtVct.scale(1.0/al.sampleNo).toColor();
-												buffer.getPixel(x, y).add(lghtClr.r, lghtClr.g, lghtClr.b,1.0);
+												if (lightInts.size() > 0){												
+													Color lghtClr = lghtVct.scale(1.0/lightInts.size()).toColor();
+													//Color lghtClr = lghtVct.scale(1.0/al.sampleNo).toColor();
+													buffer.getPixel(x, y).add(lghtClr.r, lghtClr.g, lghtClr.b,1.0);
+												}
+												
 											}
 										}
 									} 

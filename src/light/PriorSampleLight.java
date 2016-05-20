@@ -23,7 +23,6 @@ public class PriorSampleLight extends AreaLight {
 	 * @param shape    the shape of the area light
 	 * @param intensity the area light's intensity
 	 * @param sampleNo the number of sampled for the entire light
-	 * @param beta allowed light angle normal.
 	 * @param subdivisions the number of parts the light will be split into.
 	 */
 	public PriorSampleLight(LightableShape shape, double intensity,
@@ -59,7 +58,7 @@ public class PriorSampleLight extends AreaLight {
 			double diff = inter.mat.getDiffuse(N, L);
 			
 			//funArray[i] = p.subtract(pPrime).length();
-			funArray[i] = (spec + diff);
+			funArray[i] = G*(spec + diff);
 			//funArray[i] = spec;
 			//funArray[i] = G;
 			funTot = funTot + funArray[i];

@@ -50,7 +50,7 @@ public class World{
 	public double ambient;
 	public int spp = 1;
 	
-	public World(int width,int height,String choice) throws IllegalArgumentException {
+	public World(int width,int height,String choice, int sampleNo) throws IllegalArgumentException {
 		if (choice == "initialWorld")
 			initialWorld(width,height);
 		else if (choice == "sphereWorld") {
@@ -93,7 +93,7 @@ public class World{
 			sun(width,height);
 		}
 		else if (choice == "richter") {
-			richter(width,height);
+			richter(width,height,sampleNo);
 		}
 		else {
 			throw new IllegalArgumentException("World not found");
@@ -681,7 +681,7 @@ public class World{
 	}
 	
 	
-	public void richter(int width,int height) {
+	public void richter(int width,int height, int sampleNo) {
 		this.spp = 4;
 		this.ambient = 0.0000;
 		
@@ -698,12 +698,12 @@ public class World{
 		Transformation tRichterLight;
 		Specular spec;
 		
-		Diffuse lampLamb = new Lambertian(0.00025);
+		//Diffuse lampLamb = new Lambertian(0.00025);
 			
 		
 		Specular noSpec = new NoSpec();
-		double rhoDiff = 0.5;
-		double rhoSpec = 0.5;
+		double rhoDiff = 0.25;
+		double rhoSpec = 0.75;
 		Diffuse lamb = new Lambertian(rhoDiff);
 		boolean phong = false;
 		if (phong) {
@@ -716,16 +716,16 @@ public class World{
 			//Cook-Torrance	
 			//spec = new NoSpec();
 			//spec = new CookTorranceSpecular(0.03,0.01,rhoSpec);
-			//spec = new CookTorranceSpecular(0.025,0.076,rhoSpec);
-			spec = new CookTorranceSpecular(0.0366,0.276,rhoSpec); //0.0366 0.276
+			spec = new CookTorranceSpecular(0.025,0.076,rhoSpec);
+			//spec = new CookTorranceSpecular(0.0366,0.276,rhoSpec); //0.0366 0.276
 			//spec = new CookTorranceSpecular(0.015,0.01,rhoSpec);
 		}
 		//area light
 		mRichter = new RandomChess(noSpec, lamb, colorMap, 1.0,20);
 		tRichterLight = Transformation.translate(0, 8.0, 1.0).append(Transformation.rotateX(90));
 		Rectangle shape = new Rectangle(tRichterLight,mRichter);
-		//AreaLight al1 = new AreaLight(shape,10.0,100);
-		PriorSampleLight al1 = new PriorSampleLight(shape,10.0,50,5);
+		//AreaLight al1 = new AreaLight(shape,20.0,sampleNo);
+		PriorSampleLight al1 = new PriorSampleLight(shape,20.0,sampleNo,5);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
@@ -748,7 +748,5 @@ public class World{
 		Plane plane3 = new Plane(tPlane3,green);
 		this.shapes.add(plane3);
 		*/
-	}
-
-	
+	}	
 }
