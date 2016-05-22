@@ -67,9 +67,9 @@ public class PriorSampleLight extends AreaLight {
 			double diff = inter.mat.getDiffuse(N, L);
 
 			double cosTheta = N.dot(L);
-			funArray[i] = (cosTheta + 0.5);
+			//funArray[i] = (cosTheta + 0.1);
 			
-			//funArray[i] = evlInt.G*(evlInt.diff + evlInt.spec);
+			funArray[i] = G*(diff + spec);
 			//funArray[i] = evlInt.diff + evlInt.spec;
 			//funArray[i] = 1;
 			funTot = funTot + funArray[i];

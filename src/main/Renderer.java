@@ -45,12 +45,12 @@ public class Renderer {
 	 *            command line arguments.
 	 */
 	public static void main(String[] arguments) {
-		int width = 200;
-		int height = 200;
+		int width = 400;
+		int height = 400;
 		double sensitivity = 1.0;
 		double gamma = 3.0;
 		boolean gui = true;
-		int sampleNo = 2500;
+		int sampleNo = 25;
 
 
 		/**********************************************************************
@@ -149,8 +149,8 @@ public class Renderer {
 		//final World world = new World(width, height, "buddha", sampleNo);
 		//final World world = new World(width, height, "tea", sampleNo);
 		//final World world = new World(width, height, "sun", sampleNo);
-		final World world = new World(width, height, "richter", sampleNo);
-		//final World world = new World(width, height, "richterExtended", sampleNo);
+		//final World world = new World(width, height, "richter", sampleNo);
+		final World world = new World(width, height, "richterExtended", sampleNo);
 		//final World world = new World(width, height, "debug", sampleNo);
 
 		/**********************************************************************
