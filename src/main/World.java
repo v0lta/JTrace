@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import light.AreaLight;
-import light.GlossyRefLight;
 import light.PointLight;
 import light.PriorSampleLight;
 import material.Chess;
@@ -708,8 +707,8 @@ public class World{
 			
 		
 		Specular noSpec = new NoSpec();
-		double rhoDiff = 0.25;
-		double rhoSpec = 0.75;
+		double rhoDiff = 0.8;
+		double rhoSpec = 0.2;
 		Diffuse lamb = new Lambertian(rhoDiff);
 		boolean phong = false;
 		if (phong) {
@@ -730,8 +729,8 @@ public class World{
 		mRichter = new RandomChess(noSpec, lamb, colorMap, 1.0,20);
 		tRichterLight = Transformation.translate(0, 8.0, 1.0).append(Transformation.rotateX(90));
 		Rectangle shape = new Rectangle(tRichterLight,mRichter);
-		//AreaLight al1 = new AreaLight(shape,20.0,sampleNo);
-		PriorSampleLight al1 = new PriorSampleLight(shape,20.0,sampleNo,10);
+		//AreaLight al1 = new AreaLight(shape,5.0,sampleNo);
+		PriorSampleLight al1 = new PriorSampleLight(shape,5.0,sampleNo,2);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		

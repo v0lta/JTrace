@@ -48,7 +48,8 @@ public class ComputeMSE {
 	public static void main(String[] args) {
 		//set the paths.
 		File target = new File("/home/moritz/workspace/JTrace/errComp/output2500.png");
-        final File folder = new File("/home/moritz/workspace/JTrace");
+        //final File folder = new File("/home/moritz/workspace/JTrace/errComp/exp3Prior");
+		final File folder = new File("/home/moritz/workspace/JTrace/");
         List<File> pngList = findPNG(folder, target);
         pngList = sort(pngList);
 

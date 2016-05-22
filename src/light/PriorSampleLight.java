@@ -2,18 +2,24 @@ package light;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import camera.Camera;
+import main.Renderer;
+import math.Color;
 import math.Intersection;
 import math.Point;
 import math.Ray;
+import math.TextPoint;
 import math.Vector;
 import shape.LightableShape;
+import camera.Camera;
 
 
 public class PriorSampleLight extends AreaLight {
 	public final int subdivisions;
 	public List<LightableShape> subLights;
+	private int subLightNo;
+	public final double subIntensity;
 	
 	/**
 	 * Creates an area light with a subdivided surface, which
@@ -26,95 +32,139 @@ public class PriorSampleLight extends AreaLight {
 	public PriorSampleLight(LightableShape shape, double intensity,
 			int sampleNo, int subdivisions) {
 		super(shape, intensity, sampleNo);
+		
 		this.subdivisions = subdivisions;
 		subLights = shape.subdivide(subdivisions);
+		this.subLightNo = (this.subdivisions +1 ) * (this.subdivisions +1 );
 		if (subLights == null){
 			System.err.println("shape type not supported.");
 		}
-		if (sampleNo  < ((subdivisions + 1)*(subdivisions + 1))){
-			System.err.println("Number of samples must be greater than (number of subdivisions + 1)^2.");
-		}
+		//if (sampleNo  < ((subdivisions + 1)*(subdivisions + 1))){
+		//	System.err.println("Number of samples must be greater than (number of subdivisions + 1)^2.");
+		//}
+		this.subIntensity = this.intensity;
 	}
 	
 	@Override
 	public List<EvalLightInt> getpPrime(Intersection inter, Camera cam){
 		List<EvalLightInt> lightSamples = new ArrayList<EvalLightInt>();
 		
-		Point p = inter.point;
-		Vector N = inter.normal.toVector();
-		Vector V = cam.getOrigin().subtract(inter.point).normalize();
 		//compute the g factor for all the sub light sources.
 		double[] funArray = new double[subLights.size()];
 		double funTot = 0;
 		for (int i = 0; i < subLights.size(); i++){
 			LightableShape current = subLights.get(i);
-			LightIntersection subSample = current.getRandomPoint(p);
-			Point pPrime = subSample.pPrime;
-			double G = this.G(inter, pPrime);
-			Vector L = pPrime.subtract(p).normalize();
+			double prob = current.getInverseArea();
+			
+			Point p = inter.point;
+			Vector N = inter.normal.toVector();
+			Vector V = cam.getOrigin().subtract(inter.point).normalize();
+			LightIntersection currentP = current.getRandomPoint(p);
+			//Evaluate 
+			double G = this.G(inter, currentP.pPrime);
+			Vector L = currentP.pPrime.subtract(p).normalize();
 			double spec = inter.mat.getSpecular(N, L, V);
 			double diff = inter.mat.getDiffuse(N, L);
+
+			double cosTheta = N.dot(L);
+			funArray[i] = (cosTheta + 0.5);
 			
-			//funArray[i] = p.subtract(pPrime).length();
-			//funArray[i] = G*(spec + diff);
-			funArray[i] = G*(diff + spec);
-			//funArray[i] = spec;
-			//funArray[i] = G;
+			//funArray[i] = evlInt.G*(evlInt.diff + evlInt.spec);
+			//funArray[i] = evlInt.diff + evlInt.spec;
+			//funArray[i] = 1;
 			funTot = funTot + funArray[i];
-			//lightSamples.add(new EvalLightInt(subSample.txtPnt, pPrime, subSample.nPrime,
-			//				G, spec, diff));
 		}
+		
 		int remainingSamples = this.sampleNo - lightSamples.size();
 		if (remainingSamples < 0) {
 			System.err.println("remaining samples negative.");
 			System.err.println(remainingSamples);
 		}
-		//compute and generate the samples for each subsource.
 		
-		//debug....
-
-		//System.out.println(subLights.size());
-		//System.out.println(remainingSamples);
-		
-		double test = 1.0/funTot;
-		if (Double.isInfinite(test)) {
-			return lightSamples;
-		} else {		
+		//check if the probs add up to one.
+		double test = 0;
+		double[] pjArray = new double[subLights.size()];
+		boolean uniform = false;
 		for (int i = 0; i < subLights.size(); i++){
-			LightableShape current = subLights.get(i); 
-			double scale = funArray[i]/funTot;
-			
-			int n = (int) Math.round((remainingSamples) * scale);
-			
-			for (int m = 0; m < n; m++){
-				LightIntersection pWorldSpace = current.getRandomPoint(p);
-				//Evaluate 
-				Point pPrime = pWorldSpace.pPrime;
-				double G = this.G(inter, pPrime);
-				Vector L = pPrime.subtract(p).normalize();
-				double spec = inter.mat.getSpecular(N, L, V);
-				double diff = inter.mat.getDiffuse(N, L);
-				EvalLightInt evlInt = new EvalLightInt(pWorldSpace,G,spec, diff);
-				lightSamples.add(evlInt);
-			}
+			pjArray[i] = funArray[i]/funTot;
+			test = test + pjArray[i];			
 		}
+		//debug array.
+		int[] IArray = new int[this.sampleNo];
+		
+		// if that is not the case use uniform sampling
+		//System.out.println(test);
+		if (Double.isNaN(test) || Double.isInfinite(test)) {
+			uniform = true;
 		}
-		//System.out.println(lightSamples.size());
-		return lightSamples;
+		if (uniform){
+			//without a probability density function there is nothing we can do.
+			//return super.getpPrime(inter, cam);
+			return lightSamples;
+		} else {
+			//do priority sampling.
+			for (int j = 0; j < this.sampleNo; j++){
+				Random uniformDist = new Random();
+				
+				double u = uniformDist.nextDouble();
+				
+				//find the index I.
+				int I = -1;
+				double tmp = 0;
+				double prev = 0;
+				for (int i = 0; i < this.subLightNo; i++){
+					prev = tmp;	
+					tmp  = tmp + pjArray[i];	 
+					if ((prev <= u) && (u < tmp)) {
+						I = i;
+						break;
+					}		
+				}
+				IArray[j] = I;
+				
+				if (I == -1){
+					System.err.println("I not assined!!!");
+				}
+								
+				// use I the pick a sublight.
+				LightableShape current = this.subLights.get(I);
+				
+				EvalLightInt sample = evaluate(inter,current, cam,  ((current.getInverseArea())*(pjArray[I])));
+				//EvalLightInt sample = evaluate(inter,current, cam, current.getInverseArea()*(1.0/pjArray[I]));	
+				lightSamples.add(sample);
+			}			
+			return lightSamples;
+		}
 	}
 	
-	//@Override
-	public List<Intersection> intersect2(Ray ray) {
-		Ray rayInv = this.shape.getTransformation().transformInverse(ray);
-		List<Intersection> inters = new ArrayList<Intersection>();
-		for (LightableShape subShape: this.subLights) {
-			inters.addAll(subShape.intersect(rayInv));
-		}
-		return inters;
+	
+	/**
+	 * Get the sublights light's color scaled by its intensity.
+	 */	
+	@Override
+	public Vector L(Point pPrime) {		
+		TextPoint txtPoint = super.shape.getUV(pPrime);
+		Color color = super.mat.getColor(txtPoint);
+		return color.toVector().scale(this.subIntensity);
 	}
+	
 	
 	public List<LightableShape> getSubLightShapes(){
 		return this.subLights;
+	}
+	
+	public EvalLightInt evaluate(Intersection inter,LightableShape currentShape, Camera cam, double pVal){
+		Point p = inter.point;
+		Vector N = inter.normal.toVector();
+		Vector V = cam.getOrigin().subtract(inter.point).normalize();
+		LightIntersection currentP = currentShape.getRandomPoint(p);
+		//Evaluate 
+		double G = this.G(inter, currentP.pPrime);
+		Vector L = currentP.pPrime.subtract(p).normalize();
+		double spec = inter.mat.getSpecular(N, L, V);
+		double diff = inter.mat.getDiffuse(N, L);
+		EvalLightInt evlInt = new EvalLightInt(currentP,G,spec, diff, pVal);
+		return evlInt;
 	}
 	
 }

@@ -27,7 +27,6 @@ public class AreaLight implements Shape  {
 	 * @param intensity the brightness of the new light.
 	 * @param sampleNo the monte-carlo integration samples.
 	 */
-
 	public AreaLight(LightableShape shape, double intensity, int sampleNo) {
 		this.shape = shape;
 		this.mat = shape.getMaterial();
@@ -35,6 +34,10 @@ public class AreaLight implements Shape  {
 		this.sampleNo = sampleNo;
 	}
 	
+	/**
+	 * Pdf for uniformly distributed samples.
+	 * @return the pdf value for any sample from this sight sources surface.
+	 */
 	public double pdf(){
 		return this.shape.getInverseArea();
 	}
@@ -53,7 +56,7 @@ public class AreaLight implements Shape  {
 	}
 	
 	/**
-	 * Get the lights color scaled by its intensity.
+	 * Get the light's color scaled by its intensity.
 	 */	
 	public Vector L(Point pPrime) {		
 		TextPoint txtPoint = this.shape.getUV(pPrime);
@@ -93,7 +96,7 @@ public class AreaLight implements Shape  {
 			Vector L = pPrime.subtract(p).normalize();
 			double spec = inter.mat.getSpecular(N, L, V);
 			double diff = inter.mat.getDiffuse(N, L);
-			EvalLightInt evlInt = new EvalLightInt(lghtInt,G, spec, diff);
+			EvalLightInt evlInt = new EvalLightInt(lghtInt,G, spec, diff , this.shape.getInverseArea());
 			lightSamples.add(evlInt);
 		}
 		return lightSamples;

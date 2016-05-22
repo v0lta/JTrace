@@ -45,12 +45,12 @@ public class Renderer {
 	 *            command line arguments.
 	 */
 	public static void main(String[] arguments) {
-		int width = 300;
-		int height = 300;
+		int width = 200;
+		int height = 200;
 		double sensitivity = 1.0;
 		double gamma = 3.0;
 		boolean gui = true;
-		int sampleNo = 500;
+		int sampleNo = 2500;
 
 
 		/**********************************************************************
@@ -405,7 +405,7 @@ public class Renderer {
 		return lightRes.toArray();
 	}
 
-	private static Vector computeAlShading(Intersection inter, AreaLight al, EvalLightInt lightInt, Camera cam ){
+	public static Vector computeAlShading(Intersection inter, AreaLight al, EvalLightInt lightInt, Camera cam ){
 		Vector pPrime = lightInt.pPrime.toVector();
 		double G = lightInt.G;
 		Vector La = al.L(pPrime.toPoint());
@@ -418,7 +418,7 @@ public class Renderer {
 		double spec = lightInt.spec;
 		Vector Lp = al.mat.getColor(lightInt.txtPnt).toVector();
 		intermediateResult = intermediateResult.add(Cs.elPrd(Lp).scale(spec));
-		intermediateResult = intermediateResult.scale(G).scale(al.shape.getInverseArea());
+		intermediateResult = intermediateResult.scale(G).scale(1.0 / lightInt.prob);
 		return intermediateResult;
 		//return (new Vector(1,1,1).scale(spec));
 

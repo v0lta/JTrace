@@ -79,7 +79,18 @@ public class Rectangle extends Plane implements LightableShape {
 
 	@Override
 	public double getInverseArea() {
-		return this.inverseArea;
+		Vector a = new Vector(-1,1,0);
+		Vector b = new Vector(-1,-1,0);
+		Vector c = new Vector(-1,1,0);
+		
+		a = this.transformation.transform(a);
+		b = this.transformation.transform(b);
+		c = this.transformation.transform(c);
+		double g = a.subtract(b).length();
+		double h = c.subtract(b).length();
+		double area = g*h;
+		
+		return (1.0/area);
 	}
 	
 	@Override
