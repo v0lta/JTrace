@@ -66,8 +66,10 @@ public class PriorSampleLight extends AreaLight {
 			double spec = inter.mat.getSpecular(N, L, V);
 			double diff = inter.mat.getDiffuse(N, L);
 
-			double cosTheta = N.dot(L);
-			//funArray[i] = (cosTheta + 0.1);
+			//EvalLightInt evlInt = new EvalLightInt(currentP,G,spec, diff, current.getInverseArea());
+			//AreaLight currentAI = new AreaLight(current, this.intensity, this.sampleNo/this.subLightNo);
+			//Vector testRes = Renderer.computeAlShading(inter, currentAI, evlInt, cam);
+			//funArray[i] = (testRes.x + testRes.y + testRes.z)/3;
 			
 			funArray[i] = G*(diff + spec);
 			//funArray[i] = evlInt.diff + evlInt.spec;
@@ -138,15 +140,15 @@ public class PriorSampleLight extends AreaLight {
 	}
 	
 	
-	/**
-	 * Get the sublights light's color scaled by its intensity.
-	 */	
-	@Override
-	public Vector L(Point pPrime) {		
-		TextPoint txtPoint = super.shape.getUV(pPrime);
-		Color color = super.mat.getColor(txtPoint);
-		return color.toVector().scale(this.subIntensity);
-	}
+//	/**
+//	 * Get the sublights light's color scaled by its intensity.
+//	 */	
+//	@Override
+//	public Vector L(Point pPrime) {	
+//		TextPoint txtPoint = super.shape.getUV(pPrime);
+//		Color color = super.mat.getColor(txtPoint);
+//		return color.toVector().scale(this.subIntensity);
+//	}
 	
 	
 	public List<LightableShape> getSubLightShapes(){

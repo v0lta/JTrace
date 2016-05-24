@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 
 import math.Color;
 import math.TextPoint;
+import math.Transformation;
 import math.Vector;
 
 public class MyTextureFile implements Material {
@@ -86,6 +87,13 @@ public class MyTextureFile implements Material {
 	@Override
 	public double getDiffuseRho() {
 		return this.diff.getRho();
+	}
+
+
+	@Override
+	public Material setInvTrans(Transformation reverseTrans) {
+		System.err.println("setInvTrans() not implemented.");
+		return this;
 	}
 	
 	

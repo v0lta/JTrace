@@ -3,7 +3,9 @@ package material;
 import java.util.Random;
 
 import math.Color;
+import math.Point;
 import math.TextPoint;
+import math.Transformation;
 import math.Vector;
 
 public class RandomChess implements Material {
@@ -12,6 +14,7 @@ public class RandomChess implements Material {
 	public final double s;
 	public final Specular spec;
 	public final Diffuse diff;
+	private final Transformation reverseTrans;
 	
 	public RandomChess(Specular spec, Diffuse diff, ColorMap colors,
 						double s, int colorNo) {
@@ -21,10 +24,30 @@ public class RandomChess implements Material {
 		this.map.shuffleColors();
 		this.spec = spec;
 		this.diff = diff;
+		this.reverseTrans = null;
 	}
-
+	
+	private RandomChess(RandomChess rndChs, Transformation reverseTrans){
+		this.map = rndChs.map;
+		this.colorNo = rndChs.colorNo;
+		this.s = rndChs.s;
+		this.spec = rndChs.spec;
+		this.diff = rndChs.diff;
+		this.reverseTrans = reverseTrans;
+		
+		
+	}
+	
+	
 	@Override
 	public Color getColor(TextPoint texPoint) {
+		if (this.reverseTrans != null){
+			Point texPointPt = new Point(texPoint.u,texPoint.v,0.0);
+			texPointPt = reverseTrans.transform(texPointPt);
+			texPoint = new TextPoint(texPointPt.x,texPointPt.y);
+		}
+
+		
 		int tmpU = (int) Math.round((0.5 + texPoint.u/2)*10); 
 		int tmpV = (int) Math.round((0.5 + texPoint.v/2)*10);
 				
@@ -44,6 +67,10 @@ public class RandomChess implements Material {
 	
 	@Override
 	public Color getColor(Vector texPoint) {
+		if (this.reverseTrans != null){
+			texPoint = reverseTrans.transform(texPoint);
+		}
+		
 		int tmpX = (int) Math.round( texPoint.x/s); 
 		int tmpY = (int) Math.round( texPoint.y/s);
 		//int tmpZ = (int) Math.round( texPoint.y/s);
@@ -77,6 +104,11 @@ public class RandomChess implements Material {
 	@Override
 	public double getDiffuseRho() {
 		return this.diff.getRho();
+	}
+
+	@Override
+	public Material setInvTrans(Transformation reverseTrans) {
+		return new RandomChess(this,reverseTrans);
 	}
 
 

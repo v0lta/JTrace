@@ -2,6 +2,7 @@ package material;
 
 import math.Color;
 import math.TextPoint;
+import math.Transformation;
 import math.Vector;
 
 
@@ -24,4 +25,5 @@ public interface Material {
 	public double getSpecular(Vector N, Vector L, Vector V);
 	public double getDiffuse(Vector N, Vector L);
 	public double getDiffuseRho();
+	public Material setInvTrans(Transformation reverseTrans);
 }

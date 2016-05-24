@@ -50,7 +50,7 @@ public class Renderer {
 		double sensitivity = 1.0;
 		double gamma = 3.0;
 		boolean gui = true;
-		int sampleNo = 25;
+		int sampleNo = 100;
 
 
 		/**********************************************************************
@@ -150,7 +150,8 @@ public class Renderer {
 		//final World world = new World(width, height, "tea", sampleNo);
 		//final World world = new World(width, height, "sun", sampleNo);
 		//final World world = new World(width, height, "richter", sampleNo);
-		final World world = new World(width, height, "richterExtended", sampleNo);
+		//final World world = new World(width, height, "richterExtended", sampleNo);
+		final World world = new World(width, height, "twoLights", sampleNo);
 		//final World world = new World(width, height, "debug", sampleNo);
 
 		/**********************************************************************

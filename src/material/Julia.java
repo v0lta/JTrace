@@ -8,6 +8,7 @@ import java.util.List;
 
 import math.Color;
 import math.TextPoint;
+import math.Transformation;
 import math.Vector;
 
 public class Julia implements Material {
@@ -185,6 +186,14 @@ public class Julia implements Material {
 	@Override
 	public double getDiffuseRho() {
 		return 1.0;
+	}
+
+	@Override
+	public Material setInvTrans(Transformation reverseTrans) {
+		System.err.println("setInvTrans() not implemented.");
+		// TODO Auto-generated method stub
+		return this;
+		
 	}
 	
 	

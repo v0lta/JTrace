@@ -2,6 +2,7 @@ package material;
 
 import math.Color;
 import math.TextPoint;
+import math.Transformation;
 import math.Vector;
 
 
@@ -39,5 +40,8 @@ public class Monochrome implements Material {
 	public double getDiffuseRho() {
 		return this.diff.getRho();
 	}
+
+	@Override
+	public Material setInvTrans(Transformation reverseTrans) {return this;}
 
 }

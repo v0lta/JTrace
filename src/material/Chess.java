@@ -2,6 +2,7 @@ package material;
 
 import math.Color;
 import math.TextPoint;
+import math.Transformation;
 import math.Vector;
 
 public class Chess implements Material{
@@ -69,6 +70,13 @@ public class Chess implements Material{
 	@Override
 	public double getDiffuseRho() {
 		return this.diff.getRho();
+	}
+
+	@Override
+	public Material setInvTrans(Transformation reverseTrans) {
+		System.err.println("setInvTrans() not implemented.");
+		// TODO Auto-generated method stub		
+		return this;
 	}
 
 }

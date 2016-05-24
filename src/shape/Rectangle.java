@@ -182,10 +182,10 @@ public class Rectangle extends Plane implements LightableShape {
 				yStart = -1 + j*step;
 				yEnd = -1 + (j+1)*step;
 				centroidY = (yStart + yEnd)/2;
-				//toCenterScale = scale.append(Transformation.translate(centroidX, centroidY, 0));
 				toCenterScale = Transformation.translate(centroidX, centroidY, 0).append(scale);
 				Transformation rectTrans = getTransformation().append(toCenterScale);
-				Rectangle subRect = new Rectangle(rectTrans, this.mat);
+				Material invMat = this.mat.setInvTrans(toCenterScale);
+				Rectangle subRect = new Rectangle(rectTrans, invMat);
 				subShapes.add(subRect);
 			}
 		}
