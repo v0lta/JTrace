@@ -45,12 +45,12 @@ public class ComputeMSE {
 	public static void main(String[] args) {
 		//set the paths.
 	
-		//final File folder = new File("/home/moritz/workspace/JTrace/");
+		final File folder = new File("/home/moritz/workspace/JTrace/");
 
 		//simple experiment
 		File target = new File("/home/moritz/workspace/JTrace/errComp/output2500.png");
         //final File folder = new File("/home/moritz/workspace/JTrace/errComp/exp2NoPrior");
-        final File folder = new File("/home/moritz/workspace/JTrace/errComp/exp3Prior");
+        //final File folder = new File("/home/moritz/workspace/JTrace/errComp/exp3Prior");
 	    
         //with walls and objects
 		//File target = new File("/home/moritz/workspace/JTrace/errCompExt/exp4Output2500.png");

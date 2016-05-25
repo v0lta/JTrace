@@ -876,7 +876,6 @@ public class World{
 		this.shapes.add(plane1);
 	}
 	
-	//TODO.	
 	public void twoLights(int width,int height, int sampleNo) {
 		this.spp = 1;
 		this.ambient = 0.001;

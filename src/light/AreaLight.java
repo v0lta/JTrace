@@ -96,7 +96,8 @@ public class AreaLight implements Shape  {
 			Vector L = pPrime.subtract(p).normalize();
 			double spec = inter.mat.getSpecular(N, L, V);
 			double diff = inter.mat.getDiffuse(N, L);
-			EvalLightInt evlInt = new EvalLightInt(lghtInt,G, spec, diff , this.shape.getInverseArea());
+			Vector Lp = this.mat.getColor(lghtInt.txtPnt).toVector();
+			EvalLightInt evlInt = new EvalLightInt(lghtInt,G, spec, diff , Lp, this.shape.getInverseArea());
 			lightSamples.add(evlInt);
 		}
 		return lightSamples;

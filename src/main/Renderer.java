@@ -45,12 +45,12 @@ public class Renderer {
 	 *            command line arguments.
 	 */
 	public static void main(String[] arguments) {
-		int width = 400;
-		int height = 400;
+		int width = 200;
+		int height = 200;
 		double sensitivity = 1.0;
 		double gamma = 3.0;
 		boolean gui = true;
-		int sampleNo = 100;
+		int sampleNo = 50;
 
 
 		/**********************************************************************
@@ -149,9 +149,9 @@ public class Renderer {
 		//final World world = new World(width, height, "buddha", sampleNo);
 		//final World world = new World(width, height, "tea", sampleNo);
 		//final World world = new World(width, height, "sun", sampleNo);
-		//final World world = new World(width, height, "richter", sampleNo);
+		final World world = new World(width, height, "richter", sampleNo);
 		//final World world = new World(width, height, "richterExtended", sampleNo);
-		final World world = new World(width, height, "twoLights", sampleNo);
+		//final World world = new World(width, height, "twoLights", sampleNo);
 		//final World world = new World(width, height, "debug", sampleNo);
 
 		/**********************************************************************
@@ -417,7 +417,7 @@ public class Renderer {
 		Vector intermediateResult = Cs.elPrd(La).scale(Rs);
 		//specular
 		double spec = lightInt.spec;
-		Vector Lp = al.mat.getColor(lightInt.txtPnt).toVector();
+		Vector Lp = lightInt.Lp;
 		intermediateResult = intermediateResult.add(Cs.elPrd(Lp).scale(spec));
 		intermediateResult = intermediateResult.scale(G).scale(1.0 / lightInt.prob);
 		return intermediateResult;

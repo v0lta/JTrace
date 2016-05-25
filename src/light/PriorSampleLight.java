@@ -12,6 +12,7 @@ import math.Ray;
 import math.TextPoint;
 import math.Vector;
 import shape.LightableShape;
+import shape.Shape;
 import camera.Camera;
 
 
@@ -34,8 +35,18 @@ public class PriorSampleLight extends AreaLight {
 		super(shape, intensity, sampleNo);
 		
 		this.subdivisions = subdivisions;
-		subLights = shape.subdivide(subdivisions);
 		this.subLightNo = (this.subdivisions +1 ) * (this.subdivisions +1 );
+		subLights = shape.subdivide(subdivisions);
+		//debug
+		//List<LightableShape> subList = new ArrayList<LightableShape>();
+		//for (int i = 0; i < this.subLightNo; i = i + 2){
+		//	subList.add(shape.subdivide(10).get(i));
+		//}
+		//subLights = subList;
+		//debug...
+		
+		
+		
 		if (subLights == null){
 			System.err.println("shape type not supported.");
 		}
@@ -165,7 +176,8 @@ public class PriorSampleLight extends AreaLight {
 		Vector L = currentP.pPrime.subtract(p).normalize();
 		double spec = inter.mat.getSpecular(N, L, V);
 		double diff = inter.mat.getDiffuse(N, L);
-		EvalLightInt evlInt = new EvalLightInt(currentP,G,spec, diff, pVal);
+		Vector Lp = currentShape.getMaterial().getColor(currentP.txtPnt).toVector();
+		EvalLightInt evlInt = new EvalLightInt(currentP,G,spec, diff, Lp, pVal);
 		return evlInt;
 	}
 	
