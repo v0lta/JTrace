@@ -51,6 +51,7 @@ public class Renderer {
 		double gamma = 3.0;
 		boolean gui = true;
 		int sampleNo = 50;
+		int alSplits = 10;
 
 
 		/**********************************************************************
@@ -72,6 +73,8 @@ public class Renderer {
 						gamma = Double.parseDouble(arguments[++i]);
 					else if (arguments[i].equals("-samples"))
 						sampleNo = Integer.parseInt(arguments[++i]);
+					else if (arguments[i].equals("-alSplits"))
+						alSplits = Integer.parseInt(arguments[++i]);
 					else if (arguments[i].equals("-help")) {
 						System.out
 						.println("usage: "
@@ -135,24 +138,24 @@ public class Renderer {
 		/**********************************************************************
 		 * Initialize the scene
 		 *********************************************************************/
-		//final World world = new World(width, height, "initialWorld", sampleNo);
-		//final World world = new World(width, height, "sphereWorld", sampleNo);
-		//final World world = new World(width, height, "planeAndSphere", sampleNo);
-		//final World world = new World(width, height, "Julia", sampleNo);
-		//final World world = new World(width, height, "Julia3d", sampleNo);
-		//final World world = new World(width, height, "Julia2", sampleNo);
-		//final World world = new World(width, height, "Julia3d2", sampleNo);
-		//final World world = new World(width, height, "apple", sampleNo);
-		//final World world = new World(width, height, "bunny", sampleNo);		
-		//final World world = new World(width, height, "venus", sampleNo);
-		//final World world = new World(width, height, "dragon", sampleNo);
-		//final World world = new World(width, height, "buddha", sampleNo);
-		//final World world = new World(width, height, "tea", sampleNo);
-		//final World world = new World(width, height, "sun", sampleNo);
-		final World world = new World(width, height, "richter", sampleNo);
-		//final World world = new World(width, height, "richterExtended", sampleNo);
-		//final World world = new World(width, height, "twoLights", sampleNo);
-		//final World world = new World(width, height, "debug", sampleNo);
+		//final World world = new World(width, height, "initialWorld", sampleNo, alSplits);
+		//final World world = new World(width, height, "sphereWorld", sampleNo, alSplits);
+		//final World world = new World(width, height, "planeAndSphere", sampleNo, alSplits);
+		//final World world = new World(width, height, "Julia", sampleNo, alSplits);
+		//final World world = new World(width, height, "Julia3d", sampleNo, alSplits);
+		//final World world = new World(width, height, "Julia2", sampleNo, alSplits);
+		//final World world = new World(width, height, "Julia3d2", sampleNo, alSplits);
+		//final World world = new World(width, height, "apple", sampleNo, alSplits);
+		//final World world = new World(width, height, "bunny", sampleNo, alSplits);		
+		//final World world = new World(width, height, "venus", sampleNo, alSplits);
+		//final World world = new World(width, height, "dragon", sampleNo, alSplits);
+		//final World world = new World(width, height, "buddha", sampleNo, alSplits);
+		//final World world = new World(width, height, "tea", sampleNo, alSplits);
+		//final World world = new World(width, height, "sun", sampleNo, alSplits);
+		final World world = new World(width, height, "richter", sampleNo, alSplits);
+		//final World world = new World(width, height, "richterExtended", sampleNo, alSplits);
+		//final World world = new World(width, height, "twoLights", sampleNo, alSplits);
+		//final World world = new World(width, height, "debug", sampleNo, alSplits);
 
 		/**********************************************************************
 		 * Multi-threaded rendering of the scene

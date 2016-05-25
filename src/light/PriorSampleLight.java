@@ -5,14 +5,10 @@ import java.util.List;
 import java.util.Random;
 
 import main.Renderer;
-import math.Color;
 import math.Intersection;
 import math.Point;
-import math.Ray;
-import math.TextPoint;
 import math.Vector;
 import shape.LightableShape;
-import shape.Shape;
 import camera.Camera;
 
 
@@ -37,16 +33,7 @@ public class PriorSampleLight extends AreaLight {
 		this.subdivisions = subdivisions;
 		this.subLightNo = (this.subdivisions +1 ) * (this.subdivisions +1 );
 		subLights = shape.subdivide(subdivisions);
-		//debug
-		//List<LightableShape> subList = new ArrayList<LightableShape>();
-		//for (int i = 0; i < this.subLightNo; i = i + 2){
-		//	subList.add(shape.subdivide(10).get(i));
-		//}
-		//subLights = subList;
-		//debug...
-		
-		
-		
+
 		if (subLights == null){
 			System.err.println("shape type not supported.");
 		}
@@ -65,7 +52,6 @@ public class PriorSampleLight extends AreaLight {
 		double funTot = 0;
 		for (int i = 0; i < subLights.size(); i++){
 			LightableShape current = subLights.get(i);
-			double prob = current.getInverseArea();
 			
 			Point p = inter.point;
 			Vector N = inter.normal.toVector();
@@ -77,14 +63,18 @@ public class PriorSampleLight extends AreaLight {
 			double spec = inter.mat.getSpecular(N, L, V);
 			double diff = inter.mat.getDiffuse(N, L);
 
-			//EvalLightInt evlInt = new EvalLightInt(currentP,G,spec, diff, current.getInverseArea());
-			//AreaLight currentAI = new AreaLight(current, this.intensity, this.sampleNo/this.subLightNo);
-			//Vector testRes = Renderer.computeAlShading(inter, currentAI, evlInt, cam);
-			//funArray[i] = (testRes.x + testRes.y + testRes.z)/3;
-			
-			funArray[i] = G*(diff + spec);
-			//funArray[i] = evlInt.diff + evlInt.spec;
-			//funArray[i] = 1;
+			Boolean fullEval = true;
+			if (fullEval) {
+				Vector Lp = this.shape.getMaterial().getColor(currentP.txtPnt).toVector();
+				EvalLightInt evlInt = new EvalLightInt(currentP,G,spec, diff, Lp, current.getInverseArea());
+				AreaLight currentAI = new AreaLight(current, this.intensity, this.sampleNo/this.subLightNo);
+				Vector testRes = Renderer.computeAlShading(inter, currentAI, evlInt, cam);
+				funArray[i] = (testRes.x + testRes.y + testRes.z)/3;
+			} else {
+				funArray[i] = G*(diff + spec);
+				//funArray[i] = evlInt.diff + evlInt.spec;
+				//funArray[i] = 1;
+			}
 			funTot = funTot + funArray[i];
 		}
 		

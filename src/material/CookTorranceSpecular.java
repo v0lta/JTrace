@@ -47,16 +47,16 @@ public class CookTorranceSpecular implements Specular {
 		return frac1 + (1 + (frac2Num * frac2Num)/(frac2Dem * frac2Dem ));
 	}
 	
-	private double fresnelBook(Vector N, Vector V, double eta){
-		double cosThetaI = N.dot(V);
-		double cosThetaT = Math.sqrt(1 - 1/(eta*eta) * (1 / cosThetaI*cosThetaI));
-		
-		double rPrl = (eta*cosThetaI - cosThetaT) / (eta*cosThetaI + cosThetaT);
-		double rOrth = (cosThetaI - eta*cosThetaT) / (cosThetaI + eta*cosThetaT);
-		
-		double kr = 0.5*(rPrl*rPrl + rOrth*rOrth);
-		return kr;
-	}
+//	private double fresnelBook(Vector N, Vector V, double eta){
+//		double cosThetaI = N.dot(V);
+//		double cosThetaT = Math.sqrt(1 - 1/(eta*eta) * (1 / cosThetaI*cosThetaI));
+//		
+//		double rPrl = (eta*cosThetaI - cosThetaT) / (eta*cosThetaI + cosThetaT);
+//		double rOrth = (cosThetaI - eta*cosThetaT) / (cosThetaI + eta*cosThetaT);
+//		
+//		double kr = 0.5*(rPrl*rPrl + rOrth*rOrth);
+//		return kr;
+//	}
 	
 	
 	private double getg(double n, double c){

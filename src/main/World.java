@@ -49,7 +49,7 @@ public class World{
 	public double ambient;
 	public int spp = 1;
 	
-	public World(int width,int height,String choice, int sampleNo) throws IllegalArgumentException {
+	public World(int width,int height,String choice, int sampleNo,int  alSplits) throws IllegalArgumentException {
 		if (choice == "initialWorld")
 			initialWorld(width,height);
 		else if (choice == "sphereWorld") {
@@ -92,7 +92,7 @@ public class World{
 			sun(width,height);
 		}
 		else if (choice == "richter") {
-			richter(width,height,sampleNo);
+			richter(width,height,sampleNo, alSplits);
 		}
 		else if (choice == "richterExtended") {
 			richterExtended(width,height,sampleNo);
@@ -689,7 +689,7 @@ public class World{
 	}
 	
 	
-	public void richter(int width,int height, int sampleNo) {
+	public void richter(int width,int height, int sampleNo, int alSplits) {
 		this.spp = 4;
 		this.ambient = 0.0001;
 		
@@ -729,7 +729,7 @@ public class World{
 		tRichterLight = Transformation.translate(0, 8.0, 1.0).append(Transformation.rotateX(90));
 		Rectangle shape = new Rectangle(tRichterLight,mRichter);
 		//AreaLight al1 = new AreaLight(shape,5.0,sampleNo);
-		PriorSampleLight al1 = new PriorSampleLight(shape,5.0,sampleNo,10);
+		PriorSampleLight al1 = new PriorSampleLight(shape,5.0,sampleNo,alSplits);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
@@ -756,7 +756,7 @@ public class World{
 	
 	
 	public void richterExtended(int width,int height, int sampleNo) {
-		this.spp = 10;
+		this.spp = 2;
 		this.ambient = 0.0000;
 		
 		//set the camera.
@@ -788,8 +788,8 @@ public class World{
 			//Cook-Torrance	
 			//spec = new NoSpec();
 			//spec = new CookTorranceSpecular(0.03,0.01,rhoSpec);
-			spec = new CookTorranceSpecular(0.025,0.076,rhoSpec);
-			//spec = new CookTorranceSpecular(0.0366,0.276,rhoSpec); //0.0366 0.276
+			//spec = new CookTorranceSpecular(0.025,0.076,rhoSpec);
+			spec = new CookTorranceSpecular(0.0366,0.276,rhoSpec); //0.0366 0.276
 			//spec = new CookTorranceSpecular(0.015,0.01,rhoSpec);
 		}
 		//area light
@@ -798,8 +798,8 @@ public class World{
 						Transformation.rotateX(90)).append(
 						Transformation.scale(1.25, 1.0, 1.25));
 		Rectangle shape = new Rectangle(tRichterLight,mRichter);
-		AreaLight al1 = new AreaLight(shape,20.0,sampleNo);
-		//PriorSampleLight al1 = new PriorSampleLight(shape,20.0,sampleNo,10);
+		//AreaLight al1 = new AreaLight(shape,20.0,sampleNo);
+		PriorSampleLight al1 = new PriorSampleLight(shape,20.0,sampleNo,10);
 		this.alights.add(al1);
 		this.shapes.add(al1);
 		
@@ -823,6 +823,7 @@ public class World{
 		Plane plane3 = new Plane(tPlane3,green);
 		this.shapes.add(plane3);
 		
+		spec = new CookTorranceSpecular(0.03,0.01,rhoSpec);
 		Transformation tCube = Transformation.translate(0.5, 5.5, 0.25).append(
 							   Transformation.scale(0.25, 0.25, 0.25)).append(
 							   Transformation.rotateZ(45));
@@ -891,8 +892,8 @@ public class World{
 		
 		//Diffuse lampLamb = new Lambertian(0.00025);
 		Specular noSpec = new NoSpec();
-		double rhoDiff = 0.25;
-		double rhoSpec = 0.75;
+		double rhoDiff = 0.8;
+		double rhoSpec = 0.2;
 
 		
 		Diffuse lamb = new Lambertian(rhoDiff);
@@ -914,6 +915,7 @@ public class World{
 		this.shapes.add(al2);
 		this.alights.add(al2);
 		
+		//spec = new CookTorranceSpecular(0.025,0.076,rhoSpec);
 		spec = new CookTorranceSpecular(0.015,0.01,rhoSpec);
 		Material gery = new Monochrome(spec, lamb, new Color(1,1,1));
 		Transformation tPlane = Transformation.IDENTITY;

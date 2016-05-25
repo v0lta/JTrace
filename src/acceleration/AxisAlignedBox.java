@@ -62,79 +62,75 @@ public class AxisAlignedBox implements Shape {
 	}
 	
 		
-	protected void checkBox(AxisAlignedBox box, AxisAlignedBox box2){
-		Boolean fail = false;
-		if ((box.p0.x > box.p1.x) || (box.p0.y > box.p1.y) || (box.p0.z > box.p1.z)) {
-			fail = true;
-			System.err.println("Found illegal box");
-		};
-		
-		for (Triangle triangle : box.trianglesInBox){
-			Point a = triangle.a;
-			Point b = triangle.b;
-			Point c = triangle.c;
-			
-			boolean aIn = false;
-			boolean bIn = false;
-			boolean cIn = false;
-
-			if  (((a.x > box.p0.x) && (a.y  > box.p0.y) && (a.z > box.p0.z))
-					&& ((a.x < box.p1.x) && (a.y < box.p1.y) && (a.z < box.p1.z))) {
-				// a is in
-				aIn = true;
-			} 
-			if (((b.x > box.p0.x) && (b.y > box.p0.y) && (b.z > box.p0.z))
-					&& ((b.x < box.p1.x) && (b.y < box.p1.y) && (b.z < box.p1.z))) {
-				// b is in
-				bIn = true;
-			}
-			if (((c.x > box.p0.x) && (c.y > box.p0.y) && (c.z > box.p0.z))
-					&& ((c.x < box.p1.x) && (c.y < box.p1.y) && (c.z < box.p1.z))) {
-				// c is in
-				cIn = true;
-			}
-			if ((aIn == false) || (bIn == false) || (cIn == false)) {
-				fail = true;
-				System.err.println("Found triangle out of box.");				
-			}
-			
-			double maxVal = triangle.getLargestCoord('x');
-			if ((maxVal < a.x) || (maxVal < b.x) || (maxVal < c.x)) {
-				fail = true;
-				System.err.println("Max is not max along x");				
-			}
-			maxVal = triangle.getLargestCoord('y');
-			if ((maxVal < a.y) || (maxVal < b.y) || (maxVal < c.y)) {
-				fail = true;
-				System.err.println("Max is not max along y");				
-			}
-			maxVal = triangle.getLargestCoord('z');
-			if ((maxVal < a.z) || (maxVal < b.z) || (maxVal < c.z)) {
-				fail = true;
-				System.err.println("Max is not max along z");				
-			}
-			
-			double minVal = triangle.getSmallestCoord('x');
-			if ((minVal > a.x) || (minVal > b.x) || (minVal > c.x)) {
-				fail = true;
-				System.err.println("Min is not min along x");				
-			}
-			minVal = triangle.getSmallestCoord('y');
-			if ((minVal > a.y) || (minVal > b.y) || (minVal > c.y)) {
-				fail = true;
-				System.err.println("Min is not min along y");				
-			}
-			minVal = triangle.getSmallestCoord('z');
-			if ((minVal > a.z) || (minVal > b.z) || (minVal > c.z)) {
-				fail = true;
-				System.err.println("Min is not min along z");				
-			}
-			
-			
-			
-			
-		}
-	}
+//	protected void checkBox(AxisAlignedBox box, AxisAlignedBox box2){
+//		Boolean fail = false;
+//		if ((box.p0.x > box.p1.x) || (box.p0.y > box.p1.y) || (box.p0.z > box.p1.z)) {
+//			fail = true;
+//			System.err.println("Found illegal box");
+//		};
+//		
+//		for (Triangle triangle : box.trianglesInBox){
+//			Point a = triangle.a;
+//			Point b = triangle.b;
+//			Point c = triangle.c;
+//			
+//			boolean aIn = false;
+//			boolean bIn = false;
+//			boolean cIn = false;
+//
+//			if  (((a.x > box.p0.x) && (a.y  > box.p0.y) && (a.z > box.p0.z))
+//					&& ((a.x < box.p1.x) && (a.y < box.p1.y) && (a.z < box.p1.z))) {
+//				// a is in
+//				aIn = true;
+//			} 
+//			if (((b.x > box.p0.x) && (b.y > box.p0.y) && (b.z > box.p0.z))
+//					&& ((b.x < box.p1.x) && (b.y < box.p1.y) && (b.z < box.p1.z))) {
+//				// b is in
+//				bIn = true;
+//			}
+//			if (((c.x > box.p0.x) && (c.y > box.p0.y) && (c.z > box.p0.z))
+//					&& ((c.x < box.p1.x) && (c.y < box.p1.y) && (c.z < box.p1.z))) {
+//				// c is in
+//				cIn = true;
+//			}
+//			if ((aIn == false) || (bIn == false) || (cIn == false)) {
+//				fail = true;
+//				System.err.println("Found triangle out of box.");				
+//			}
+//			
+//			double maxVal = triangle.getLargestCoord('x');
+//			if ((maxVal < a.x) || (maxVal < b.x) || (maxVal < c.x)) {
+//				fail = true;
+//				System.err.println("Max is not max along x");				
+//			}
+//			maxVal = triangle.getLargestCoord('y');
+//			if ((maxVal < a.y) || (maxVal < b.y) || (maxVal < c.y)) {
+//				fail = true;
+//				System.err.println("Max is not max along y");				
+//			}
+//			maxVal = triangle.getLargestCoord('z');
+//			if ((maxVal < a.z) || (maxVal < b.z) || (maxVal < c.z)) {
+//				fail = true;
+//				System.err.println("Max is not max along z");				
+//			}
+//			
+//			double minVal = triangle.getSmallestCoord('x');
+//			if ((minVal > a.x) || (minVal > b.x) || (minVal > c.x)) {
+//				fail = true;
+//				System.err.println("Min is not min along x");				
+//			}
+//			minVal = triangle.getSmallestCoord('y');
+//			if ((minVal > a.y) || (minVal > b.y) || (minVal > c.y)) {
+//				fail = true;
+//				System.err.println("Min is not min along y");				
+//			}
+//			minVal = triangle.getSmallestCoord('z');
+//			if ((minVal > a.z) || (minVal > b.z) || (minVal > c.z)) {
+//				fail = true;
+//				System.err.println("Min is not min along z");				
+//			}
+//		}
+//	}
 	
 	
 	/**
