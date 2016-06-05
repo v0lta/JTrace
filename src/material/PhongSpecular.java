@@ -6,6 +6,12 @@ public class PhongSpecular implements Specular {
 	public final double n; //phong exponent
 	public final double rhos; //scaling
 	
+	/**
+	 * Create a phon specular function.
+	 * @param p0 the phong exponent.
+	 * @param p1 not used
+	 * @param rhos the weight of the specular component.
+	 */	
 	public PhongSpecular(double p0,double p1, double rhos){
 		this.n = p0;
 		this.rhos = rhos;

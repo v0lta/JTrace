@@ -16,12 +16,25 @@ public class SahBox extends AxisAlignedBox  {
 	public SahBox left = null;
 	public SahBox right = null;
 
+	/**
+	 * Create an axis aligned box with an acceleration structure generated
+	 * using the surface area heuristic. 
+	 * @param p0 bottom position of the axis aligned box.
+	 * @param p1 top position of the axis aligned box
+	 * @param transformation matrix of the top level box.
+	 * @param cam the camera.
+	 * @param treeEpsilon tree generation epsilon.
+	 * @param objIntersEpsilon object intersection epsilon.
+	 */	
 	public SahBox(Point p0, Point p1, Transformation transformation, Camera cam, double treeEps, double objEps) {
 		super(p0, p1, transformation, cam, treeEps, objEps);
-		// TODO Auto-generated constructor stub
 	}
 	
-	
+	/**
+	 * split this box and obtained child boxes in two until
+	 * a maximum tree depth is reached.
+	 * @param depth max tree size.
+	 */	
 	public void split(int depth) {
 		int triCount = this.trianglesInBox.size();
 
@@ -155,6 +168,12 @@ public class SahBox extends AxisAlignedBox  {
 		}
 	}
 	
+	
+	/**
+	 * Adjust the box' size to accomodate all inclded triangles.
+	 * @param axis the axis of the last split.
+	 * @return this box with adjusted bounds.
+	 */	
 	public SahBox adjustBounds(Character axis){
 		if (this.trianglesInBox.isEmpty() == false) {
 			Point adjP0;
@@ -188,38 +207,12 @@ public class SahBox extends AxisAlignedBox  {
 		}
 	}
 
-	//@Override
-	public List<Intersection> intersectOld(Ray ray) {
-	//public List<Intersection> intersect(Ray ray) {
-		List<Intersection> hits = new ArrayList<Intersection>();
-
-		if (Constants.compVisualization){
-			ray.countIntersection();
-		}
-		
-		if (this.left != null)  {
-			if (this.left.intersectBool(ray)) {
-				hits.addAll(left.intersect(ray));
-			}
-		}
-		if (this.right != null) {
-			if (this.right.intersectBool(ray)) {
-				hits.addAll(right.intersect(ray));
-			}
-		}
-		if ((this.left == null) && (this.right == null)) {
-			//maximum depth reached.
-			if (this.intersectBool(ray)){
-				for (Triangle tri :	this.trianglesInBox) {
-					hits.addAll(tri.intersect(ray));
-				}
-			}
-		}		
-		return hits;
-	}
-
+	/**
+	 * Intersect this box with a ray.
+	 * @param ray the ray to intersect the box with.
+	 * @return list of found intersections.
+	 */	
 	@Override
-	//public List<Intersection> intersectNew(Ray ray) {
 	public List<Intersection> intersect(Ray ray) {
 		List<Intersection> hits = new ArrayList<Intersection>();
 
@@ -304,6 +297,35 @@ public class SahBox extends AxisAlignedBox  {
 			}
 		}
 		if ((this.right != null) && (this.left == null)) {
+			if (this.right.intersectBool(ray)) {
+				hits.addAll(right.intersect(ray));
+			}
+		}
+		if ((this.left == null) && (this.right == null)) {
+			//maximum depth reached.
+			if (this.intersectBool(ray)){
+				for (Triangle tri :	this.trianglesInBox) {
+					hits.addAll(tri.intersect(ray));
+				}
+			}
+		}		
+		return hits;
+	}
+	
+	
+	public List<Intersection> intersectOld(Ray ray) {
+		List<Intersection> hits = new ArrayList<Intersection>();
+
+		if (Constants.compVisualization){
+			ray.countIntersection();
+		}
+		
+		if (this.left != null)  {
+			if (this.left.intersectBool(ray)) {
+				hits.addAll(left.intersect(ray));
+			}
+		}
+		if (this.right != null) {
 			if (this.right.intersectBool(ray)) {
 				hits.addAll(right.intersect(ray));
 			}

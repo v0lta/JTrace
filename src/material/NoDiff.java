@@ -2,6 +2,11 @@ package material;
 
 import math.Vector;
 
+/**
+ * Class to set the diffuse part of the brdf to zero.
+ * @author moritz
+ *
+ */
 public class NoDiff implements Diffuse {
 
 	@Override

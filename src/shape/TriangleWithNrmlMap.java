@@ -15,6 +15,12 @@ import math.TextPoint;
 import math.Transformation;
 import math.Vector;
 
+/**
+ * Modified triangle primitive with normal lookup from
+ * a file.
+ * @author moritz
+ *
+ */
 public class TriangleWithNrmlMap extends Triangle {
 	ObjTextureFile nMapFile;
 

@@ -12,6 +12,12 @@ public class Monochrome implements Material {
 	public final Specular spec;
 	public final Diffuse diff;
 	
+	/**
+	 * Creates a material with just one color.
+	 * @param spec the specular brdf part.
+	 * @param diff the diffuse brdf part.
+	 * @param color the material color.
+	 */	
 	public Monochrome(Specular spec, Diffuse diff, Color color) {
 		this.color = color;
 		this.spec = spec;

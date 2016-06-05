@@ -51,7 +51,6 @@ public class Julia implements Material {
 	/**
 	 * A two dimensional material definition
 	 */
-
 	@Override
 	public Color getColor(TextPoint point){
 		//map input into the space where the julia set has been computed.

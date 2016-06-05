@@ -16,6 +16,17 @@ public class ParallelSahBox extends SahBox {
 	public final int cores; 
 	final ExecutorService service;
 
+	/**
+	 * Create an axis aligned box with an acceleration structure generated
+	 * using the surface area heuristic. After the first split further splitting
+	 * is done on other cores.
+	 * @param p0 bottom position of the axis aligned box.
+	 * @param p1 top position of the axis aligned box
+	 * @param transformation matrix of the top level box.
+	 * @param cam the camera.
+	 * @param treeEpsilon tree generation epsilon.
+	 * @param objIntersEpsilon object intersection epsilon.
+	 */	
 	public ParallelSahBox(Point p0, Point p1, Transformation transformation,
 			Camera cam, int maxDepth, int depth, ExecutorService service, double treeEpsilon, double objIntersEpsilon) {
 		super(p0, p1, transformation, cam, treeEpsilon, objIntersEpsilon);

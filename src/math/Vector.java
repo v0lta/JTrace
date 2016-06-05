@@ -7,7 +7,6 @@ import java.util.Locale;
  * Vector implementation in three dimensions.
  * 
  * @author Niels Billen
- * @version 0.2
  */
 public class Vector implements Cloneable, Comparable<Vector> {
 	/**

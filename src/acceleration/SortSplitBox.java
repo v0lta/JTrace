@@ -18,6 +18,17 @@ public class SortSplitBox extends AxisAlignedBox {
 	public SortSplitBox right = null;
 	
 	
+	/**
+	 * Create an axis aligned box with an acceleration structure generated
+	 * from sorting triangles according to centroid position and splitting 
+	 * the obtained list in the middle.
+	 * @param p0 bottom position of the axis aligned box.
+	 * @param p1 top position of the axis aligned box
+	 * @param transformation matrix of the top level box.
+	 * @param cam the camera.
+	 * @param treeEpsilon tree generation epsilon.
+	 * @param objIntersEpsilon object intersection epsilon.
+	 */	
 	public SortSplitBox(Point p0, Point p1, Transformation transformation, Camera cam, double treeEpsilon, double objIntersEpsilon) {
 		super(p0, p1, transformation, cam, treeEpsilon, objIntersEpsilon);
 		
@@ -31,6 +42,11 @@ public class SortSplitBox extends AxisAlignedBox {
 	}
 	
 	
+	/**
+	 * split this box and obtained child boxes in two until
+	 * a maximum tree depth is reached.
+	 * @param depth max tree size.
+	 */	
 	public void split(int depth) {
 		int triCount = this.trianglesInBox.size();
 		depth = 1;
@@ -115,6 +131,11 @@ public class SortSplitBox extends AxisAlignedBox {
 		}
 	}
 	
+	/**
+	 * Intersect this box with a ray.
+	 * @param ray the ray to intersect the box with.
+	 * @return list of found intersections.
+	 */	
 	public List<Intersection> intersect(Ray ray) {
 		List<Intersection> hits = new ArrayList<Intersection>();
 

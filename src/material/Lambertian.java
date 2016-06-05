@@ -2,6 +2,10 @@ package material;
 
 import math.Vector;
 
+/**
+ * Create a Lambertian brdf part.
+ * @author moritz
+ */
 public class Lambertian implements Diffuse {
 	public final double rhod;
 	

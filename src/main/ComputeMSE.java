@@ -14,10 +14,7 @@ import javax.imageio.ImageIO;
 public class ComputeMSE {
 	/**
 	 * Compare two images by computing their mean square difference. 
-	 */
-	
-	
-	
+	 */	
 	public static List<File> findPNG(final File folder, File target) {
 		List<File> fileList = new ArrayList<File>();
 		

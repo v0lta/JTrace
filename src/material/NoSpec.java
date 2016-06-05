@@ -2,6 +2,11 @@ package material;
 
 import math.Vector;
 
+/**
+ * Class to set the specular part of the brdf to zero.
+ * @author moritz
+ *
+ */
 public class NoSpec implements Specular {
 
 	@Override

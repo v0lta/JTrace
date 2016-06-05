@@ -46,6 +46,13 @@ public class ColorMap {
 		this.colorRescale(scale);
 		//this.limitVals = limits;
 	}
+	
+	/**
+	 * Get a color to color a julia fractal.
+	 * @param indexX x position in the Julia data set.
+	 * @param indexY y position in the Julia data set.
+	 * @return the color values assigend to the given point.
+	 */
 	public Color getColor(int indexX, int indexY){
 		Vector retColor = new Color(0,0,0).toVector();
 		
@@ -63,6 +70,13 @@ public class ColorMap {
 		return retColor.toColor();
 	}
 	
+	/**
+	 * Get color for a false color acceleration
+	 * tree visualization.
+	 * @param intersections the number of intersecions found
+	 * 						in a given pixel
+	 * @return the proper color value.
+	 */	
 	public Color getCompColor(int intersections) {
 		double step = (minVal + maxVal)/colors.size();
 		Vector retColor = new Color(0,0,0).toVector();
@@ -105,6 +119,9 @@ public class ColorMap {
 		this.colors.addAll(tmpClrs);
 	}
 	
+	/**
+	 * Matlab parula inspired colors.
+	 */
 	private void parula(){
 		this.colors.clear();
 		this.colors.add(new Color(0.2081,    0.1663,    0.5292));
@@ -173,6 +190,9 @@ public class ColorMap {
 		this.colors.add(new Color(0.9763,    0.9831,    0.0538));		
 	}
 	
+	/**
+	 * Matlab hot inspired colors.
+	 */
 	private void hot() {
 		   this.colors.add(new Color(0.0417,         0,         0));
 		   this.colors.add(new Color(0.0833,         0,         0));
@@ -240,6 +260,9 @@ public class ColorMap {
 		   this.colors.add(new Color(1.0000,    1.0000,    1.0000));
 	}
 	
+	/**
+	 * Matlab jet inspired colors.
+	 */
 	private void jet() {
 		this.colors.add(new Color(     0,         0,    0.5625));
 		this.colors.add(new Color(     0,         0,    0.6250));
@@ -307,6 +330,9 @@ public class ColorMap {
 		this.colors.add(new Color(0.5000,         0,         0));
 		}
 	
+	/**
+	 * Matlab summer inspired colors.
+	 */
 	private void summer(){
 		this.colors.add(new Color(0     ,    0.5000,    0.4000));
 		this.colors.add(new Color(0.0159,    0.5079,    0.4000));

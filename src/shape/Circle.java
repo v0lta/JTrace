@@ -15,6 +15,12 @@ import math.TextPoint;
 import math.Transformation;
 import math.Vector;
 
+/**
+ * Unit circle around the origin.
+ * @author Moritz Wolter
+ *
+ */
+
 public class Circle extends Plane implements LightableShape {
 	public final double radius = 1;
 	public final double inverseArea;

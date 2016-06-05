@@ -16,6 +16,14 @@ public class RandomChess implements Material {
 	public final Diffuse diff;
 	private final Transformation reverseTrans;
 	
+	/**
+	 * Create a material consiting of candomized pixels.
+	 * @param spec specular part of material brdf.
+	 * @param diff diffuse part of material brdf.
+	 * @param colors {@link ColorMap} object.
+	 * @param s pixel size.
+	 * @param colorNo color number.
+	 */	
 	public RandomChess(Specular spec, Diffuse diff, ColorMap colors,
 						double s, int colorNo) {
 		this.map = colors;

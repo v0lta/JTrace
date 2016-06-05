@@ -25,7 +25,6 @@ import shape.Triangle;
  * @author moritz
  *
  */
-
 public class AxisAlignedBox implements Shape {
 	public final Point p0;
 	public final Point p1;

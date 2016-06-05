@@ -1,5 +1,11 @@
 package math;
 
+/**
+ * A point in texture coordinate space.
+ * @author moritz wolter
+ *
+ */
+
 public class TextPoint {
 	public double u;
 	public double v;

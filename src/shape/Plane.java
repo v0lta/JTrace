@@ -22,6 +22,12 @@ public class Plane implements Shape {
 	public final Transformation transformation;
 	public final Material mat; //the material describes the plane's coloring.
 	
+	
+	/**
+	 * Create a transformable plane initially orthogonal to the z-axis.
+	 * @param transformation matrix to relocate the plane.
+	 * @param mat plane material.
+	 */	
     public Plane(Transformation transformation, Material mat) {
     	this.transformation = transformation;
         this.mat = mat;

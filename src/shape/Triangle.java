@@ -33,7 +33,20 @@ public class Triangle implements Shape {
 	public final Material mat;
 	public final Transformation transformation;
 
-	
+	/**
+	 * Create a triangle. 
+	 * @param a triangle edge.
+	 * @param b triangle edge.
+	 * @param c triangle edge.
+	 * @param an normal at triangle edge.
+	 * @param bn normal at triangle edge.
+	 * @param cn normal at triangle edge.
+	 * @param at texture coordinate at triangle edge.
+	 * @param bt texture coordinate at triangle edge.
+	 * @param ct texture coordinate at triangle edge.
+	 * @param mat triangle material.
+	 * @param transformation matrix scaling, relocating and re-orienting the triangle. 
+	 */	
 	public Triangle (Point a, Point b, Point c,
 			Normal an, Normal bn, Normal cn,
 			TextPoint at, TextPoint bt, TextPoint ct, Material mat,

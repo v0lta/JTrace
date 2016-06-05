@@ -6,7 +6,7 @@ import java.util.Locale;
 /**
  * Normal implementation in three dimensions.
  * 
- * @author Niels Billen
+ * @author Niels Billen and Moritz Wolter.
  * @version 1.0
  */
 public class Normal implements Cloneable, Comparable<Normal> {

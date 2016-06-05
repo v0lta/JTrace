@@ -15,7 +15,6 @@ import math.Transformation;
  * @author moritz
  *
  */
-
 public interface LightableShape extends Shape {
 
 	public double getInverseArea();

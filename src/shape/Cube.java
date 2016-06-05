@@ -12,12 +12,10 @@ import math.Transformation;
 
 
 /**
- * A transformed unit cube.
+ * A transformable unit cube.
  * @author moritz
  *
  */
-
-
 public class Cube implements Shape {
 	public final Point center = new Point(0,0,0);
 	public final Transformation transformation;

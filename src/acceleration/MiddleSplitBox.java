@@ -16,6 +16,16 @@ public class MiddleSplitBox extends AxisAlignedBox {
 	public MiddleSplitBox left = null;
 	public MiddleSplitBox right = null;
 
+	/**
+	 * Create a box with an acceleration structure found from splitting
+	 * in the geometric middle.
+	 * @param p0 bottom position of the axis aligned box.
+	 * @param p1 top position of the axis aligned box
+	 * @param transformation matrix of the top level box.
+	 * @param cam the camera.
+	 * @param treeEpsilon tree generation epsilon.
+	 * @param objIntersEpsilon object intersection epsilon.
+	 */		
 	public MiddleSplitBox(Point p0, Point p1, Transformation transformation, Camera cam, double treeEps, double oEps) {
 		super(p0, p1, transformation, cam, treeEps, oEps);
 

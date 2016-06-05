@@ -5,8 +5,7 @@ import math.Normal;
 /**
  * Represents a {@link Transformation} to transform three dimensional objects.
  * 
- * @author Niels Billen
- * @version 0.2
+ * @author Niels Billen and Moritz Wolter.
  */
 public class Transformation implements Cloneable {
 	private final Matrix matrix;

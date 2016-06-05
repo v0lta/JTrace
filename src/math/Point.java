@@ -6,7 +6,7 @@ import java.util.Locale;
 /**
  * Point implementation in three dimensions.
  * 
- * @author Niels Billen
+ * @author Niels Billen and Moritz Wolter.
  * @version 1.0
  */
 public class Point implements Cloneable, Comparable<Point> {

@@ -6,7 +6,7 @@ import java.util.Locale;
 /**
  * Implementation of a 4 x 4 matrix.
  * 
- * @author Niels Billen
+ * @author Niels Billen and Moritz Wolter
  * @version 1.0
  */
 public class Matrix implements Cloneable {
