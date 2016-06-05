@@ -19,6 +19,14 @@ public class Circle extends Plane implements LightableShape {
 	public final double radius = 1;
 	public final double inverseArea;
 	
+	
+	/**
+	 * Creates a unit circle in the x-y-plane. This circle can be
+	 * transformed into another position.
+	 * @param transformation changes size and orientation of the unit circle.
+	 * @param mat the circles material.
+	 */
+	
 	public Circle(Transformation transformation, Material mat) {
 		super(transformation, mat);
 		this.inverseArea = 1.0/(Math.PI * radius * radius);

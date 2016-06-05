@@ -19,6 +19,13 @@ import math.Ray;
 import math.TextPoint;
 import math.Transformation;
 
+/**
+ * A class which loads and makes simple wavefront files (.obj)
+ * available to the ray tracer.
+ * @author moritz
+ *
+ */
+
 public class ObjShape implements Shape {
 	public final String path;
 	public final Transformation transformation;
@@ -286,6 +293,11 @@ public class ObjShape implements Shape {
 			System.out.println(elTime);
 	}
 	
+	
+	/**
+	 * Creates the acceleration tree for the wavefront object.
+	 * @param minmax contains the extreme points of the considered mesh.
+	 */	
 	protected void createTree(Extremes minmax){
 		boolean singleCore = true;
 		if (singleCore){
@@ -313,7 +325,11 @@ public class ObjShape implements Shape {
 		aab.split(this.treeDepth); //recursively split the box until the max depth is reached.
 	}
 
-	
+	/**
+	 * A class which stores extreme points of a given mesh.
+	 * @author moritz
+	 *
+	 */
 	
 	protected class Extremes{
 		public double xMax = 0;public  double xMin = 0;

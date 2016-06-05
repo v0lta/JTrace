@@ -10,11 +10,25 @@ import math.Point;
 import math.Ray;
 import math.Transformation;
 
+
+/**
+ * A transformed unit cube.
+ * @author moritz
+ *
+ */
+
+
 public class Cube implements Shape {
 	public final Point center = new Point(0,0,0);
 	public final Transformation transformation;
 	public final Material mat;
 	public final List<Rectangle> rects;
+	
+	/**
+	 * Create a transformed unit cube.
+	 * @param transformation matrix with transformation information.
+	 * @param mat the cube's material.
+	 */
 	
 	public Cube(Transformation transformation, Material mat){
 		this.transformation = transformation;
@@ -58,6 +72,9 @@ public class Cube implements Shape {
 		this.rects.add(zm1);
 	}
 
+	/**
+	 * Find ray cube intersection points.
+	 */
 	@Override
 	public List<Intersection> intersect(Ray ray) {
 		Ray rayInv = this.transformation.transformInverse(ray);
@@ -73,6 +90,11 @@ public class Cube implements Shape {
 		return intersTransformed;
 	}
 	
+	/**
+	 * Internal method to handle cube space world space transformation.
+	 * @param inter cube space intersection.
+	 * @return the same intersection in world coordinates.
+	 */
 	private Intersection TransformIntersection(Intersection inter) {
         Point hitPoint = this.transformation.transform( inter.point );
         Normal hitNormal = this.transformation.transformInverseTranspose( inter.normal);

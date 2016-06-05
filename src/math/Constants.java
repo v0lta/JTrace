@@ -1,5 +1,9 @@
 package math;
 
+/**
+ * Static constants available throughout the code.
+ * @author moritz
+ */
 public class Constants {
 	public static final double epsilon = 0.001;		 //shadow self intersection prevention.
 	public static final boolean normalVisualization = false;

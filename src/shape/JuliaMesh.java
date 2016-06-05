@@ -16,14 +16,33 @@ import math.Ray;
 import math.TextPoint;
 import math.Transformation;
 
+/**
+ * A function mesh used to created Julia-3d-renderings.
+ * @author moritz
+ */
+
 public class JuliaMesh extends Julia implements Shape {
 	public final List<Triangle> mesh;
 	public final SahBox aab;
 	
-	public JuliaMesh (Complex c, int N, double bound, int lim, double colorScale, String colorSet, double ref,
+	
+	/**
+	 * Set up a function mesh on top of a Julia-set-matrix.
+	 * @param c the seed, this complex number determines the form of the fractal.
+	 * @param N for loop counter
+	 * @param bound 0.5 of the rectangle size.
+	 * @param lim kernel threshold. See https://en.wikipedia.org/wiki/Julia_set
+	 * @param colorScale color scaling factor.
+	 * @param colorSet define the colormap used: Parula, hot, summer or Jet.
+	 * @param trans mesh transformation matrix
+	 * @param cam the camera
+	 * @param treeEps SAH tree epsilon.
+	 * @param objIntersEps object intersection epsilon.
+	 */
+	public JuliaMesh (Complex c, int N, double bound, int lim, double colorScale, String colorSet,
 			          Transformation trans, Camera cam, double treeEps, double objIntersEps){
 		super(c, N, bound, lim, colorScale, colorSet);
-		this.mesh = generateMesh(ref,trans);
+		this.mesh = generateMesh(trans);
 		this.aab = new SahBox(new Point(-1.1,-1,0),
 							  new Point(1,1,1), trans , cam, treeEps, objIntersEps);
 		aab.trianglesInBox.addAll(mesh);
@@ -38,7 +57,7 @@ public class JuliaMesh extends Julia implements Shape {
 		return this.colorMap.getColor(x, y);
 	}
 	
-	public List<Triangle> generateMesh(double ref, Transformation trans){
+	public List<Triangle> generateMesh(Transformation trans){
 		List<Triangle> mesh = new ArrayList<Triangle>();
 
 		//unit mesh has length,width,and height one.

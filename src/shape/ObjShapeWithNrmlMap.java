@@ -18,6 +18,13 @@ import math.TextPoint;
 import math.Transformation;
 import camera.Camera;
 
+/**
+ * A modified version of the wavefront object class to include mapped
+ * normal information from an image file.
+ * @author moritz
+ *
+ */
+
 public class ObjShapeWithNrmlMap extends ObjShape {
 	ObjTextureFile nMapFile;
 	

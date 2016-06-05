@@ -310,7 +310,7 @@ public class World{
 																	//800
 		//JuliaMesh juliaMesh = new JuliaMesh(new Complex(-0.8,0.156),800,2,400, 100, "jet",1.0,
 		//							trans, camera, 0.01, 100);
-		JuliaMesh juliaMesh = new JuliaMesh(new Complex(-0.8,0.175),800,2,400, 100, "jet",1.0,
+		JuliaMesh juliaMesh = new JuliaMesh(new Complex(-0.8,0.175),800,2,400, 100, "jet",
 				trans, camera, 0.01, 100);
 		this.shapes.add(juliaMesh);
 		
@@ -336,7 +336,7 @@ public class World{
 		Transformation trans = Transformation.scale(1.2, 1.2, 1.2);
 		
 																	//800
-		JuliaMesh juliaMesh = new JuliaMesh(new Complex(-0.1,0.651),800,2,400, 100, "jet",1.0,
+		JuliaMesh juliaMesh = new JuliaMesh(new Complex(-0.1,0.651),800,2,400, 100, "jet",
 									trans, camera, 0.01, 100);
 		this.shapes.add(juliaMesh);
 		

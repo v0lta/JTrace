@@ -170,6 +170,13 @@ public class Sphere implements LightableShape {
 		return this.transformation;
 	}
 
+	
+	/**
+	 * Given a hit point in world coodinates return a 
+	 * suitable sample point on the light source.
+	 * @param hp world coordinate hit point.
+	 * @return a sample point on the light sources surface.
+	 */
 	@Override
 	public LightIntersection getRandomPoint(Point hP) {
 		Vector vhP = hP.toVector();
@@ -198,6 +205,13 @@ public class Sphere implements LightableShape {
 		return new LightIntersection(txtPnt, pPrime, n);
 	}
 
+	
+	/**
+	 * Find out if a hit point is on the light source.
+	 * @param hitPoint the hit point in question.
+	 * @return boolean true if point is on light source
+	 * 			false if not.
+	 */
 	@Override
 	public boolean inShape(Point hitPoint) {
 		hitPoint = this.transformation.transformInverse(hitPoint);

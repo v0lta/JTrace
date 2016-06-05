@@ -5,6 +5,13 @@ public class Color {
 	public final double g;
 	public final double b;
 	
+	
+	/**
+	 * Create a color object
+	 * @param r red
+	 * @param g green
+	 * @param b blue
+	 */	
 	public Color(double r, double g, double b) {
 		this.r = r;
 		this.g = g;
@@ -17,7 +24,6 @@ public class Color {
 	
 	/**
 	 * Converts this {@link Color} to a {@link Vector}.
-	 * 
 	 * @return this {@link Color} as a {@link Vector}.
 	 */
 	public Vector toVector() {

@@ -13,6 +13,12 @@ import math.TextPoint;
 import math.Transformation;
 import math.Vector;
 
+/**
+ * The triangle primitive.
+ * @author moritz
+ *
+ */
+
 public class Triangle implements Shape {
 
 	public final Point a;

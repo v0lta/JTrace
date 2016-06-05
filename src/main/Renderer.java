@@ -39,7 +39,7 @@ import material.ColorMap;
  */
 public class Renderer {
 	/**
-	 * Entry point of your renderer.
+	 * Entry point of the renderer.
 	 * 
 	 * @param arguments
 	 *            command line arguments.
@@ -227,8 +227,6 @@ public class Renderer {
 
 										//intensity = intersections.size()/1.0;
 										//double[] compRes = computeAmbientShading(visColor,intensity , 1.0);
-
-										//double greenValue = ((double) intersectionCount)/max;						
 										//double whiteValue = ((double) intersectionCount)/max;
 										//buffer.getPixel(x, y).add(whiteValue,whiteValue,whiteValue);
 										buffer.getPixel(x, y).add(pixelColor.r,pixelColor.g,pixelColor.b);
@@ -370,7 +368,17 @@ public class Renderer {
 			e.printStackTrace();
 		}
 	}
-
+	
+	
+	/**
+	 * Do the intersection testing for a list of shapes and a given ray.
+	 * Intersection objects are returned for each hit.
+	 * @param shapeList list of primitives which should be intersected.
+	 * @param ray = (o + td)
+	 * @return intersection objects containing the intersection point
+	 * 			texture coordiantes at hit point as well as normal and
+	 * 			material information.
+	 */
 	private static List<Intersection> testforIntsections(List<Shape> shapeList,Ray ray) {
 		List<Intersection> interList = new ArrayList<Intersection>();
 		for (Shape shape : shapeList) {
@@ -382,6 +390,15 @@ public class Renderer {
 		}
 		return interList;
 	}
+	
+	
+	/**
+	 * Computes the ambient shading part of the lighting.
+	 * @param inter the ray object intersection closest to the camera.
+	 * @param La ambient lighting intensity.
+	 * @param Rs
+	 * @return
+	 */
 
 	private static double[] computeAmbientShading(Intersection inter,Double La, Double Rs) {
 		Color hitClr = inter.mat.getColor(inter.txtPnt);

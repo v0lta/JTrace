@@ -42,6 +42,11 @@ public class ComputeMSE {
 	}
 	
 	
+	/**
+	 * Computes the mean squared error for a target file and all the .png files in a given folder.
+	 * The resolution of the target image and all the images in the specified folder have to
+	 * be the same.
+	 */
 	public static void main(String[] args) {
 		//set the paths.
 	

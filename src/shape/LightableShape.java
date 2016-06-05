@@ -10,6 +10,12 @@ import math.TextPoint;
 import math.Transformation;
 
 
+/**
+ * A shape interface for use in area lights.
+ * @author moritz
+ *
+ */
+
 public interface LightableShape extends Shape {
 
 	public double getInverseArea();

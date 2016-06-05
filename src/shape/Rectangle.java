@@ -159,6 +159,12 @@ public class Rectangle extends Plane implements LightableShape {
 		return this.transformation.transform(new Point(0,0,0));
 	}
 
+	
+	
+	/**
+	 * Subdivide the rectangle into (cuts+1)^2 pieces.
+	 * @return a list with the parts of this shape.
+	 */
 	@Override
 	public List<LightableShape> subdivide(int subdivisions) {
 		List<LightableShape> subShapes = new ArrayList<LightableShape>();
