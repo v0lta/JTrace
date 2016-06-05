@@ -2,7 +2,6 @@
 #
 # Makefile for the basic Computer Graphics source code
 #
-# The following lines are the only files that you as a student should edit.
 #
 ################################################################################
 
@@ -10,7 +9,7 @@
 SOURCEDIR = src
 
 # specify the name of the executable jar file.
-EXECUTABLENAME = cgproject.jar	
+EXECUTABLENAME = renderer.jar	
 
 # specify the name of the class containing main method.
 ENTRYPOINT = main.Renderer

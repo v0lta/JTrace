@@ -45,10 +45,10 @@ public class Renderer {
 	 *            command line arguments.
 	 */
 	public static void main(String[] arguments) {
-		int width = 200;
-		int height = 200;
+		int width = 400;
+		int height = 400;
 		double sensitivity = 1.0;
-		double gamma = 3.0;
+		double gamma = 1.0;
 		boolean gui = true;
 		int sampleNo = 50;
 		int alSplits = 10;
@@ -76,18 +76,12 @@ public class Renderer {
 					else if (arguments[i].equals("-alSplits"))
 						alSplits = Integer.parseInt(arguments[++i]);
 					else if (arguments[i].equals("-help")) {
-						System.out
-						.println("usage: "
-								+ "[-width  <integer> width of the image] "
-								+ "[-height  <integer> height of the image] "
-								+ "[-sensitivity  <double> scaling factor for the radiance] "
-								+ "[-gamma  <double> gamma correction factor] "
-								+ "[-gui  <boolean> whether to start a graphical user interface]"
-								+ "[-samples  <interger> number of sampels for the area light computation]");
+						printHelp();
 						return;
 					} else {
 						System.err.format("unknown flag \"%s\" encountered!\n",
 								arguments[i]);
+								printHelp();
 					}
 				} catch (ArrayIndexOutOfBoundsException e) {
 					System.err.format("could not find a value for "
@@ -148,11 +142,11 @@ public class Renderer {
 		//final World world = new World(width, height, "apple", sampleNo, alSplits);
 		//final World world = new World(width, height, "bunny", sampleNo, alSplits);		
 		//final World world = new World(width, height, "venus", sampleNo, alSplits);
-		//final World world = new World(width, height, "dragon", sampleNo, alSplits);
+		final World world = new World(width, height, "dragon", sampleNo, alSplits);
 		//final World world = new World(width, height, "buddha", sampleNo, alSplits);
 		//final World world = new World(width, height, "tea", sampleNo, alSplits);
 		//final World world = new World(width, height, "sun", sampleNo, alSplits);
-		final World world = new World(width, height, "richter", sampleNo, alSplits);
+		//final World world = new World(width, height, "richter", sampleNo, alSplits);
 		//final World world = new World(width, height, "richterExtended", sampleNo, alSplits);
 		//final World world = new World(width, height, "twoLights", sampleNo, alSplits);
 		//final World world = new World(width, height, "debug", sampleNo, alSplits);
@@ -444,4 +438,17 @@ public class Renderer {
 		//return (new Vector(1,1,1).scale(spec));
 
 	}
+	
+	private static void printHelp(){
+		System.out
+		.println("usage: "
+				+ "[-width  <integer> width of the image] "
+				+ "[-height  <integer> height of the image] "
+				+ "[-sensitivity  <double> scaling factor for the radiance] "
+				+ "[-gamma  <double> gamma correction factor] "
+				+ "[-gui  <boolean> whether to start a graphical user interface]"
+				+ "[-samples  <interger> number of sampels for the area light computation]");
+	}
 }
+
+

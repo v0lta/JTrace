@@ -475,9 +475,9 @@ public class World{
 				new Point(5, 0, 5), new Point(0, 0, 0), new Vector(0, 0, 1), 80);
 
 		//set up the lights                (Point origin, Color color, double intensity,boolean shadows)
-		PointLight redLight = new PointLight(new Point(-5,5,8),new Color(100,10,10), 0.01,true);
+		PointLight redLight = new PointLight(new Point(-5,5,8),new Color(100,10,10), 0.05,true);
 		this.plights.add(redLight);
-		PointLight whiteLight = new PointLight(new Point(5,0,8),new Color(100,100,100), 0.01,true);
+		PointLight whiteLight = new PointLight(new Point(5,0,8),new Color(100,100,100), 0.05,true);
 		this.plights.add(whiteLight);
 		
 		
@@ -495,7 +495,7 @@ public class World{
 		//mat = new ObjTextureFile("./obj/dragonLowPoly/dragonNormalMap4k.jpg",3.0);
 		
 		
-		//ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonLowPoly.obj",t1,mat,2.0,20, this.camera);
+		//ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonLowPoly.obj",t1,mat,20, this.camera,0.01, 0.1);
 		//ObjShape dragon = new ObjShapeWithNrmlMap("./obj/dragonLowPoly/dragonLowPoly.obj",
 		//		"./obj/dragonLowPoly/dragonNormalMap4k.jpg",t1,mat,20, this.camera, 0.001, 3.0); //png will crash.!!
 		ObjShape dragon = new ObjShape("./obj/dragonLowPoly/dragonHighPoly.obj",t1,mat,25, this.camera,0.0001, 0.001);
