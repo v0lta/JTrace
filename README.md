@@ -1,5 +1,5 @@
 # Java Ray Tracer
-Java source code for the 2016 ray tracing project.
+Java source code for my 2016 ray tracing project.
 
 ## Howto
 1. To run the code clone this repo and type:
