@@ -1,3 +1,6 @@
+![alt text](https://github.com/v0lta/JTrace/blob/master/falseColorDragon.png)
+
+
 # Java Ray Tracer
 Java source code for my 2016 ray tracing project.
 
