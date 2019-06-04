@@ -1,4 +1,4 @@
-![alt text](https://github.com/v0lta/JTrace/blob/master/falseColorDragon.png)
+
 
 
 # Java Ray Tracer
@@ -18,3 +18,5 @@ final World world variable in src.main.Renderer.java
 ## More information
 A more detailed description of this project can be
 found in the file detailedReport.pdf
+
+![alt text](https://github.com/v0lta/JTrace/blob/master/falseColorDragon.png)
